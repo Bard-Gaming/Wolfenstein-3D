@@ -1,0 +1,12 @@
+# Temporary files:
+*~
+\#*\#
+*.gcno
+*.gcda
+coding-style-reports.log
+
+# Compiled/Binary files:
+*.out
+*.o
+*.a
+libcarpet.a
