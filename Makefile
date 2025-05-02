@@ -17,10 +17,10 @@ CRPT_DIR = lib/carpet
 CRPT_BIN = $(CRPT_DIR)/libcarpet.a
 CRPT_RULE =
 
-LIBS =	-lcsfml-window -lcsfml-graphics -lcsfml-system -lcsfml-audio		\
+LIBS =	-L./$(CRPT_DIR) -lcarpet											\
+		-lcsfml-audio -lcsfml-graphics -lcsfml-window -lcsfml-system		\
 		-lm																	\
 
-#		-L./$(CRPT_DIR) -lcarpet											\
 
 
 INCLUDE_DIRS = -I./include -I./$(CRPT_DIR)/include
@@ -46,10 +46,8 @@ $(CRPT_BIN):
 	(printf $(ERROR_MSG_FORMAT) "Error compiling $<"; false)
 	@printf $(SUCCESS_MSG_FORMAT) "Successfully compiled $<"
 
-# TODO: Remove ./lib/carpet/libcarpet.a from src files
 $(NAME): $(CRPT_BIN) $(OBJ_FILES)
-	@$(CC) -o $(NAME) $(OBJ_FILES) ./lib/carpet/libcarpet.a \
-	$(INCLUDE_DIRS) $(LIBS) || \
+	@$(CC) -o $(NAME) $(OBJ_FILES) $(INCLUDE_DIRS) $(LIBS) || \
 	(printf $(ERROR_MSG_FORMAT) "Error building $(NAME)"; false)
 	@printf $(SUCCESS_MSG_FORMAT) "Successfully built $(NAME)"
 
