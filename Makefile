@@ -12,7 +12,6 @@ CFLAGS =
 
 NAME = wolf3d
 
-
 CRPT_DIR = lib/carpet
 CRPT_BIN = $(CRPT_DIR)/libcarpet.a
 CRPT_RULE =
@@ -20,8 +19,6 @@ CRPT_RULE =
 LIBS =	-L./$(CRPT_DIR) -lcarpet											\
 		-lcsfml-audio -lcsfml-graphics -lcsfml-window -lcsfml-system		\
 		-lm																	\
-
-
 
 INCLUDE_DIRS = -I./include -I./$(CRPT_DIR)/include
 
