@@ -12,24 +12,30 @@
     #include <carpet/utils/vector.h>
 
 
+enum carpet_object_type {
+    OT_WALL,  // Solid wall. Faces: North, East, South, West
+    OT_ROOM,  // No wall. Faces: Ceil, Floor
+};
+
+
 struct carpet_object {
     // Map Info:
     vec2_t position;
     map_t *map;
 
     // Display:
+    object_type_t type;
     const texture_t *texture;
     color_t color;
-    bool draw_solid;  // whether or not to draw the object as a solid cube
 };
 
 
-object_t *crpt_object_create(vec2_t pos);
+object_t *crpt_object_create(vec2_t pos, object_type_t type);
 void crpt_object_delete(object_t *object);
 object_t *crpt_object_dup(const object_t *reference, vec2_t pos);
 
 // Internal:
-object_t *crpt_object_create_in_map(map_t *map, vec2_t pos);
+object_t *crpt_object_create_in_map(map_t *map, vec2_t pos, object_type_t t);
 object_t *crpt_object_dup_in_map(const object_t *ref, map_t *map, vec2_t pos);
 
 

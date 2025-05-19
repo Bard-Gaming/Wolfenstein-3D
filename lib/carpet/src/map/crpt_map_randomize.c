@@ -17,7 +17,7 @@
 ** This function will never place walls on the
 ** border of the map.
 */
-void crpt_map_randomize(map_t *map, size_t count)
+void crpt_map_randomize(map_t *map, size_t count, const object_t *ref)
 {
     size_t x;
     size_t y;
@@ -28,7 +28,6 @@ void crpt_map_randomize(map_t *map, size_t count)
         x = crpt_rand(map->width - 2) + 1;
         y = crpt_rand(map->height - 2) + 1;
         pos = (vec2_t){ x * map->cube_size, y * map->cube_size };
-        obj = crpt_object_create_in_map(map, pos);
-        obj->color = sfGreen;
+        obj = crpt_object_dup_in_map(ref, map, pos);
     }
 }

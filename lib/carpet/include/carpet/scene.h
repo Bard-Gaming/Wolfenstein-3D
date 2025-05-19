@@ -18,9 +18,20 @@
     #define UPDATE_SCENE_FIXED(s) _SCENE_FNC(s, fixed_update, CRPT_FIXED_RATE)
 
 
+struct carpet_ui {
+    // User data:
+    void *data;
+
+    // Functions:
+    ui_draw_fnc_t draw;
+    ui_update_fnc_t update;
+};
+
+
 struct carpet_scene {
     // User data:
     NULLABLE map_t *map;
+    NULLABLE ui_t *ui;
 
     // Load:
     NULLABLE scene_fnc_t load;

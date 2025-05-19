@@ -40,6 +40,8 @@ typedef sfFont font_t;
 /////////////////////////////////////////////////////////////
 
 typedef struct carpet_asset_manager asset_manager_t;
+typedef struct carpet_graphics_line graphics_line_t;
+typedef struct carpet_map_face map_face_t;
 typedef struct carpet_camera camera_t;
 typedef struct carpet_object object_t;
 typedef struct carpet_scene scene_t;
@@ -48,6 +50,7 @@ typedef struct carpet_vec3 vec3_t;
 typedef struct carpet_vec2 vec2_t;
 typedef struct carpet_ray ray_t;
 typedef struct carpet_map map_t;
+typedef struct carpet_ui ui_t;
 
 // Utils (prefixed with crpt):
 typedef struct carpet_hashtable crpt_hashtable_t;
@@ -60,8 +63,9 @@ typedef struct carpet_array crpt_array_t;
 //                                                         //
 /////////////////////////////////////////////////////////////
 
-typedef enum carpet_errno crpt_errno_t;
 typedef enum carpet_object_type object_type_t;
+typedef enum carpet_ray_side ray_side_t;
+typedef enum carpet_errno crpt_errno_t;
 
 
 /////////////////////////////////////////////////////////////
@@ -75,6 +79,8 @@ typedef void (*event_handler_t)(scene_t *, event_t *);
 typedef void *(*asset_load_fnc_t)(const char *);
 typedef void (*scene_fnc_t)(scene_t *);
 typedef void (*free_fnc_t)(void *);
+typedef void (*ui_update_fnc_t)();
+typedef void (*ui_draw_fnc_t)();
 
 
 #endif

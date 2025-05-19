@@ -13,11 +13,20 @@
     #define CRPT_DEFAULT_CUBE_SIZE 64.f
 
 
+struct carpet_map_face {
+    const texture_t *texture;
+    color_t color;
+};
+
+
 struct carpet_map {
     float cube_size;
     unsigned int width;
     unsigned int height;
     object_t ***blocks;
+
+    map_face_t ceiling;
+    map_face_t floor;
 };
 
 
@@ -32,8 +41,9 @@ void crpt_map_add(map_t *map, object_t *obj);
 void crpt_map_remove(map_t *map, object_t *obj);
 
 // Utils:
+void crpt_map_randomize(map_t *map, size_t count, const object_t *ref);
 void crpt_map_create_border(map_t *map, const object_t *ref);
-void crpt_map_randomize(map_t *map, size_t count);
+void crpt_map_fill_empty(map_t *map, const object_t *ref);
 bool crpt_map_is_solid(const map_t *map, vec2_t position);
 
 
