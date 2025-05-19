@@ -41,9 +41,9 @@ void crpt_map_add(map_t *map, object_t *obj);
 void crpt_map_remove(map_t *map, object_t *obj);
 
 // Utils:
+void crpt_map_randomize(map_t *map, size_t count, const object_t *ref);
 void crpt_map_create_border(map_t *map, const object_t *ref);
 void crpt_map_fill_empty(map_t *map, const object_t *ref);
-void crpt_map_randomize(map_t *map, size_t count);
 bool crpt_map_is_solid(const map_t *map, vec2_t position);
 
 

@@ -21,7 +21,7 @@ void crpt_map_create_border(map_t *map, const object_t *ref)
     double x_pos;
     double y_pos;
 
-    for (unsigned int x = 1; x < map->width - 1; x++) {
+    for (unsigned int x = 0; x < map->width; x++) {
         x_pos = x * map->cube_size;
         y_pos = (map->height - 1) * map->cube_size;
         crpt_object_dup_in_map(ref, map, (vec2_t){ x_pos, 0 });

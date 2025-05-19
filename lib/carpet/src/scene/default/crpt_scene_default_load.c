@@ -18,10 +18,11 @@
 void crpt_scene_default_load(scene_t *scene)
 {
     object_t border = { .type = OT_WALL, .color = sfGreen };
+    object_t walls = { .type = OT_WALL, .color = sfBlue };
     object_t room = { .type = OT_ROOM, .color = sfWhite };
 
     scene->map = crpt_map_create(50, 50);
     crpt_map_create_border(scene->map, &border);
-    crpt_map_randomize(scene->map, 20);
+    crpt_map_randomize(scene->map, 20, &walls);
     crpt_map_fill_empty(scene->map, &room);
 }
