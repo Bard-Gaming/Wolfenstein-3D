@@ -17,11 +17,11 @@ static vec2_t compute_pos_offset(camera_t *camera, float intensity)
 {
     if (sfKeyboard_isKeyPressed(sfKeyLShift)) {
         intensity *= 4.f;
-        if (camera->fov < M_PI_2 + 0.15)
-            camera->fov += 0.01;
+        if (camera->fov < M_PI_2 + 0.075)
+            camera->fov += 0.0075;
     } else {
         if (camera->fov > M_PI_2)
-            camera->fov -= 0.01;
+            camera->fov -= 0.0075;
     }
     return (vec2_t){
         .x = cosf(camera->rotation) * intensity,
