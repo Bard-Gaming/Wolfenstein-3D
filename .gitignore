@@ -10,3 +10,6 @@ coding-style-reports.log
 *.o
 *.a
 wolf3d
+
+# omar
+.vscode
