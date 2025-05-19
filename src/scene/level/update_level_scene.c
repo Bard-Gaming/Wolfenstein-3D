@@ -6,6 +6,7 @@
 ** update_level_scene
 */
 
+#include "carpet/camera.h"
 #include <wolf/scenes.h>
 
 
@@ -17,11 +18,9 @@ static vec2_t compute_pos_offset(camera_t *camera, float intensity)
 {
     if (sfKeyboard_isKeyPressed(sfKeyLShift)) {
         intensity *= 4.f;
-        if (camera->fov < M_PI_2 + 0.075)
-            camera->fov += 0.0075;
+        crpt_camera_interpolate_fov(M_PI_2 - 0.15, 0.0075);
     } else {
-        if (camera->fov > M_PI_2)
-            camera->fov -= 0.0075;
+        crpt_camera_interpolate_fov(M_PI_2 - 0.225, -0.0075);
     }
     return (vec2_t){
         .x = cosf(camera->rotation) * intensity,
