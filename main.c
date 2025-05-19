@@ -17,7 +17,7 @@ static void load_custom_scene(scene_t *scene)
     border.texture = crpt_fetch_texture("bricks");
     scene->map = crpt_map_create(50, 50);
     crpt_map_create_border(scene->map, &border);
-    crpt_map_randomize(scene->map, 20);
+    crpt_map_randomize(scene->map, 20, &border);
     crpt_map_fill_empty(scene->map, &room);
 }
 
