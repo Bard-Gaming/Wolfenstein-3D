@@ -74,8 +74,10 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/utils/hashtable/crpt_hashtable_set.c						\
 			src/utils/vector/crpt_vec_add.c									\
 			src/utils/vector/crpt_vec_distance.c							\
+			src/utils/vector/crpt_vec_dot.c									\
 			src/utils/vector/crpt_vec_magnitude.c							\
-			src/utils/vector/crpt_vec_mul.c									\
+			src/utils/vector/crpt_vec_normalized.c							\
+			src/utils/vector/crpt_vec_scale.c								\
 			src/utils/vector/crpt_vec_sub.c									\
 
 OBJ_FILES = $(SRC_FILES:.c=.o)

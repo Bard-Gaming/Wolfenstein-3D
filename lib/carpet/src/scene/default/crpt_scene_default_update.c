@@ -39,7 +39,7 @@ static vec2_t compute_pos_offset(camera_t *camera, float intensity)
 */
 static bool will_collide(const map_t *map, vec2_t pos, vec2_t offset)
 {
-    vec2_t new_pos = crpt_vec2_add(pos, crpt_vec2_mul(offset, 5.0f));
+    vec2_t new_pos = crpt_vec2_add(pos, crpt_vec2_scale(offset, 5.0f));
 
     return crpt_map_is_solid(map, new_pos);
 }

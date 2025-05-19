@@ -50,6 +50,7 @@ typedef struct carpet_vec3 vec3_t;
 typedef struct carpet_vec2 vec2_t;
 typedef struct carpet_ray ray_t;
 typedef struct carpet_map map_t;
+typedef struct carpet_ui ui_t;
 
 // Utils (prefixed with crpt):
 typedef struct carpet_hashtable crpt_hashtable_t;
@@ -78,6 +79,8 @@ typedef void (*event_handler_t)(scene_t *, event_t *);
 typedef void *(*asset_load_fnc_t)(const char *);
 typedef void (*scene_fnc_t)(scene_t *);
 typedef void (*free_fnc_t)(void *);
+typedef void (*ui_update_fnc_t)();
+typedef void (*ui_draw_fnc_t)();
 
 
 #endif
