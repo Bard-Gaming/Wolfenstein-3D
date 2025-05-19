@@ -20,7 +20,7 @@ static ray_t cast_ray_vert(vec2_t origin, double angle, const map_t *map)
 {
     const float tangent = tan(angle);
     bool is_right = cos(angle) > 0.0;
-    ray_t ray = { { 0 }, 0.0, true };
+    ray_t ray = { RS_VERTICAL, 0.0, 0.0, { 0 } };
     vec2_t offset = is_right ?
         (vec2_t){ map->cube_size, - map->cube_size * tangent } :
         (vec2_t){ - map->cube_size, map->cube_size * tangent };
@@ -33,7 +33,7 @@ static ray_t cast_ray_vert(vec2_t origin, double angle, const map_t *map)
             return ray;
         ray.pos = crpt_vec2_add(ray.pos, offset);
     }
-    return (ray_t){ origin, 1.0 / 0.0, false };
+    return (ray_t){ RS_VERTICAL, 0.0, 1.0 / 0.0, origin };
 }
 
 /*
@@ -45,7 +45,7 @@ static ray_t cast_ray_vert(vec2_t origin, double angle, const map_t *map)
 static ray_t cast_ray_horiz(vec2_t origin, double angle, const map_t *map)
 {
     const float tangent = 1.0 / tan(angle);
-    ray_t ray = { { 0 }, 0.0, false };
+    ray_t ray = { RS_HORIZONTAL, 0.0, 0.0, { 0 } };
     bool is_top = sin(angle) > 0.0;
     vec2_t offset = is_top ?
         (vec2_t){ map->cube_size * tangent, - map->cube_size } :
@@ -59,7 +59,7 @@ static ray_t cast_ray_horiz(vec2_t origin, double angle, const map_t *map)
             return ray;
         ray.pos = crpt_vec2_add(ray.pos, offset);
     }
-    return (ray_t){ origin, 1.0 / 0.0, false };
+    return (ray_t){ RS_HORIZONTAL, 0.0, 1.0 / 0.0, origin };
 }
 
 /*
@@ -87,11 +87,14 @@ ray_t crpt_raycast(vec2_t origin, double rotation, const map_t *map)
 {
     ray_t vertical_ray = cast_ray_vert(origin, rotation, map);
     ray_t horizontal_ray = cast_ray_horiz(origin, rotation, map);
+    ray_t *closest;
 
     if (!isinff(vertical_ray.dist))
         update_distance(&vertical_ray, origin, rotation);
     if (!isinff(horizontal_ray.dist))
         update_distance(&horizontal_ray, origin, rotation);
-    return vertical_ray.dist < horizontal_ray.dist ?
-        vertical_ray : horizontal_ray;
+    closest = vertical_ray.dist < horizontal_ray.dist ?
+        &vertical_ray : &horizontal_ray;
+    closest->angle = rotation;
+    return *closest;
 }

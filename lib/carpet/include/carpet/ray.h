@@ -15,14 +15,23 @@
     #define CRPT_SHADOW_INTENSITY 0.65f
 
 
+enum carpet_ray_side {
+    RS_VERTICAL,
+    RS_HORIZONTAL,
+};
+
+
 struct carpet_ray {
-    vec2_t pos;
+    ray_side_t side;
+    double angle;
     double dist;
-    bool draw_shadow;  // whether or not to draw a shadow
+    vec2_t pos;
 };
 
 
 ray_t crpt_raycast(vec2_t origin, double rotation, const map_t *map);
+void crpt_ray_draw3(ray_t ray, unsigned int x,
+    const map_t *map, const camera_t *cam);
 
 
 #endif

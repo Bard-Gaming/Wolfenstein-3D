@@ -41,6 +41,7 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/map/crpt_map_create_border.c								\
 			src/map/crpt_map_delete.c										\
 			src/map/crpt_map_draw3.c										\
+			src/map/crpt_map_fill_empty.c									\
 			src/map/crpt_map_get.c											\
 			src/map/crpt_map_is_solid.c										\
 			src/map/crpt_map_randomize.c									\
@@ -53,6 +54,7 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/object/crpt_object_create.c									\
 			src/object/crpt_object_delete.c									\
 			src/object/crpt_object_dup.c									\
+			src/ray/crpt_ray_draw3.c										\
 			src/ray/crpt_raycast.c											\
 			src/scene/default/crpt_scene_default_get.c						\
 			src/scene/default/crpt_scene_default_load.c						\

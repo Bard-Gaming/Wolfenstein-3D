@@ -21,7 +21,7 @@
 ** in a critical error if the scene
 ** doesn't contain a map.
 */
-object_t *crpt_object_create(vec2_t pos)
+object_t *crpt_object_create(vec2_t pos, object_type_t type)
 {
     map_t *map = crpt_game_get()->scene->map;
 
@@ -30,5 +30,5 @@ object_t *crpt_object_create(vec2_t pos)
         crpt_perror("carpet");
         exit(CRPT_CRITICAL_ERROR);
     }
-    return crpt_object_create_in_map(map, pos);
+    return crpt_object_create_in_map(map, pos, type);
 }

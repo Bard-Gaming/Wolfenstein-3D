@@ -2,8 +2,8 @@
 ** EPITECH PROJECT, 2025
 ** Project - Carpet Lib
 ** File description:
-** Header file for carpet lib's
-** graphical utilities
+** Header file for
+** graphics utilities
 */
 
 #ifndef LIB_CARPET_UTILS_GRAPHICS_H
@@ -12,7 +12,23 @@
     #include <carpet/utils/vector.h>
 
 
-void crpt_draw_line(window_t *window, vec2_t start, vec2_t end, color_t color);
+struct carpet_graphics_line {
+    // Screen Position:
+    vec2_t start;
+    vec2_t end;
+
+    // Texture:
+    const texture_t *texture;
+    vec2_t tex_start;
+    vec2_t tex_end;
+
+    // Color:
+    color_t color;
+};
+
+
+void crpt_draw_line(window_t *win, graphics_line_t line);
+
 
 
 #endif

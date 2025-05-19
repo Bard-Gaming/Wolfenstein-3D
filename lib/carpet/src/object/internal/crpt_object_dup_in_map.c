@@ -16,10 +16,9 @@
 */
 object_t *crpt_object_dup_in_map(const object_t *ref, map_t *map, vec2_t pos)
 {
-    object_t *obj = crpt_object_create_in_map(map, pos);
+    object_t *obj = crpt_object_create_in_map(map, pos, ref->type);
 
     obj->color = ref->color;
     obj->texture = ref->texture;
-    obj->draw_solid = ref->draw_solid;
     return obj;
 }

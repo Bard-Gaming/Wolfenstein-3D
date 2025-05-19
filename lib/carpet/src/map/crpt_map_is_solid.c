@@ -20,5 +20,5 @@ bool crpt_map_is_solid(const map_t *map, vec2_t position)
 {
     object_t *object = crpt_map_get(map, position);
 
-    return object != NULL && object->draw_solid;
+    return object != NULL && object->type == OT_WALL;
 }

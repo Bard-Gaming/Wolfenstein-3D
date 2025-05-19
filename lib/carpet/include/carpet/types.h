@@ -40,6 +40,8 @@ typedef sfFont font_t;
 /////////////////////////////////////////////////////////////
 
 typedef struct carpet_asset_manager asset_manager_t;
+typedef struct carpet_graphics_line graphics_line_t;
+typedef struct carpet_map_face map_face_t;
 typedef struct carpet_camera camera_t;
 typedef struct carpet_object object_t;
 typedef struct carpet_scene scene_t;
@@ -60,8 +62,9 @@ typedef struct carpet_array crpt_array_t;
 //                                                         //
 /////////////////////////////////////////////////////////////
 
-typedef enum carpet_errno crpt_errno_t;
 typedef enum carpet_object_type object_type_t;
+typedef enum carpet_ray_side ray_side_t;
+typedef enum carpet_errno crpt_errno_t;
 
 
 /////////////////////////////////////////////////////////////

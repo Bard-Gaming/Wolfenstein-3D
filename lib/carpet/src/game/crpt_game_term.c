@@ -8,6 +8,7 @@
 
 #include <carpet/game.h>
 #include <carpet/scene.h>
+#include <carpet/assets.h>
 
 
 /*
@@ -24,5 +25,6 @@ void crpt_game_term(void)
 
     UNLOAD_SCENE(game->scene);
     sfRenderWindow_destroy(game->window);
+    crpt_assets_term();
     *game = (game_t){ 0 };
 }
