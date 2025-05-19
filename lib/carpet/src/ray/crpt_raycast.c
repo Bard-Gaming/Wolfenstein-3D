@@ -20,7 +20,7 @@ static ray_t cast_ray_vert(vec2_t origin, double angle, const map_t *map)
 {
     const float tangent = tan(angle);
     bool is_right = cos(angle) > 0.0;
-    ray_t ray = { RS_VERTICAL, 0.0, 0.0, { 0 } };
+    ray_t ray = { RS_VERTICAL, 0.0, 0.0, { 0, 0 } };
     vec2_t offset = is_right ?
         (vec2_t){ map->cube_size, - map->cube_size * tangent } :
         (vec2_t){ - map->cube_size, map->cube_size * tangent };
@@ -45,7 +45,7 @@ static ray_t cast_ray_vert(vec2_t origin, double angle, const map_t *map)
 static ray_t cast_ray_horiz(vec2_t origin, double angle, const map_t *map)
 {
     const float tangent = 1.0 / tan(angle);
-    ray_t ray = { RS_HORIZONTAL, 0.0, 0.0, { 0 } };
+    ray_t ray = { RS_HORIZONTAL, 0.0, 0.0, { 0, 0 } };
     bool is_top = sin(angle) > 0.0;
     vec2_t offset = is_top ?
         (vec2_t){ map->cube_size * tangent, - map->cube_size } :

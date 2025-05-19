@@ -10,12 +10,25 @@
 
 
 /*
+** sfRenderStates_default() doesn't exist in
+** CSFML 2.5.X, so create a function that does
+** the same.
+*/
+static sfRenderStates get_default_state(void)
+{
+    return (sfRenderStates){
+        sfBlendAlpha, sfTransform_Identity,
+        NULL, NULL
+    };
+}
+
+/*
 ** Draws a line with the given data.
 */
 void crpt_draw_line(window_t *win, graphics_line_t line)
 {
     sfVertexArray *array = sfVertexArray_create();
-    sfRenderStates state = sfRenderStates_default();
+    sfRenderStates state = get_default_state();
     sfVertex v1 = {
         { line.start.x, line.start.y },
         line.color,
