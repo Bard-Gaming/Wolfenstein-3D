@@ -13,6 +13,7 @@
 
 
     #include <carpet/assets.h>
+    #include <carpet/camera.h>
     #include <carpet/errno.h>
     #include <carpet/event.h>
     #include <carpet/game.h>

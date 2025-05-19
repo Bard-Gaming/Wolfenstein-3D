@@ -75,12 +75,12 @@ typedef enum carpet_errno crpt_errno_t;
 /////////////////////////////////////////////////////////////
 
 typedef void (*update_fnc_t)(scene_t *, time_micro_t);
+typedef void (*ui_update_fnc_t)(void *, time_micro_t);
 typedef void (*event_handler_t)(scene_t *, event_t *);
 typedef void *(*asset_load_fnc_t)(const char *);
 typedef void (*scene_fnc_t)(scene_t *);
+typedef void (*ui_draw_fnc_t)(void *);
 typedef void (*free_fnc_t)(void *);
-typedef void (*ui_update_fnc_t)();
-typedef void (*ui_draw_fnc_t)();
 
 
 #endif

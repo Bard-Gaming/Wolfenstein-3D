@@ -25,6 +25,12 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/assets/crpt_asset_manager_load.c							\
 			src/assets/crpt_assets_init.c									\
 			src/assets/crpt_assets_term.c									\
+			src/camera/crpt_camera_get_fov.c								\
+			src/camera/crpt_camera_get_position.c							\
+			src/camera/crpt_camera_get_rotation.c							\
+			src/camera/crpt_camera_interpolate_fov.c						\
+			src/camera/crpt_camera_set_fov.c								\
+			src/camera/crpt_camera_set_rotation.c							\
 			src/errno/crpt_errno.c											\
 			src/errno/crpt_perror.c											\
 			src/errno/crpt_strerror.c										\
@@ -62,8 +68,7 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/scene/default/crpt_scene_default_update.c					\
 			src/scene/crpt_scene_draw.c										\
 			src/scene/crpt_scene_set.c										\
-			src/scene/crpt_scene_draw.c										\
-			src/scene/crpt_scene_set.c										\
+			src/scene/crpt_scene_update.c									\
 			src/utils/array/crpt_array_append.c								\
 			src/utils/array/crpt_array_delete.c								\
 			src/utils/array/crpt_array_reserve.c							\

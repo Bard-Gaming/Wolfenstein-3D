@@ -9,18 +9,11 @@
 #ifndef LIB_CARPET_GAME_H
     #define LIB_CARPET_GAME_H
     #include <carpet/types.h>
-    #include <carpet/utils/vector.h>
+    #include <carpet/camera.h>
 
     #define CRPT_DEFAULT_WIDTH 1920
     #define CRPT_DEFAULT_HEIGHT 1080
     #define CRPT_DEFAULT_FPS 144
-
-
-struct carpet_camera {
-    vec2_t position;
-    double rotation;
-    double fov;
-};
 
 
 struct carpet_game {

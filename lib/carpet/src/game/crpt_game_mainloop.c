@@ -6,6 +6,7 @@
 ** crpt_game_mainloop
 */
 
+#include "carpet/types.h"
 #include <carpet/game.h>
 #include <carpet/event.h>
 #include <carpet/scene.h>
@@ -42,11 +43,8 @@ void crpt_game_mainloop(void)
     while (sfRenderWindow_isOpen(game->window)) {
         crpt_event_poll(game);
         delta += sfClock_restart(clock).microseconds;
-        UPDATE_SCENE(game->scene, delta);
-        while (delta >= CRPT_FIXED_RATE) {
-            UPDATE_SCENE_FIXED(game->scene);
-            delta -= CRPT_FIXED_RATE;
-        }
+        crpt_scene_update(game->scene, delta);
+        delta %= CRPT_FIXED_RATE;
         display_game(game);
     }
     sfClock_destroy(clock);

@@ -23,8 +23,8 @@ struct carpet_ui {
     void *data;
 
     // Functions:
-    ui_draw_fnc_t draw;
-    ui_update_fnc_t update;
+    NULLABLE ui_draw_fnc_t draw;
+    NULLABLE ui_update_fnc_t update;
 };
 
 
@@ -46,6 +46,7 @@ struct carpet_scene {
 
 void crpt_scene_set(NULLABLE scene_t *scene);
 void crpt_scene_draw(scene_t *scene, camera_t *cam, window_t *window);
+void crpt_scene_update(scene_t *scene, time_micro_t delta);
 
 // Default scene:
 scene_t *crpt_scene_default_get(void);

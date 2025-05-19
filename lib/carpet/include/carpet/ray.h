@@ -6,8 +6,8 @@
 ** to do with raycasting
 */
 
-#ifndef LIB_CARPET_CAMERA_H
-    #define LIB_CARPET_CAMERA_H
+#ifndef LIB_CARPET_RAY_H
+    #define LIB_CARPET_RAY_H
     #include <carpet/types.h>
     #include <carpet/utils/vector.h>
     #include <carpet/utils/math.h>

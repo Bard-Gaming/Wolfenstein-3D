@@ -13,11 +13,11 @@
 /*
 ** Draws a scene onto the given
 ** window.
-** TODO: Add UI elements after
-** drawing map.
 */
 void crpt_scene_draw(scene_t *scene, camera_t *cam, window_t *window)
 {
     if (scene->map != NULL)
         crpt_map_draw3(scene->map, cam, window);
+    if (scene->ui != NULL && scene->ui->draw != NULL)
+        scene->ui->draw(scene->ui->data);
 }
