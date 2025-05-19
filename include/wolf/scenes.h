@@ -12,6 +12,7 @@
 
 
 // Level Scene:
+void set_level_scene(void);
 void load_level_scene(scene_t *scene);
 void unload_level_scene(scene_t *scene);
 void update_level_scene(scene_t *scene, time_micro_t dt);
