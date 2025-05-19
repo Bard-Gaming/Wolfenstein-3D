@@ -57,8 +57,8 @@ static float get_input_diff(sfKeyCode a, sfKeyCode b)
 */
 void crpt_scene_default_update(scene_t *scene, time_micro_t dt)
 {
-    float mv_input = get_input_diff(sfKeyUp, sfKeyDown);
-    float rotation = get_input_diff(sfKeyRight, sfKeyLeft) * 0.01f;
+    float mv_input = get_input_diff(sfKeyZ, sfKeyS);
+    float rotation = get_input_diff(sfKeyD, sfKeyQ) * 0.01f;
     camera_t *camera = &crpt_game_get()->camera;
     vec2_t offset = compute_pos_offset(camera, mv_input);
 
