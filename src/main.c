@@ -5,7 +5,7 @@
 ** Program Entry
 */
 
-#include <wolf/scenes.h>
+#include <wolf.h>
 
 
 int main(void)

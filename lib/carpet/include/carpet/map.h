@@ -11,6 +11,7 @@
     #include <carpet/types.h>
 
     #define CRPT_DEFAULT_CUBE_SIZE 64.f
+    #define CRPT_DEFAULT_TILE_SIZE 12.f
 
 
 struct carpet_map_face {
@@ -21,6 +22,8 @@ struct carpet_map_face {
 
 struct carpet_map {
     float cube_size;
+    float tile_size;
+
     unsigned int width;
     unsigned int height;
     object_t ***blocks;
@@ -32,6 +35,7 @@ struct carpet_map {
 
 // Map process / lifetime:
 map_t *crpt_map_create(unsigned int width, unsigned int height);
+void crpt_map_draw2(const map_t *map, vec2_t screen_pos, window_t *window);
 void crpt_map_draw3(const map_t *map, const camera_t *cam, window_t *window);
 void crpt_map_delete(map_t *map);
 

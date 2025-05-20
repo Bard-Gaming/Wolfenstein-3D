@@ -26,6 +26,7 @@ map_t *crpt_map_create(unsigned int width, unsigned int height)
     map = cmalloc(sizeof(map_t));
     *map = (map_t){
         .cube_size = CRPT_DEFAULT_CUBE_SIZE,
+        .tile_size = CRPT_DEFAULT_TILE_SIZE,
         .width = width, .height = height,
         .blocks = cmalloc(height * sizeof(object_t **)),
         .ceiling = { .color = sfBlack },

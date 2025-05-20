@@ -28,6 +28,7 @@ struct carpet_graphics_line {
 
 
 void crpt_draw_line(window_t *win, graphics_line_t line);
+void crpt_draw_square(window_t *win, vec2_t pos, double len, color_t col);
 
 
 

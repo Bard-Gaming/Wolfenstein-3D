@@ -23,6 +23,7 @@ LIBS =	-L./$(CRPT_DIR) -lcarpet											\
 INCLUDE_DIRS = -I./include -I./$(CRPT_DIR)/include
 
 SRC_FILES =	src/main.c														\
+			src/scene/level/draw_level_scene_ui.c							\
 			src/scene/level/load_level_scene.c								\
 			src/scene/level/set_level_scene.c								\
 			src/scene/level/unload_level_scene.c							\

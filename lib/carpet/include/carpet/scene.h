@@ -16,22 +16,13 @@
     #define UNLOAD_SCENE(scene) _SCENE_FNC(scene, unload)
     #define UPDATE_SCENE(scene, delta) _SCENE_FNC(scene, update, delta)
     #define UPDATE_SCENE_FIXED(s) _SCENE_FNC(s, fixed_update, CRPT_FIXED_RATE)
-
-
-struct carpet_ui {
-    // User data:
-    void *data;
-
-    // Functions:
-    NULLABLE ui_draw_fnc_t draw;
-    NULLABLE ui_update_fnc_t update;
-};
+    #define DRAW_SCENE_UI(scene, window) _SCENE_FNC(scene, draw_ui, window)
 
 
 struct carpet_scene {
     // User data:
     NULLABLE map_t *map;
-    NULLABLE ui_t *ui;
+    void *data;
 
     // Load:
     NULLABLE scene_fnc_t load;
@@ -40,6 +31,11 @@ struct carpet_scene {
     // Process:
     NULLABLE update_fnc_t update;
     NULLABLE update_fnc_t fixed_update;
+
+    // UI:
+    NULLABLE ui_draw_fnc_t draw_ui;
+
+    // Events:
     event_handler_t event_handlers[sfEvtCount];
 };
 

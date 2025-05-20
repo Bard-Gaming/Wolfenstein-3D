@@ -46,6 +46,7 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/map/crpt_map_create.c										\
 			src/map/crpt_map_create_border.c								\
 			src/map/crpt_map_delete.c										\
+			src/map/crpt_map_draw2.c										\
 			src/map/crpt_map_draw3.c										\
 			src/map/crpt_map_fill_empty.c									\
 			src/map/crpt_map_get.c											\
@@ -73,6 +74,7 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/utils/array/crpt_array_delete.c								\
 			src/utils/array/crpt_array_reserve.c							\
 			src/utils/graphics/crpt_draw_line.c								\
+			src/utils/graphics/crpt_draw_square.c							\
 			src/utils/hashtable/crpt_hash.c									\
 			src/utils/hashtable/crpt_hashtable_delete.c						\
 			src/utils/hashtable/crpt_hashtable_get.c						\

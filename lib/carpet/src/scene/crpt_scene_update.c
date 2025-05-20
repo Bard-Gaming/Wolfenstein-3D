@@ -20,6 +20,4 @@ void crpt_scene_update(scene_t *scene, time_micro_t delta)
         UPDATE_SCENE_FIXED(scene);
         delta -= CRPT_FIXED_RATE;
     }
-    if (scene->ui != NULL && scene->ui->update != NULL)
-        scene->ui->update(scene, delta);
 }
