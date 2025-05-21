@@ -7,6 +7,7 @@
 */
 
 #include <wolf/scenes.h>
+#include <wolf/player.h>
 
 
 /*
@@ -25,4 +26,5 @@ void load_level_scene(scene_t *scene)
     crpt_map_create_border(scene->map, &border);
     crpt_map_randomize(scene->map, 20, &border);
     crpt_map_fill_empty(scene->map, &room);
+    init_player();
 }
