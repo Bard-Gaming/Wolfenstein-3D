@@ -38,7 +38,7 @@ typedef sfFont font_t;
 //                        Structures                       //
 //                                                         //
 /////////////////////////////////////////////////////////////
-
+typedef struct carpet_graphics_healthbar graphics_healthbar_t;
 typedef struct carpet_graphics_line graphics_line_t;
 typedef struct carpet_asset_manager asset_manager_t;
 typedef struct carpet_object_face object_face_t;

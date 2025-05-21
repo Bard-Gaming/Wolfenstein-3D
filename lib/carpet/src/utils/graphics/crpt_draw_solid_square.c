@@ -6,17 +6,17 @@
 ** crpt_draw_square
 */
 
-#include <SFML/Graphics/RectangleShape.h>
-#include <SFML/Graphics/RenderWindow.h>
 #include <carpet/utils/graphics.h>
+#include <carpet/game.h>
 
 
 /*
 ** Draws a solid square onto the screen.
 ** Nothing much to add there.
 */
-void crpt_draw_square(window_t *win, vec2_t pos, double len, color_t col)
+void crpt_draw_solid_square(vec2_t pos, double len, color_t col)
 {
+    window_t *win = crpt_game_get()->window;
     sfRectangleShape *rect = sfRectangleShape_create();
 
     if (rect == NULL)

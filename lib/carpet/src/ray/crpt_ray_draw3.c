@@ -55,8 +55,7 @@ static void compute_tex_coords(vec2_t *buf, ray_t ray,
 ** This is mainly a wrapper function around crpt_draw_line,
 ** which is necessary when trying to compute the tex coords.
 */
-static void draw_line(window_t *win, ray_t ray,
-    const object_t *obj, graphics_line_t line)
+static void draw_line(ray_t ray, const object_t *obj, graphics_line_t line)
 {
     double height = line.tex_start.y;
     vec2_t tex_coords[2] = { 0 };
@@ -65,13 +64,13 @@ static void draw_line(window_t *win, ray_t ray,
         compute_tex_coords(tex_coords, ray, obj, height);
     line.tex_start = tex_coords[0];
     line.tex_end = tex_coords[1];
-    crpt_draw_line(win, line);
+    crpt_draw_line(line);
 }
 
 /*
 ** Draws the floor and ceiling.
 */
-static void draw_floor_ceil(game_t *game, ray_t ray, double x, double y)
+static void draw_floor_ceil(game_t *game, double x, double y)
 {
     const map_t *map = game->scene->map;
     const camera_t *cam = &game->camera;
@@ -81,11 +80,11 @@ static void draw_floor_ceil(game_t *game, ray_t ray, double x, double y)
         .color = map->floor,
     };
 
-    crpt_draw_line(game->window, line);
+    crpt_draw_line(line);
     line.start.y = 0.0;
     line.end.y = cam->height - y;
     line.color = map->ceiling;
-    crpt_draw_line(game->window, line);
+    crpt_draw_line(line);
 }
 
 /*
@@ -109,10 +108,10 @@ void crpt_ray_draw3(ray_t ray, double x,
     height_uncapped = map->cube_size * cam->height / ray.dist;
     height = fmin(cam->height, height_uncapped);
     start_y = (cam->height - height) * 0.5;
-    draw_line(game->window, ray, obj, (graphics_line_t){
+    draw_line(ray, obj, (graphics_line_t){
         .start = { x, start_y }, .end = { x, start_y + height },
         .texture = obj->texture, .color = process_color(ray, obj),
         .tex_start = { start_y, height_uncapped },
     });
-    draw_floor_ceil(game, ray, x, start_y + height);
+    draw_floor_ceil(game, x, start_y + height);
 }

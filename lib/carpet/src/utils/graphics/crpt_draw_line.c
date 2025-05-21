@@ -7,6 +7,7 @@
 */
 
 #include <carpet/utils/graphics.h>
+#include <carpet/game.h>
 
 
 /*
@@ -25,8 +26,9 @@ static sfRenderStates get_default_state(void)
 /*
 ** Draws a line with the given data.
 */
-void crpt_draw_line(window_t *win, graphics_line_t line)
+void crpt_draw_line(graphics_line_t line)
 {
+    window_t *win = crpt_game_get()->window;
     sfVertexArray *array = sfVertexArray_create();
     sfRenderStates state = get_default_state();
     sfVertex v1 = {

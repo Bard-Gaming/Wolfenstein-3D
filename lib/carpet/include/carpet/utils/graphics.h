@@ -27,8 +27,24 @@ struct carpet_graphics_line {
 };
 
 
-void crpt_draw_line(window_t *win, graphics_line_t line);
-void crpt_draw_square(window_t *win, vec2_t pos, double len, color_t col);
+struct carpet_graphics_healthbar {
+    // Screen position:
+    vec2_t pos;
+    vec2_t dimensions;
+
+    // Data:
+    double progress;  // value between 0.0 and 1.0
+
+    // Display:
+    const texture_t *empty;
+    const texture_t *full;
+    color_t color;
+};
+
+
+void crpt_draw_line(graphics_line_t line);
+void crpt_draw_solid_square(vec2_t pos, double len, color_t col);
+void crpt_draw_healthbar(graphics_healthbar_t healthbar);
 
 
 #endif

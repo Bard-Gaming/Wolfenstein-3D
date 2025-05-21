@@ -17,6 +17,6 @@
 void crpt_scene_draw(scene_t *scene, camera_t *cam, window_t *window)
 {
     if (scene->map != NULL)
-        crpt_map_draw3(scene->map, cam, window);
+        crpt_map_draw3(scene->map, cam);
     DRAW_SCENE_UI(scene, window);
 }

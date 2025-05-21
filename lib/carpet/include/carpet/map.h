@@ -30,8 +30,8 @@ struct carpet_map {
 
 // Map process / lifetime:
 map_t *crpt_map_create(unsigned int width, unsigned int height);
-void crpt_map_draw2(const map_t *map, vec2_t screen_pos, window_t *window);
-void crpt_map_draw3(const map_t *map, const camera_t *cam, window_t *window);
+void crpt_map_draw2(const map_t *map, vec2_t screen_pos);
+void crpt_map_draw3(const map_t *map, const camera_t *cam);
 void crpt_map_delete(map_t *map);
 
 // Map objects:
