@@ -30,7 +30,7 @@ double crpt_vec3_magnitude(vec3_t vec)
 */
 double crpt_vec2_magnitude(vec2_t vec)
 {
-    return sqrt(
+    return sqrtf(
         vec.x * vec.x +
         vec.y * vec.y
     );
