@@ -29,8 +29,6 @@ map_t *crpt_map_create(unsigned int width, unsigned int height)
         .tile_size = CRPT_DEFAULT_TILE_SIZE,
         .width = width, .height = height,
         .blocks = cmalloc(height * sizeof(object_t **)),
-        .ceiling = { .color = sfBlack },
-        .floor = { .color = sfBlack },
     };
     for (unsigned int row = 0; row < height; row++)
         map->blocks[row] = ccalloc(width, sizeof(object_t *));

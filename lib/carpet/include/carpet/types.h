@@ -39,11 +39,11 @@ typedef sfFont font_t;
 //                                                         //
 /////////////////////////////////////////////////////////////
 
-typedef struct carpet_asset_manager asset_manager_t;
 typedef struct carpet_graphics_line graphics_line_t;
-typedef struct carpet_map_face map_face_t;
-typedef struct carpet_camera camera_t;
+typedef struct carpet_asset_manager asset_manager_t;
+typedef struct carpet_object_face object_face_t;
 typedef struct carpet_object object_t;
+typedef struct carpet_camera camera_t;
 typedef struct carpet_scene scene_t;
 typedef struct carpet_game game_t;
 typedef struct carpet_vec3 vec3_t;

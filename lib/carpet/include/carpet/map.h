@@ -14,12 +14,6 @@
     #define CRPT_DEFAULT_TILE_SIZE 12.f
 
 
-struct carpet_map_face {
-    const texture_t *texture;
-    color_t color;
-};
-
-
 struct carpet_map {
     float cube_size;
     float tile_size;
@@ -28,8 +22,9 @@ struct carpet_map {
     unsigned int height;
     object_t ***blocks;
 
-    map_face_t ceiling;
-    map_face_t floor;
+    // Ceiling / Floor textures:
+    color_t ceiling;
+    color_t floor;
 };
 
 

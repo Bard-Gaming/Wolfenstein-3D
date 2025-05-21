@@ -18,9 +18,11 @@ LIBS = -lcsfml-window -lcsfml-graphics -lcsfml-system -lcsfml-audio -lm
 SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/assets/fonts/crpt_load_font.c								\
 			src/assets/fonts/crpt_load_font_src.c							\
+			src/assets/fonts/crpt_unload_font.c								\
 			src/assets/textures/crpt_fetch_texture.c						\
 			src/assets/textures/crpt_load_texture.c							\
 			src/assets/textures/crpt_load_texture_src.c						\
+			src/assets/textures/crpt_unload_texture.c						\
 			src/assets/crpt_asset_manager_get.c								\
 			src/assets/crpt_asset_manager_load.c							\
 			src/assets/crpt_assets_init.c									\
@@ -29,6 +31,7 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/camera/crpt_camera_get_position.c							\
 			src/camera/crpt_camera_get_rotation.c							\
 			src/camera/crpt_camera_interpolate_fov.c						\
+			src/camera/crpt_camera_rotate.c									\
 			src/camera/crpt_camera_set_fov.c								\
 			src/camera/crpt_camera_set_rotation.c							\
 			src/errno/crpt_errno.c											\
@@ -79,6 +82,7 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/utils/hashtable/crpt_hashtable_delete.c						\
 			src/utils/hashtable/crpt_hashtable_get.c						\
 			src/utils/hashtable/crpt_hashtable_set.c						\
+			src/utils/hashtable/crpt_hashtable_unset.c						\
 			src/utils/vector/crpt_vec_add.c									\
 			src/utils/vector/crpt_vec_distance.c							\
 			src/utils/vector/crpt_vec_dot.c									\
@@ -119,6 +123,9 @@ $(NAME): $(ASS_FILES) $(OBJ_FILES)
 
 debug: CFLAGS += -ggdb -Wall -Wextra
 debug: fclean $(NAME)
+
+perf: CFLAGS += -g -pg
+perf: fclean $(NAME)
 
 sanitize: CFLAGS += -g -lasan -fsanitize=address
 sanitize: fclean $(NAME)

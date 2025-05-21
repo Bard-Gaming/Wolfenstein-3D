@@ -6,11 +6,12 @@
 ** crpt_ray_draw3
 */
 
-#include "carpet/types.h"
+#include <SFML/Graphics/Texture.h>
 #include <carpet/ray.h>
 #include <carpet/map.h>
 #include <carpet/game.h>
 #include <carpet/object.h>
+#include <carpet/scene.h>
 #include <carpet/utils/graphics.h>
 
 
@@ -28,18 +29,13 @@ static color_t process_color(ray_t ray, const object_t *obj)
 }
 
 /*
-** Tells whether or not the angle is facing
-** a North / South wall or not.
-*/
-#include <stdio.h>
-/*
 ** Computes the tex coords and store them in
 ** the given 2D vector buffer (buf).
 */
 static void compute_tex_coords(vec2_t *buf, ray_t ray,
     const object_t *obj, double height)
 {
-    const double max_height = buf[0].x;
+    const double max_height = crpt_game_get()->camera.height;
     sfVector2u texture_dim = sfTexture_getSize(obj->texture);
     double texture_ratio = texture_dim.y / height;
     double height_offset = fmax(height - max_height, 0.0) / 2.0;
@@ -48,10 +44,10 @@ static void compute_tex_coords(vec2_t *buf, ray_t ray,
         fabs(ray.pos.y - obj->position.y);
     double tex_x = texture_dim.x * (offset / obj->map->cube_size);
 
-    buf[0].y = height_offset * texture_ratio;
-    buf[1].y = (height - height_offset) * texture_ratio;
     buf[0].x = tex_x;
+    buf[0].y = height_offset * texture_ratio;
     buf[1].x = tex_x;
+    buf[1].y = (height - height_offset) * texture_ratio;
 }
 
 /*
@@ -62,42 +58,61 @@ static void compute_tex_coords(vec2_t *buf, ray_t ray,
 static void draw_line(window_t *win, ray_t ray,
     const object_t *obj, graphics_line_t line)
 {
-    const unsigned int max_height = sfRenderWindow_getSize(win).y;
-    double height = line.end.y - line.start.y;
+    double height = line.tex_start.y;
     vec2_t tex_coords[2] = { 0 };
 
-    if (obj->texture != NULL) {
-        tex_coords[0].x = max_height;
+    if (obj->texture != NULL)
         compute_tex_coords(tex_coords, ray, obj, height);
-    }
     line.tex_start = tex_coords[0];
     line.tex_end = tex_coords[1];
-    line.end.y = line.start.y + fmin(max_height, height);
     crpt_draw_line(win, line);
+}
+
+/*
+** Draws the floor and ceiling.
+*/
+static void draw_floor_ceil(game_t *game, ray_t ray, double x, double y)
+{
+    const map_t *map = game->scene->map;
+    const camera_t *cam = &game->camera;
+    graphics_line_t line = {
+        .start = { x, y },
+        .end = { x, cam->height },
+        .color = map->floor,
+    };
+
+    crpt_draw_line(game->window, line);
+    line.start.y = 0.0;
+    line.end.y = cam->height - y;
+    line.color = map->ceiling;
+    crpt_draw_line(game->window, line);
 }
 
 /*
 ** Draws the vertical line the given ray has hit
 ** onto the game's window at the specified x-position.
 */
-void crpt_ray_draw3(ray_t ray, unsigned int x,
+void crpt_ray_draw3(ray_t ray, double x,
     const map_t *map, const camera_t *cam)
 {
-    window_t *win = crpt_game_get()->window;
-    const unsigned int max_height = sfRenderWindow_getSize(win).y;
-    object_t *obj = crpt_map_get(map, ray.pos);
+    game_t *game = crpt_game_get();
+    double height_uncapped;
     double start_y;
     double height;
+    object_t *obj;
 
-    if (isinff(ray.dist) || obj == NULL)
+    if (isinff(ray.dist))
         return;
-    ray.dist *= cos(ray.angle - cam->rotation);
-    height = map->cube_size * max_height / ray.dist;
-    start_y = (max_height - fmin(max_height, height)) / 2.0;
-    draw_line(win, ray, obj, (graphics_line_t){
-        .start = (vec2_t){ x, start_y },
-        .end = (vec2_t){ x, start_y + height },
-        .texture = obj->texture,
-        .color = process_color(ray, obj),
+    obj = crpt_map_get(map, ray.pos);
+    if (obj == NULL)
+        return;
+    height_uncapped = map->cube_size * cam->height / ray.dist;
+    height = fmin(cam->height, height_uncapped);
+    start_y = (cam->height - height) * 0.5;
+    draw_line(game->window, ray, obj, (graphics_line_t){
+        .start = { x, start_y }, .end = { x, start_y + height },
+        .texture = obj->texture, .color = process_color(ray, obj),
+        .tex_start = { start_y, height_uncapped },
     });
+    draw_floor_ceil(game, ray, x, start_y + height);
 }

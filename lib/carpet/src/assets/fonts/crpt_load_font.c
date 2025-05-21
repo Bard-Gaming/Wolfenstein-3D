@@ -7,7 +7,6 @@
 */
 
 #include <carpet/assets.h>
-#include <carpet/errno.h>
 
 
 /*

@@ -8,6 +8,7 @@
 
 #include <carpet/ray.h>
 #include <carpet/map.h>
+#include <carpet/game.h>
 
 
 /*
@@ -75,6 +76,18 @@ static void update_distance(ray_t *ray, vec2_t origin, double rotation)
 }
 
 /*
+** Fixes the fisheye effect that naturally
+** occurs in the raycasting process.
+*/
+static void fix_fisheye(ray_t *ray, double rotation)
+{
+    const camera_t *cam = &crpt_game_get()->camera;
+
+    ray->angle = rotation;
+    ray->dist *= cos(ray->angle - cam->rotation);
+}
+
+/*
 ** Returns a 3D vector that describes the
 ** wall that was hit.
 ** The vector is in the following format:
@@ -95,6 +108,6 @@ ray_t crpt_raycast(vec2_t origin, double rotation, const map_t *map)
         update_distance(&horizontal_ray, origin, rotation);
     closest = vertical_ray.dist < horizontal_ray.dist ?
         &vertical_ray : &horizontal_ray;
-    closest->angle = rotation;
+    fix_fisheye(closest, rotation);
     return *closest;
 }

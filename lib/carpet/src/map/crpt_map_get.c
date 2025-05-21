@@ -22,7 +22,6 @@ object_t *crpt_map_get(const map_t *map, vec2_t position)
     size_t x = (size_t)position.x / map->cube_size;
     size_t y = (size_t)position.y / map->cube_size;
 
-    if (x >= map->width || y >= map->height)
-        return NULL;
-    return map->blocks[y][x];
+    return x >= map->width || y >= map->height ?
+        NULL : map->blocks[y][x];
 }

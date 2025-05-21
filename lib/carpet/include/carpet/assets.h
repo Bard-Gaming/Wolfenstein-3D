@@ -29,11 +29,13 @@ void crpt_assets_term(void);
 
 // Fonts:
 void crpt_load_font(const char *path, const char *id);
+void crpt_unload_font(const char *id);
 UNSAFE void crpt_load_font_src(void *data, size_t len, const char *id);
 font_t *crpt_fetch_font(const char *id);
 
 // Textures:
 void crpt_load_texture(const char *path, const char *id);
+void crpt_unload_texture(const char *id);
 UNSAFE void crpt_load_texture_src(void *data, size_t len, const char *id);
 texture_t *crpt_fetch_texture(const char *id);
 

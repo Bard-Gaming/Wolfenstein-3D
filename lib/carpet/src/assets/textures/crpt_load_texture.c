@@ -8,7 +8,6 @@
 
 #include <carpet/assets.h>
 #include <carpet/memory.h>
-#include <carpet/errno.h>
 #include <stdlib.h>
 
 

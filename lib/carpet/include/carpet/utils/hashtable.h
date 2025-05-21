@@ -30,6 +30,8 @@ struct carpet_hashtable {
 
 // User functions:
 void crpt_hashtable_set(crpt_hashtable_t *table, const char *key, void *data);
+void crpt_hashtable_unset(crpt_hashtable_t *table, const char *key,
+    free_fnc_t free);
 void *crpt_hashtable_get(const crpt_hashtable_t *table, const char *key);
 void crpt_hashtable_delete(crpt_hashtable_t *table, free_fnc_t free_data);
 

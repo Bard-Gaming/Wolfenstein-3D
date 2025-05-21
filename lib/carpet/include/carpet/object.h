@@ -13,7 +13,7 @@
 
 
 enum carpet_object_type {
-    OT_WALL,  // Solid wall. Faces: North, East, South, West
+    OT_WALL,  // Solid wall. Faces: Wall (same for all 4 sides)
     OT_ROOM,  // No wall. Faces: Ceil, Floor
 };
 

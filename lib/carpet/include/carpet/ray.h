@@ -30,7 +30,7 @@ struct carpet_ray {
 
 
 ray_t crpt_raycast(vec2_t origin, double rotation, const map_t *map);
-void crpt_ray_draw3(ray_t ray, unsigned int x,
+void crpt_ray_draw3(ray_t ray, double x,
     const map_t *map, const camera_t *cam);
 
 

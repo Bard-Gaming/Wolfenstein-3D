@@ -27,12 +27,11 @@
 object_t *crpt_object_create_in_map(map_t *map, vec2_t pos, object_type_t t)
 {
     object_t *obj = ccalloc(1, sizeof(object_t));
-    object_t *old;
+    object_t *old = crpt_map_get(map, pos);
 
     obj->position = pos;
     obj->type = t;
-    obj->color = t == OT_ROOM ? sfBlue : sfWhite;
-    old = crpt_map_get(map, pos);
+    obj->color = t == OT_ROOM ? sfMagenta : sfWhite;
     free(old);
     crpt_map_add(map, obj);
     return obj;
