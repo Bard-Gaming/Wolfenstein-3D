@@ -14,6 +14,7 @@
 */
 void unload_level_scene(scene_t *scene)
 {
+    crpt_unload_texture("bricks");
     crpt_map_delete(scene->map);
     scene->map = NULL;
 }

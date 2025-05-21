@@ -57,6 +57,13 @@ debug: CFLAGS += -ggdb -Wall -Wextra
 debug: CRPT_RULE = debug
 debug: fclean $(NAME)
 
+perf: LIBS := -pg $(LIBS)
+perf: CFLAGS += -g
+perf: CRPT_RULE = perf
+perf: fclean $(NAME)
+	@./$(NAME)
+	@gprof -bp $(NAME)
+
 sanitize: CFLAGS += -g -lasan -fsanitize=address
 sanitize: CRPT_RULE = sanitize
 sanitize: fclean $(NAME)
