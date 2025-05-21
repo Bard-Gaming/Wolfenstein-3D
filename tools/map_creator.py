@@ -1,7 +1,6 @@
+#!/bin/env python3
 
 import tkinter as tk
-from tkinter.ttk import *
-from tkinter import filedialog, messagebox
 import random
 
 
@@ -101,7 +100,7 @@ class Application(tk.Tk):
             width = int(self.width_entry.get())
             height = int(self.height_entry.get())
         except ValueError:
-            messagebox.showerror("Error", "Width and Height must be integers.")
+            tk.messagebox.showerror("Error", "Width and Height must be integers.")
             return
 
         self.cell_widgets = []
@@ -117,7 +116,7 @@ class Application(tk.Tk):
                 solid_checkbox.pack()
 
                 texture_entry = tk.Entry(cell_frame, width=6)
-                texture_entry.insert(0, "WALL")
+                texture_entry.insert(0, "")
                 texture_entry.pack()
 
                 color_entry = tk.Entry(cell_frame, width=6)
@@ -133,14 +132,14 @@ class Application(tk.Tk):
 
     def export_map(self):
         if not self.cell_widgets:
-            messagebox.showerror("Error", "You must generate the grid first.")
+            tk.messagebox.showerror("Error", "You must generate the grid first.")
             return
 
         try:
             width = int(self.width_entry.get())
             height = int(self.height_entry.get())
         except ValueError:
-            messagebox.showerror("Error", "Invalid dimensions.")
+            tk.messagebox.showerror("Error", "Invalid dimensions.")
             return
 
         map_file = MapFile()
@@ -155,16 +154,16 @@ class Application(tk.Tk):
                 try:
                     color = int(color_str.lstrip("#"), 16)
                 except ValueError:
-                    messagebox.showerror("Error", f"Invalid color: {color_str}")
+                    tk.messagebox.showerror("Error", f"Invalid color: {color_str}")
                     return
 
                 map_cell = MapCell(is_solid, texture, color)
                 map_file.add_cell(map_cell)
 
-        filename = filedialog.asksaveasfilename(defaultextension=".mdsc", filetypes=[("Map Files", "*.mdsc")])
+        filename = tk.filedialog.asksaveasfilename(defaultextension=".mdsc", filetypes=[("Map Files", "*.mdsc")])
         if filename:
             map_file.write(filename)
-            messagebox.showinfo("Success", f"Map saved to {filename}")
+            tk.messagebox.showinfo("Success", f"Map saved to {filename}")
 
 
 
