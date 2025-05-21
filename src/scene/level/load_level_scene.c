@@ -10,6 +10,13 @@
 #include <wolf/player.h>
 
 
+static void load_textures(void)
+{
+    crpt_load_texture("assets/textures/bricks.png", "bricks");
+    crpt_load_texture("assets/textures/healthbar_full.png", "hb_full");
+    crpt_load_texture("assets/textures/healthbar_empty.png", "hb_empty");
+}
+
 /*
 ** Level's scene load function.
 */
@@ -18,7 +25,7 @@ void load_level_scene(scene_t *scene)
     object_t border = { .type = OT_WALL, .color = sfWhite };
     object_t room = { .type = OT_ROOM, .color = sfWhite };
 
-    crpt_load_texture("assets/textures/bricks.png", "bricks");
+    load_textures();
     border.texture = crpt_fetch_texture("bricks");
     scene->map = crpt_map_create(50, 50);
     scene->map->floor = (color_t){ 100, 100, 100, 255 };

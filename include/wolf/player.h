@@ -10,12 +10,12 @@
     #define WOLF_PLAYER_H
     #include <carpet.h>
 
-    #define PLAYER_MAX_HEALTH 20
+    #define PLAYER_MAX_HEALTH 20.f
 
 
 typedef struct {
     // Player stats:
-    unsigned int health;
+    float health;
 
     // World Data:
     vec2_t *pos;
