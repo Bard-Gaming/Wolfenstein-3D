@@ -2,6 +2,7 @@
 
 import tkinter as tk
 import random
+from tkinter import messagebox, filedialog
 
 
 class MapCell:
@@ -91,6 +92,8 @@ class Application(tk.Tk):
 
         self.export_button.pack(pady=10)
 
+        self.cell_widgets = []
+
     def generate_grid(self):
         # Clear existing widgets
         for widget in self.scrollable_frame.winfo_children():
@@ -100,7 +103,7 @@ class Application(tk.Tk):
             width = int(self.width_entry.get())
             height = int(self.height_entry.get())
         except ValueError:
-            tk.messagebox.showerror("Error", "Width and Height must be integers.")
+            messagebox.showerror("Error", "Width and Height must be integers.")
             return
 
         self.cell_widgets = []
@@ -132,14 +135,14 @@ class Application(tk.Tk):
 
     def export_map(self):
         if not self.cell_widgets:
-            tk.messagebox.showerror("Error", "You must generate the grid first.")
+            messagebox.showerror("Error", "You must generate the grid first.")
             return
 
         try:
             width = int(self.width_entry.get())
             height = int(self.height_entry.get())
         except ValueError:
-            tk.messagebox.showerror("Error", "Invalid dimensions.")
+            messagebox.showerror("Error", "Invalid dimensions.")
             return
 
         map_file = MapFile()
@@ -154,16 +157,16 @@ class Application(tk.Tk):
                 try:
                     color = int(color_str.lstrip("#"), 16)
                 except ValueError:
-                    tk.messagebox.showerror("Error", f"Invalid color: {color_str}")
+                    messagebox.showerror("Error", f"Invalid color: {color_str}")
                     return
 
                 map_cell = MapCell(is_solid, texture, color)
                 map_file.add_cell(map_cell)
 
-        filename = tk.filedialog.asksaveasfilename(defaultextension=".mdsc", filetypes=[("Map Files", "*.mdsc")])
+        filename = filedialog.asksaveasfilename(defaultextension=".mdsc", filetypes=[("Map Files", "*.mdsc")])
         if filename:
             map_file.write(filename)
-            tk.messagebox.showinfo("Success", f"Map saved to {filename}")
+            messagebox.showinfo("Success", f"Map saved to {filename}")
 
 
 

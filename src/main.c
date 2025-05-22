@@ -11,7 +11,7 @@
 int main(void)
 {
     crpt_game_init();
-    set_level_scene();
+    set_start_scene();
     crpt_game_mainloop();
     crpt_game_term();
 }
