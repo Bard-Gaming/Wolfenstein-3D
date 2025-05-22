@@ -17,11 +17,11 @@
 ** Note that depending on the given position,
 ** the returned wall may be NULL.
 */
-object_t *crpt_map_get(const map_t *map, vec2_t position)
+map_cell_t *crpt_map_get_cell(const map_t *map, vec2_t position)
 {
-    size_t x = (size_t)position.x / map->cube_size;
-    size_t y = (size_t)position.y / map->cube_size;
+    size_t x = (size_t)position.x / map->cell_size;
+    size_t y = (size_t)position.y / map->cell_size;
 
     return x >= map->width || y >= map->height ?
-        NULL : map->blocks[y][x];
+        NULL : map->cells[y] + x;
 }

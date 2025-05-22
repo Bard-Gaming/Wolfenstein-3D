@@ -7,7 +7,6 @@
 */
 
 #include <carpet/map.h>
-#include <carpet/object.h>
 #include <carpet/utils/math.h>
 
 
@@ -17,16 +16,14 @@
 ** This function will never place walls on the
 ** border of the map.
 */
-void crpt_map_randomize(map_t *map, size_t count, const object_t *ref)
+void crpt_map_randomize(map_t *map, size_t count, const map_cell_t *ref)
 {
-    vec2_t pos;
     size_t x;
     size_t y;
 
     for (size_t i = 0; i < count; i++) {
         x = crpt_rand(map->width - 2) + 1;
         y = crpt_rand(map->height - 2) + 1;
-        pos = (vec2_t){ x * map->cube_size, y * map->cube_size };
-        crpt_object_dup_in_map(ref, map, pos);
+        map->cells[y][x] = *ref;
     }
 }

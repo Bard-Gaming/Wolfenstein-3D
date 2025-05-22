@@ -19,6 +19,9 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/assets/fonts/crpt_load_font.c								\
 			src/assets/fonts/crpt_load_font_src.c							\
 			src/assets/fonts/crpt_unload_font.c								\
+			src/assets/sprites/crpt_fetch_sprite.c							\
+			src/assets/sprites/crpt_load_sprite.c							\
+			src/assets/sprites/crpt_unload_sprite.c							\
 			src/assets/textures/crpt_fetch_texture.c						\
 			src/assets/textures/crpt_load_texture.c							\
 			src/assets/textures/crpt_load_texture_src.c						\
@@ -45,25 +48,26 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/game/crpt_game_mainloop.c									\
 			src/game/crpt_game_stop.c										\
 			src/game/crpt_game_term.c										\
-			src/map/crpt_map_add.c											\
+			src/map/crpt_map_add_object.c									\
+			src/map/crpt_map_cell_coords.c									\
 			src/map/crpt_map_create.c										\
 			src/map/crpt_map_create_border.c								\
 			src/map/crpt_map_delete.c										\
+			src/map/crpt_map_delete_object.c								\
 			src/map/crpt_map_draw2.c										\
 			src/map/crpt_map_draw3.c										\
 			src/map/crpt_map_fill_empty.c									\
-			src/map/crpt_map_get.c											\
+			src/map/crpt_map_get_cell.c										\
 			src/map/crpt_map_is_solid.c										\
 			src/map/crpt_map_randomize.c									\
-			src/map/crpt_map_remove.c										\
+			src/map/crpt_map_remove_object.c								\
 			src/memory/ccalloc.c											\
 			src/memory/cmalloc.c											\
 			src/memory/crealloc.c											\
-			src/object/internal/crpt_object_create_in_map.c					\
-			src/object/internal/crpt_object_dup_in_map.c					\
 			src/object/crpt_object_create.c									\
-			src/object/crpt_object_delete.c									\
-			src/object/crpt_object_dup.c									\
+			src/object/crpt_object_defaults.c								\
+			src/object/crpt_object_move.c									\
+			src/object/crpt_object_set_position.c							\
 			src/ray/crpt_ray_draw3.c										\
 			src/ray/crpt_raycast.c											\
 			src/scene/default/crpt_scene_default_get.c						\
@@ -75,10 +79,13 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/scene/crpt_scene_update.c									\
 			src/utils/array/crpt_array_append.c								\
 			src/utils/array/crpt_array_delete.c								\
+			src/utils/array/crpt_array_empty.c								\
 			src/utils/array/crpt_array_reserve.c							\
+			src/utils/array/crpt_array_sort.c								\
 			src/utils/graphics/crpt_draw_healthbar.c						\
 			src/utils/graphics/crpt_draw_line.c								\
 			src/utils/graphics/crpt_draw_solid_square.c						\
+			src/utils/graphics/crpt_draw_sprite.c							\
 			src/utils/hashtable/crpt_hash.c									\
 			src/utils/hashtable/crpt_hashtable_delete.c						\
 			src/utils/hashtable/crpt_hashtable_get.c						\

@@ -50,6 +50,11 @@ static inline unsigned int crpt_umin(unsigned int a, unsigned int b)
     return a < b ? a : b;
 }
 
+static inline unsigned int crpt_umax(unsigned int a, unsigned int b)
+{
+    return a > b ? a : b;
+}
+
 
 
 #endif

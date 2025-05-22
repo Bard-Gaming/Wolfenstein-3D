@@ -8,27 +8,22 @@
 
 #include <carpet/object.h>
 #include <carpet/memory.h>
-#include <carpet/errno.h>
-#include <carpet/scene.h>
-#include <carpet/game.h>
-#include <carpet/map.h>
 #include <stdlib.h>
 
 
 /*
-** Creates a new object in the
-** current scene's map. This results
-** in a critical error if the scene
-** doesn't contain a map.
+** Default object creation function.
+** This allocates memory, so it shouldn't
+** be used when trying to create a non-default
+** object that inherits from the object structure.
 */
-object_t *crpt_object_create(vec2_t pos, object_type_t type)
+object_t *crpt_object_create(const texture_t *texture, vec2_t pos)
 {
-    map_t *map = crpt_game_get()->scene->map;
+    object_t *object = cmalloc(sizeof(object_t));
 
-    if (map == NULL) {
-        crpt_errno_set(CE_OBJECT_NO_MAP);
-        crpt_perror("carpet");
-        exit(CRPT_CRITICAL_ERROR);
-    }
-    return crpt_object_create_in_map(map, pos, type);
+    object->texture = texture;
+    object->update = NULL;
+    object->free = free;
+    crpt_object_set_position(object, pos);
+    return object;
 }

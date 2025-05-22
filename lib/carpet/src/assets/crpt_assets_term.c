@@ -20,4 +20,5 @@ void crpt_assets_term(void)
 
     crpt_hashtable_delete(&manager->fonts, (free_fnc_t)sfFont_destroy);
     crpt_hashtable_delete(&manager->textures, (free_fnc_t)sfTexture_destroy);
+    crpt_hashtable_delete(&manager->sprites, (free_fnc_t)sfSprite_destroy);
 }

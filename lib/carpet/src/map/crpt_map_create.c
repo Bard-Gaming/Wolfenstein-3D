@@ -7,7 +7,6 @@
 */
 
 #include <carpet/map.h>
-#include <carpet/object.h>
 #include <carpet/memory.h>
 
 
@@ -25,12 +24,12 @@ map_t *crpt_map_create(unsigned int width, unsigned int height)
         return NULL;
     map = cmalloc(sizeof(map_t));
     *map = (map_t){
-        .cube_size = CRPT_DEFAULT_CUBE_SIZE,
+        .cell_size = CRPT_DEFAULT_CUBE_SIZE,
         .tile_size = CRPT_DEFAULT_TILE_SIZE,
         .width = width, .height = height,
-        .blocks = cmalloc(height * sizeof(object_t **)),
+        .cells = cmalloc(height * sizeof(map_cell_t *)),
     };
     for (unsigned int row = 0; row < height; row++)
-        map->blocks[row] = ccalloc(width, sizeof(object_t *));
+        map->cells[row] = ccalloc(width, sizeof(map_cell_t));
     return map;
 }

@@ -23,7 +23,8 @@ struct carpet_graphics_line {
     vec2_t tex_end;
 
     // Color:
-    color_t color;
+    color_t start_color;
+    color_t end_color;
 };
 
 
@@ -43,6 +44,7 @@ struct carpet_graphics_healthbar {
 
 
 void crpt_draw_line(graphics_line_t line);
+void crpt_draw_sprite(const sprite_t *sprite);
 void crpt_draw_solid_square(vec2_t pos, double len, color_t col);
 void crpt_draw_healthbar(graphics_healthbar_t healthbar);
 

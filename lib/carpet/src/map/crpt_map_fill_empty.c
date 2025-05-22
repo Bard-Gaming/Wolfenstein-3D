@@ -7,7 +7,6 @@
 */
 
 #include <carpet/map.h>
-#include <carpet/object.h>
 
 
 /*
@@ -15,21 +14,18 @@
 ** if the given slot is empty.
 ** Does nothing otherwise.
 */
-static void fill_map(map_t *map, size_t x, size_t y, const object_t *ref)
+static void fill_map(map_t *map, size_t x, size_t y, const map_cell_t *ref)
 {
-    if (map->blocks[y][x] != NULL)
+    if (map->cells[y][x].type != MCT_EMPTY)
         return;
-    crpt_object_dup_in_map(
-        ref, map,
-        (vec2_t){ x * map->cube_size, y * map->cube_size }
-    );
+    map->cells[y][x] = *ref;
 }
 
 /*
 ** Fills all empty slots of the map with the
 ** given reference.
 */
-void crpt_map_fill_empty(map_t *map, const object_t *ref)
+void crpt_map_fill_empty(map_t *map, const map_cell_t *ref)
 {
     for (size_t y = 0; y < map->height; y++)
         for (size_t x = 0; x < map->width; x++)

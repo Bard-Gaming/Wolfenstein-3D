@@ -7,7 +7,6 @@
 */
 
 #include <carpet/map.h>
-#include <carpet/object.h>
 #include <carpet/utils/vector.h>
 
 
@@ -18,7 +17,7 @@
 */
 bool crpt_map_is_solid(const map_t *map, vec2_t position)
 {
-    object_t *object = crpt_map_get(map, position);
+    map_cell_t *cell = crpt_map_get_cell(map, position);
 
-    return object != NULL && object->type == OT_WALL;
+    return cell != NULL && cell->type == MCT_WALL;
 }

@@ -7,7 +7,6 @@
 */
 
 #include <carpet/scene.h>
-#include <carpet/object.h>
 #include <carpet/memory.h>
 #include <carpet/map.h>
 
@@ -17,9 +16,9 @@
 */
 void crpt_scene_default_load(scene_t *scene)
 {
-    object_t border = { .type = OT_WALL, .color = sfGreen };
-    object_t walls = { .type = OT_WALL, .color = sfBlue };
-    object_t room = { .type = OT_ROOM, .color = sfWhite };
+    map_cell_t border = { .type = MCT_WALL, .color = sfGreen };
+    map_cell_t walls = { .type = MCT_WALL, .color = sfBlue };
+    map_cell_t room = { .type = MCT_EMPTY, .color = sfWhite };
 
     scene->map = crpt_map_create(50, 50);
     crpt_map_create_border(scene->map, &border);

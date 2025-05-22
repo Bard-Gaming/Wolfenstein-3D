@@ -13,6 +13,7 @@
     #include <carpet/utils/math.h>
 
     #define CRPT_SHADOW_INTENSITY 0.65f
+    #define CRPT_DISTANCE_FALLOFF 0.55
 
 
 enum carpet_ray_side {

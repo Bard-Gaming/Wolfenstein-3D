@@ -33,12 +33,12 @@ void crpt_draw_line(graphics_line_t line)
     sfRenderStates state = get_default_state();
     sfVertex v1 = {
         { line.start.x, line.start.y },
-        line.color,
+        line.start_color,
         { line.tex_start.x, line.tex_start.y },
     };
     sfVertex v2 = {
         { line.end.x, line.end.y },
-        line.color,
+        line.end_color,
         { line.tex_end.x, line.tex_end.y },
     };
 

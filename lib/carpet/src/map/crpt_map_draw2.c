@@ -7,7 +7,6 @@
 */
 
 #include <carpet/map.h>
-#include <carpet/object.h>
 #include <carpet/camera.h>
 #include <carpet/utils/vector.h>
 #include <carpet/utils/graphics.h>
@@ -58,15 +57,15 @@ static void draw_outline(vec2_t *screen_pos, const map_t *map)
 */
 void crpt_map_draw2(const map_t *map, vec2_t screen_pos)
 {
-    const double off = 10.0 * map->cube_size;
+    const double off = 10.0 * map->cell_size;
     vec2_t pos = *crpt_camera_get_position();
     vec2_t cur_screen;
 
     draw_outline(&screen_pos, map);
     cur_screen = screen_pos;
-    for (double y = pos.y - off; y < pos.y + off; y += map->cube_size) {
+    for (double y = pos.y - off; y < pos.y + off; y += map->cell_size) {
         cur_screen.x = screen_pos.x;
-        for (double x = pos.x - off; x < pos.x + off; x += map->cube_size) {
+        for (double x = pos.x - off; x < pos.x + off; x += map->cell_size) {
             draw_block(map, cur_screen, (vec2_t){ x, y });
             cur_screen.x += map->tile_size;
         }
