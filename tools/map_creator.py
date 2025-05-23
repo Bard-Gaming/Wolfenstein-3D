@@ -1,176 +1,220 @@
 #!/bin/env python3
 
 import tkinter as tk
-import random
-from tkinter import messagebox, filedialog
+from tkinter import colorchooser, messagebox, filedialog
+from dataclasses import dataclass
+import argparse
+import sys
 
 
+@dataclass
 class MapCell:
-    def __init__(self, is_solid: bool, texture: str, color: int):
-        self.is_solid = is_solid
-        self.texture = texture
-        self.color = color
-
-    def to_bytes(self) -> bytes:
-        data = bytearray()
-        data.append(self.is_solid)
-        data.extend(self.texture.encode("ascii"))
-        data.append(0)
-        data.extend(self.color.to_bytes(4))
-
-        return bytes(data)
-
-    def __repr__(self) -> str:
-        return "MapCell()"
+    is_solid: bool
+    texture: str
+    color: int
 
 
-
-class MapFile:
-    def __init__(self):
-        self.bytes = bytearray()
-
-
-    def add_dimensions(self, width: int, height: int) -> None:
-        self.bytes.extend(width.to_bytes(4))
-        self.bytes.extend(height.to_bytes(4))
-
-
-    def add_cell(self, cell: MapCell) -> None:
-        self.bytes.extend(cell.to_bytes())
-
-
-    def write(self, filename: str = "map.mdsc") -> None:
-        with open(filename, "wb") as file:
-            file.write(self.bytes)
-
-
-    def __repr__(self) -> str:
-        return "MapFile()"
-
-
-
-class Application(tk.Tk):
-    def __init__(self) -> None:
+class MapEditor(tk.Tk):
+    def __init__(self, default_texture="WALL", default_color=0xCCCCCC, default_solid=False):
         super().__init__()
-        self.title("Wolf 3D Map Generator")
-        self.geometry("900x700")
+        self.title("Wolf3D Map Editor")
+        self.geometry("1200x800")
 
-        self.width_entry = tk.Entry(self)
-        self.height_entry = tk.Entry(self)
-        self.generate_button = tk.Button(self, text="Generate Grid", command=self.generate_grid)
-        self.export_button = tk.Button(self, text="Export Map", command=self.export_map)
+        self.default_texture = default_texture
+        self.default_color = default_color
+        self.default_solid = default_solid
 
-        tk.Label(self, text="Width:").pack()
-        self.width_entry.pack()
-        tk.Label(self, text="Height:").pack()
-        self.height_entry.pack()
+        self.cell_size = 20
+        self.map_data = []
+        self.cell_ids = {}
+        self.selected_x = None
+        self.selected_y = None
 
-        self.generate_button.pack(pady=10)
+        self.setup_ui()
 
-        # 1. Scrollable canvas
-        self.canvas = tk.Canvas(self, width=800, height=500)
-        self.scrollable_frame = tk.Frame(self.canvas)
+    def setup_ui(self):
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_columnconfigure(0, weight=1)
 
-        # 2. Scrollbars
-        scrollbar_y = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
-        scrollbar_x = tk.Scrollbar(self, orient="horizontal", command=self.canvas.xview)
-        self.canvas.configure(yscrollcommand=scrollbar_y.set, xscrollcommand=scrollbar_x.set)
+        dimension_frame = tk.Frame(self, padx=5, pady=5)
+        dimension_frame.grid(row=0, column=0, sticky="w", columnspan=2)
 
-        # 3. Create a window inside the canvas to hold the frame
-        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+        tk.Label(dimension_frame, text="Width:").pack(side="left")
+        self.width_entry = tk.Entry(dimension_frame, width=5)
+        self.width_entry.insert(0, "50")
+        self.width_entry.pack(side="left")
 
-        # 4. Scroll region updates when the frame resizes
-        self.scrollable_frame.bind(
-            "<Configure>",
-            lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all"))
-        )
+        tk.Label(dimension_frame, text="Height:").pack(side="left")
+        self.height_entry = tk.Entry(dimension_frame, width=5)
+        self.height_entry.insert(0, "50")
+        self.height_entry.pack(side="left")
 
-        # 5. Pack everything
-        self.canvas.pack(fill="both", expand=True)
-        scrollbar_y.pack(side="right", fill="y")
-        scrollbar_x.pack(side="bottom", fill="x")
+        tk.Button(dimension_frame, text="Generate Grid", command=self.generate_grid).pack(side="left", padx=10)
+        tk.Button(dimension_frame, text="Export Map", command=self.export_map).pack(side="left")
 
-        self.export_button.pack(pady=10)
+        canvas_container = tk.Frame(self)
+        canvas_container.grid(row=1, column=0, sticky="nsew")
 
-        self.cell_widgets = []
+        self.canvas = tk.Canvas(canvas_container, bg="white")
+        self.canvas.pack(side="left", fill="both", expand=True)
+
+        self.vbar = tk.Scrollbar(canvas_container, orient="vertical", command=self.canvas.yview)
+        self.vbar.pack(side="right", fill="y")
+
+        self.canvas.config(yscrollcommand=self.vbar.set)
+        self.canvas.bind("<Button-1>", self.on_canvas_click)
+
+        self.hbar = tk.Scrollbar(self, orient="horizontal", command=self.canvas.xview)
+        self.hbar.grid(row=2, column=0, sticky="we")
+        self.canvas.config(xscrollcommand=self.hbar.set)
+
+        self.panel = tk.Frame(self, padx=10, pady=10)
+        self.panel.grid(row=1, column=1, sticky="n")
+
+        tk.Label(self.panel, text="Texture:").pack()
+        self.texture_entry = tk.Entry(self.panel)
+        self.texture_entry.pack()
+
+        tk.Label(self.panel, text="Color (hex):").pack()
+        self.color_button = tk.Button(self.panel, text="Pick Color", command=self.pick_color)
+        self.color_button.pack()
+        self.color_hex = tk.Entry(self.panel)
+        self.color_hex.pack()
+
+        self.solid_var = tk.BooleanVar()
+        self.solid_var.set(self.default_solid)
+        self.solid_checkbox = tk.Checkbutton(self.panel, text="Solid", variable=self.solid_var)
+        self.solid_checkbox.pack()
+
+        self.apply_button = tk.Button(self.panel, text="Apply to Cell", command=self.apply_changes)
+        self.apply_button.pack(pady=10)
 
     def generate_grid(self):
-        # Clear existing widgets
-        for widget in self.scrollable_frame.winfo_children():
-            widget.destroy()
-
         try:
             width = int(self.width_entry.get())
             height = int(self.height_entry.get())
         except ValueError:
-            messagebox.showerror("Error", "Width and Height must be integers.")
+            messagebox.showerror("Invalid Input", "Width and Height must be integers.")
             return
 
-        self.cell_widgets = []
+        self.grid_width = width
+        self.grid_height = height
+
+        self.canvas.delete("all")
+        self.map_data = [
+            [MapCell(self.default_solid, self.default_texture, self.default_color) for _ in range(width)]
+            for _ in range(height)
+        ]
+        self.cell_ids = {}
+        self.selected_x = None
+        self.selected_y = None
+
+        total_width = width * self.cell_size
+        total_height = height * self.cell_size
+        self.canvas.config(scrollregion=(0, 0, total_width, total_height))
 
         for y in range(height):
-            row = []
             for x in range(width):
-                cell_frame = tk.Frame(self.scrollable_frame, borderwidth=1, relief="solid")
-                cell_frame.grid(row=y, column=x, padx=1, pady=1)
+                cell = self.map_data[y][x]
+                x1 = x * self.cell_size
+                y1 = y * self.cell_size
+                x2 = x1 + self.cell_size
+                y2 = y1 + self.cell_size
+                color = f"#{cell.color:06x}"
+                rect_id = self.canvas.create_rectangle(x1, y1, x2, y2, fill=color, outline="black")
+                self.cell_ids[(x, y)] = rect_id
 
-                solid_var = tk.BooleanVar()
-                solid_checkbox = tk.Checkbutton(cell_frame, text="S", variable=solid_var)
-                solid_checkbox.pack()
+    def on_canvas_click(self, event):
+        if not hasattr(self, "grid_width") or not hasattr(self, "grid_height"):
+            return  # Grid hasn't been initialized yet
 
-                texture_entry = tk.Entry(cell_frame, width=6)
-                texture_entry.insert(0, "")
-                texture_entry.pack()
+        canvas_x = self.canvas.canvasx(event.x)
+        canvas_y = self.canvas.canvasy(event.y)
+        x = int(canvas_x // self.cell_size)
+        y = int(canvas_y // self.cell_size)
+        if 0 <= x < self.grid_width and 0 <= y < self.grid_height:
+            self.selected_x = x
+            self.selected_y = y
+            self.load_cell_to_editor()
 
-                color_entry = tk.Entry(cell_frame, width=6)
-                color_entry.insert(0, "FF0000")
-                color_entry.pack()
+    def update_cell_color(self, x, y, color=None):
+        if color is None:
+            cell = self.map_data[y][x]
+            color = f"#{cell.color:06x}"
+        else:
+            color = f"#{color:06x}"
+        self.canvas.itemconfig(self.cell_ids[(x, y)], fill=color)
 
-                row.append({
-                    "solid": solid_var,
-                    "texture": texture_entry,
-                    "color": color_entry
-                })
-            self.cell_widgets.append(row)
+    def load_cell_to_editor(self):
+        cell = self.map_data[self.selected_y][self.selected_x]
+        self.texture_entry.delete(0, tk.END)
+        self.texture_entry.insert(0, cell.texture)
+        self.color_hex.delete(0, tk.END)
+        self.color_hex.insert(0, f"{cell.color:06x}")
+        self.solid_var.set(cell.is_solid)
+
+    def apply_changes(self):
+        if self.selected_x is None or self.selected_y is None:
+            messagebox.showwarning("No cell selected", "Click on a cell in the grid first.")
+            return
+
+        texture = self.texture_entry.get()
+        try:
+            color = int(self.color_hex.get(), 16)
+        except ValueError:
+            messagebox.showerror("Invalid color", "Color must be a valid hex value like FF0000.")
+            return
+
+        is_solid = self.solid_var.get()
+        cell = MapCell(is_solid, texture, color)
+        self.map_data[self.selected_y][self.selected_x] = cell
+
+        self.update_cell_color(self.selected_x, self.selected_y, 0x000000)
+
+    def pick_color(self):
+        color = colorchooser.askcolor()[1]
+        if color:
+            self.color_hex.delete(0, tk.END)
+            self.color_hex.insert(0, color.lstrip("#"))
 
     def export_map(self):
-        if not self.cell_widgets:
-            messagebox.showerror("Error", "You must generate the grid first.")
+        if not self.map_data:
+            messagebox.showerror("Error", "No map to export.")
+            return
+
+        filename = filedialog.asksaveasfilename(defaultextension=".mdsc", filetypes=[("Map Files", "*.mdsc")])
+        if not filename:
             return
 
         try:
-            width = int(self.width_entry.get())
-            height = int(self.height_entry.get())
-        except ValueError:
-            messagebox.showerror("Error", "Invalid dimensions.")
-            return
-
-        map_file = MapFile()
-        map_file.add_dimensions(width, height)
-
-        for row in self.cell_widgets:
-            for cell in row:
-                is_solid = cell["solid"].get()
-                texture = cell["texture"].get()
-                color_str = cell["color"].get()
-
-                try:
-                    color = int(color_str.lstrip("#"), 16)
-                except ValueError:
-                    messagebox.showerror("Error", f"Invalid color: {color_str}")
-                    return
-
-                map_cell = MapCell(is_solid, texture, color)
-                map_file.add_cell(map_cell)
-
-        filename = filedialog.asksaveasfilename(defaultextension=".mdsc", filetypes=[("Map Files", "*.mdsc")])
-        if filename:
-            map_file.write(filename)
-            messagebox.showinfo("Success", f"Map saved to {filename}")
+            with open(filename, "wb") as f:
+                f.write(self.grid_width.to_bytes(4, "big"))
+                f.write(self.grid_height.to_bytes(4, "big"))
+                for row in self.map_data:
+                    for cell in row:
+                        f.write(bytes([1 if cell.is_solid else 0]))
+                        f.write(cell.texture.encode("ascii") + b"\x00")
+                        f.write(cell.color.to_bytes(4, "big"))
+            messagebox.showinfo("Export Complete", f"Map saved to {filename}")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to write map file:\n{e}")
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="Launch Wolf3D Map Editor")
+    parser.add_argument("-t", "--texture", type=str, default="WALL", help="Default texture ID")
+    parser.add_argument("-c", "--color", type=str, default="CCCCCC", help="Default hex color (e.g. FF0000)")
+    parser.add_argument("-s", "--solid", action="store_true", help="Default solid status")
+    return parser.parse_args()
 
-app = Application()
-app.mainloop()
 
+if __name__ == "__main__":
+    args = parse_args()
+    try:
+        color_int = int(args.color.lstrip("#"), 16)
+    except ValueError:
+        print("Invalid color hex provided. Use format like FF0000.")
+        sys.exit(1)
 
+    app = MapEditor(default_texture=args.texture, default_color=color_int, default_solid=args.solid)
+    app.mainloop()
