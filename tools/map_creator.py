@@ -8,7 +8,7 @@ import sys
 
 # === Default Parameters ===
 DEFAULT_TEXTURE = ""
-DEFAULT_COLOR_HEX = "CCCCCC" #light gray
+DEFAULT_COLOR_HEX = "ffffffff" # solid white
 DEFAULT_SOLID = False
 
 
@@ -17,6 +17,17 @@ class MapCell:
     is_solid: bool
     texture: str
     color: int
+
+    def to_bytes(self) -> bytes:
+        if not self.is_solid:
+            return b'\x00'
+
+        array = bytearray()
+        array.extend(b'\x01')
+        array.extend(self.texture.encode("ascii") + b"\x00")
+        array.extend(self.color.to_bytes(4))
+
+        return bytes(array)
 
 
 class MapEditor(tk.Tk):
@@ -125,9 +136,9 @@ class MapEditor(tk.Tk):
                 y1 = y * self.cell_size
                 x2 = x1 + self.cell_size
                 y2 = y1 + self.cell_size
-                color = f"#{cell.color:06x}"
+                color = f"#{cell.color >> 8:06x}"
                 rect_id = self.canvas.create_rectangle(x1, y1, x2, y2, fill=color, outline="black")
-                self.cell_ids[(x, y)] = rect_id
+                self.cell_ids[x, y] = rect_id
 
     def on_canvas_click(self, event):
         if not hasattr(self, "grid_width") or not hasattr(self, "grid_height"):
@@ -148,7 +159,7 @@ class MapEditor(tk.Tk):
             color = f"#{cell.color:06x}"
         else:
             color = f"#{color:06x}"
-        self.canvas.itemconfig(self.cell_ids[(x, y)], fill=color)
+        self.canvas.itemconfig(self.cell_ids[x, y], fill=color)
 
     def load_cell_to_editor(self):
         cell = self.map_data[self.selected_y][self.selected_x]
@@ -167,20 +178,20 @@ class MapEditor(tk.Tk):
         try:
             color = int(self.color_hex.get(), 16)
         except ValueError:
-            messagebox.showerror("Invalid color", "Color must be a valid hex value like FF0000.")
+            messagebox.showerror("Invalid color", "Color must be a valid RGBA value like FF000000.")
             return
 
         is_solid = self.solid_var.get()
         cell = MapCell(is_solid, texture, color)
         self.map_data[self.selected_y][self.selected_x] = cell
 
-        self.update_cell_color(self.selected_x, self.selected_y, 0x000000)
+        self.update_cell_color(self.selected_x, self.selected_y, 0x000000 if is_solid else int(DEFAULT_COLOR_HEX[:6], 16))
 
     def pick_color(self):
         color = colorchooser.askcolor()[1]
         if color:
             self.color_hex.delete(0, tk.END)
-            self.color_hex.insert(0, color.lstrip("#"))
+            self.color_hex.insert(0, color.lstrip("#") + "ff")
 
     def export_map(self):
         if not self.map_data:
@@ -193,13 +204,12 @@ class MapEditor(tk.Tk):
 
         try:
             with open(filename, "wb") as f:
-                f.write(self.grid_width.to_bytes(4, "big"))
-                f.write(self.grid_height.to_bytes(4, "big"))
+                f.write(self.grid_width.to_bytes(4))
+                f.write(self.grid_height.to_bytes(4))
                 for row in self.map_data:
                     for cell in row:
-                        f.write(bytes([1 if cell.is_solid else 0]))
-                        f.write(cell.texture.encode("ascii") + b"\x00")
-                        f.write(cell.color.to_bytes(4, "big"))
+                        f.write(cell.to_bytes())
+
             messagebox.showinfo("Export Complete", f"Map saved to {filename}")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to write map file:\n{e}")
