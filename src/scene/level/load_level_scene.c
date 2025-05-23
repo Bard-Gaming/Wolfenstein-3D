@@ -8,13 +8,23 @@
 
 #include <wolf/scenes.h>
 #include <wolf/player.h>
+#include <wolf/enemy.h>
 
 
 static void load_textures(void)
 {
+    crpt_load_texture(SOLDIER_ASSET("idle_front"), "soldier_idle_front");
     crpt_load_texture("assets/textures/blue_wall.png", "blue_wall");
     crpt_load_texture("assets/textures/healthbar_full.png", "hb_full");
     crpt_load_texture("assets/textures/healthbar_empty.png", "hb_empty");
+}
+
+static void load_enemies(map_t *map)
+{
+    crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 200.0, 100.0 }));
+    crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 342.0, 513.0 }));
+    crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 720.0, 78.0 }));
+    crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 563.0, 391.0 }));
 }
 
 /*
@@ -32,5 +42,6 @@ void load_level_scene(scene_t *scene)
     scene->map->ceiling = (color_t){ 56, 56, 56, 255 };
     crpt_map_create_border(scene->map, &border);
     crpt_map_randomize(scene->map, 20, &border);
+    load_enemies(scene->map);
     init_player();
 }
