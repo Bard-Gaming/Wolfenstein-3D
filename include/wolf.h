@@ -13,6 +13,7 @@
     #define WOLF_H
 
 
+    #include <wolf/enemy.h>
     #include <wolf/player.h>
     #include <wolf/scenes.h>
 
