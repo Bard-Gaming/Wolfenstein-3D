@@ -1,15 +1,15 @@
-# Temporary files:
+# Temporary Files:
 *~
 \#*\#
 *.gcno
 *.gcda
 coding-style-reports.log
 
-# Compiled/Binary files:
+# Map Files:
+*.mdsc
+
+# Compiled Files:
 *.out
 *.o
 *.a
 wolf3d
-
-# omar
-.vscode
