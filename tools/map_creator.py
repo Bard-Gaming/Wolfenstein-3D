@@ -6,6 +6,11 @@ from dataclasses import dataclass
 import argparse
 import sys
 
+# === Default Parameters ===
+DEFAULT_TEXTURE = "WALL"
+DEFAULT_COLOR_HEX = "CCCCCC" #light gray
+DEFAULT_SOLID = False
+
 
 @dataclass
 class MapCell:
@@ -15,7 +20,7 @@ class MapCell:
 
 
 class MapEditor(tk.Tk):
-    def __init__(self, default_texture="WALL", default_color=0xCCCCCC, default_solid=False):
+    def __init__(self, default_texture=DEFAULT_TEXTURE, default_color=int(DEFAULT_COLOR_HEX, 16), default_solid=DEFAULT_SOLID):
         super().__init__()
         self.title("Wolf3D Map Editor")
         self.geometry("1200x800")
@@ -126,7 +131,7 @@ class MapEditor(tk.Tk):
 
     def on_canvas_click(self, event):
         if not hasattr(self, "grid_width") or not hasattr(self, "grid_height"):
-            return  # Grid hasn't been initialized yet
+            return
 
         canvas_x = self.canvas.canvasx(event.x)
         canvas_y = self.canvas.canvasy(event.y)
@@ -202,9 +207,9 @@ class MapEditor(tk.Tk):
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Launch Wolf3D Map Editor")
-    parser.add_argument("-t", "--texture", type=str, default="WALL", help="Default texture ID")
-    parser.add_argument("-c", "--color", type=str, default="CCCCCC", help="Default hex color (e.g. FF0000)")
-    parser.add_argument("-s", "--solid", action="store_true", help="Default solid status")
+    parser.add_argument("-t", "--texture", type=str, default=DEFAULT_TEXTURE, help="Default texture ID")
+    parser.add_argument("-c", "--color", type=str, default=DEFAULT_COLOR_HEX, help="Default hex color (e.g. FF0000)")
+    parser.add_argument("-s", "--solid", action="store_true", default=DEFAULT_SOLID, help="Default solid status")
     return parser.parse_args()
 
 
