@@ -7,32 +7,24 @@
 */
 
 #include <wolf/scenes.h>
+#include <SFML/Graphics.h>
 #include <wolf/scenes.h>
+#include <carpet/assets.h>
 
 void start_menu_events(scene_t *scene, event_t *event)
 {
     int mouse_x = event->mouseButton.x;
     int mouse_y = event->mouseButton.y;
-    int btn_x;
-    int btn_y;
-    int width;
-    int height;
+    sprite_t *btn_start = crpt_fetch_sprite("btn_start");
+    sfFloatRect start_bounds = sfSprite_getGlobalBounds(btn_start);
 
-    crpt_sprite_get_position("btn_start", &btn_x, &btn_y);
-    crpt_sprite_get("btn_start", &width, &height);
-    if (mouse_x >= btn_x && mouse_x <= btn_x + width &&
-        mouse_y >= btn_y && mouse_y <= btn_y + height)
+    (void)scene;
+    if (sfFloatRect_contains(&start_bounds, mouse_x, mouse_y))
         set_level_scene();
-    crpt_sprite_get_position("btn_settings", &btn_x, &btn_y);
-    crpt_sprite_get("btn_settings", &width, &height);
-    if (mouse_x >= btn_x && mouse_x <= btn_x + width &&
-        mouse_y >= btn_y && mouse_y <= btn_y + height)
-        set_settings_scene();
-    ;
 }
 
-
-void update_start_scene(scene_t *scene)
+void update_start_scene(scene_t *scene, time_micro_t dt)
 {
-    ;
+    (void)scene;
+    (void)dt;
 }

@@ -25,6 +25,6 @@ void load_start_scene(scene_t *scene);
 void unload_start_scene(scene_t *scene);
 void update_start_scene(scene_t *scene, time_micro_t dt);
 void draw_start_scene_ui(scene_t *scene, window_t *window);
-void start_events(scene_t *scene, mouse_event_t evt);
+void start_menu_events(scene_t *scene, event_t *event);
 
 #endif

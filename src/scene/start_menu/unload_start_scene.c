@@ -7,15 +7,22 @@
 */
 
 #include <wolf/scenes.h>
+#include <carpet/assets.h>
 
-
-/*
-** Unloads the start scene.
-*/
+/**
+ * Unloads all sprites related to the start menu.
+ */
 void unload_start_scene(scene_t *scene)
 {
-    crpt_unload_texture("bricks");
-    crpt_unload_texture("hb_full");
-    crpt_unload_texture("hb_empty");
-    crpt_map_delete(scene->map);
+    const char *sprites[] = {
+        "start_bg",
+        "logo",
+        "btn_start",
+        "btn_settings",
+    };
+
+    (void)scene;
+    for (long unsigned int i = 0;
+            i < sizeof(sprites) / sizeof(sprites[0]); i++)
+        crpt_unload_sprite(sprites[i]);
 }
