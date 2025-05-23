@@ -25,8 +25,10 @@
 
 typedef unsigned long long time_micro_t;  // time (in µs)
 typedef sfRenderStates render_state_t;
+typedef sfVertexArray vertex_array_t;
 typedef sfRenderWindow window_t;
 typedef sfTexture texture_t;
+typedef sfVector2u vec2u_t;
 typedef sfSprite sprite_t;
 typedef sfShader shader_t;
 typedef sfEvent event_t;
@@ -40,6 +42,7 @@ typedef sfFont font_t;
 //                                                         //
 /////////////////////////////////////////////////////////////
 
+typedef struct carpet_graphics_map_texture graphics_map_texture_t;
 typedef struct carpet_graphics_healthbar graphics_healthbar_t;
 typedef struct carpet_graphics_line graphics_line_t;
 typedef struct carpet_asset_manager asset_manager_t;
@@ -79,11 +82,11 @@ typedef enum carpet_errno crpt_errno_t;
 typedef void (*update_fnc_t)(scene_t *, time_micro_t);
 typedef void (*event_handler_t)(scene_t *, event_t *);
 typedef void (*ui_draw_fnc_t)(scene_t *, window_t *);
+typedef int (*cmp_fnc_t)(const void *, const void *);
 typedef void (*object_update_fnc_t)(object_t *);
 typedef void *(*asset_load_fnc_t)(const char *);
 typedef void (*scene_fnc_t)(scene_t *);
 typedef void (*free_fnc_t)(void *);
-typedef int (*cmp_fnc_t)(void *, void *);
 
 
 #endif

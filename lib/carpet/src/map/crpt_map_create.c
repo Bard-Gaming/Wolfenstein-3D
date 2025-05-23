@@ -28,6 +28,7 @@ map_t *crpt_map_create(unsigned int width, unsigned int height)
         .tile_size = CRPT_DEFAULT_TILE_SIZE,
         .width = width, .height = height,
         .cells = cmalloc(height * sizeof(map_cell_t *)),
+        .objects = { 0 },
     };
     for (unsigned int row = 0; row < height; row++)
         map->cells[row] = ccalloc(width, sizeof(map_cell_t));

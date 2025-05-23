@@ -33,6 +33,7 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/camera/crpt_camera_get_fov.c								\
 			src/camera/crpt_camera_get_position.c							\
 			src/camera/crpt_camera_get_rotation.c							\
+			src/camera/crpt_camera_get_size.c								\
 			src/camera/crpt_camera_interpolate_fov.c						\
 			src/camera/crpt_camera_rotate.c									\
 			src/camera/crpt_camera_set_fov.c								\
@@ -66,6 +67,7 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/memory/crealloc.c											\
 			src/object/crpt_object_create.c									\
 			src/object/crpt_object_defaults.c								\
+			src/object/crpt_object_draw.c									\
 			src/object/crpt_object_move.c									\
 			src/object/crpt_object_set_position.c							\
 			src/ray/crpt_ray_draw3.c										\
@@ -84,6 +86,7 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/utils/array/crpt_array_sort.c								\
 			src/utils/graphics/crpt_draw_healthbar.c						\
 			src/utils/graphics/crpt_draw_line.c								\
+			src/utils/graphics/crpt_draw_map_texture.c						\
 			src/utils/graphics/crpt_draw_solid_square.c						\
 			src/utils/graphics/crpt_draw_sprite.c							\
 			src/utils/hashtable/crpt_hash.c									\
@@ -129,7 +132,7 @@ $(NAME): $(ASS_FILES) $(OBJ_FILES)
 	(printf $(ERROR_MSG_FORMAT) "Error creating $(NAME) archive"; false)
 	@printf $(SUCCESS_MSG_FORMAT) "Successfully created $(NAME) archive"
 
-debug: CFLAGS += -ggdb -Wall -Wextra
+debug: CFLAGS += -ggdb -O0 -Wall -Wextra
 debug: fclean $(NAME)
 
 perf: CFLAGS += -g -pg
