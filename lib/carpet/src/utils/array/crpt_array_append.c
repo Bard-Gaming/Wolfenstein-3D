@@ -18,7 +18,7 @@
 void crpt_array_append(crpt_array_t *array, void *data)
 {
     if (array->count == array->capacity) {
-        array->capacity = array->capacity ?
+        array->capacity = array->capacity == 0 ?
             CRPT_ARRAY_INIT_CAP : CRPT_ARRAY_GROWTH * array->capacity;
         array->data = crealloc(array->data, array->capacity * sizeof(void *));
     }

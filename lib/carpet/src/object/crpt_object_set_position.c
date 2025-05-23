@@ -20,8 +20,5 @@
 */
 void crpt_object_set_position(object_t *object, vec2_t new)
 {
-    camera_t *cam = &crpt_game_get()->camera;
-
     object->position = new;
-    object->cam_dist = crpt_vec2_distance(new, cam->position);
 }

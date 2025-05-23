@@ -62,7 +62,7 @@ void crpt_scene_default_update(scene_t *scene, time_micro_t dt)
     vec2_t offset = compute_pos_offset(camera, mv_input);
 
     (void)dt;
-    camera->rotation = norm(camera->rotation + rotation);
+    crpt_camera_rotate(rotation);
     if (!will_collide(scene->map, camera->position, offset))
         camera->position = crpt_vec2_add(camera->position, offset);
 }

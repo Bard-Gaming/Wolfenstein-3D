@@ -18,5 +18,6 @@
 void crpt_object_defaults(object_t *object)
 {
     memset(object, 0, sizeof(object_t));
+    object->scale = 1.0;
     object->free = free;
 }

@@ -8,8 +8,21 @@
 
 #include <carpet/scene.h>
 #include <carpet/object.h>
+#include <carpet/game.h>
 #include <carpet/map.h>
 
+
+/*
+** Compares the distances between two
+** objects.
+** cmp_dist(a, b) will is positive if
+** a is further away than b, negative
+** if b is further than a, and 0 otherwise.
+*/
+static int cmp_dist(object_t *a, object_t *b)
+{
+    return b->cam_dist - a->cam_dist;
+}
 
 /*
 ** Runs a single update cycle on the
@@ -17,13 +30,16 @@
 */
 static void update_objects(map_t *map)
 {
+    camera_t *cam = &crpt_game_get()->camera;
     object_t *object;
 
     for (size_t i = 0; i < map->objects.count; i++) {
         object = map->objects.data[i];
+        object->cam_dist = crpt_vec2_distance(object->position, cam->position);
         if (object->update != NULL)
             object->update(object);
     }
+    crpt_array_sort(&map->objects, (cmp_fnc_t)cmp_dist);
 }
 
 /*

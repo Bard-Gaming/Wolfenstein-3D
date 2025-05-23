@@ -8,7 +8,6 @@
 
 #include <carpet/object.h>
 #include <carpet/memory.h>
-#include <stdlib.h>
 
 
 /*
@@ -21,9 +20,8 @@ object_t *crpt_object_create(const texture_t *texture, vec2_t pos)
 {
     object_t *object = cmalloc(sizeof(object_t));
 
+    crpt_object_defaults(object);
     object->texture = texture;
-    object->update = NULL;
-    object->free = free;
     crpt_object_set_position(object, pos);
     return object;
 }

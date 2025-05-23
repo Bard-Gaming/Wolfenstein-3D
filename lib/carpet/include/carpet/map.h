@@ -54,7 +54,7 @@ void crpt_map_delete(map_t *map);
 
 // Drawing:
 void crpt_map_draw2(const map_t *map, vec2_t screen_pos);
-void crpt_map_draw3(const map_t *map, const camera_t *cam);
+void crpt_map_draw3(const map_t *map, camera_t *cam);
 
 // Map cells:
 map_cell_t *crpt_map_get_cell(const map_t *map, vec2_t position);

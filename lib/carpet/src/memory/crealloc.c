@@ -22,7 +22,7 @@ void *crealloc(void *ptr, size_t size)
 {
     void *res = realloc(ptr, size);
 
-    if (size > 0 && res != NULL) {
+    if (size > 0 && res == NULL) {
         crpt_errno_set(CE_NO_MEMORY);
         crpt_perror("carpet");
         exit(CRPT_CRITICAL_ERROR);
