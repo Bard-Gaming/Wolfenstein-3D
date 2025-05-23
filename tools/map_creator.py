@@ -31,8 +31,7 @@ class MapCell:
     def from_bytes(buffer: bytes, offset: int):
         if buffer[offset] == 0:
             return MapCell(False, "", int(DEFAULT_COLOR_HEX, 16)), offset + 1
-
-        offset += 1  # skip 0x01
+        offset += 1
         end = buffer.index(0x00, offset)
         texture = buffer[offset:end].decode("ascii")
         offset = end + 1
@@ -54,6 +53,8 @@ class MapEditor(tk.Tk):
         self.cell_ids = {}
         self.selected_x = None
         self.selected_y = None
+        self.last_selected = None
+        self.selection_overlay_id = None
 
         self.setup_ui()
 
@@ -145,7 +146,7 @@ class MapEditor(tk.Tk):
                 y1 = y * self.cell_size
                 x2 = x1 + self.cell_size
                 y2 = y1 + self.cell_size
-                color = f"#{cell.color >> 8:06x}"
+                color = f"#{(cell.color >> 8) & 0xFFFFFF:06x}"
                 rect_id = self.canvas.create_rectangle(x1, y1, x2, y2, fill=color, outline="black")
                 self.cell_ids[x, y] = rect_id
 
@@ -166,10 +167,32 @@ class MapEditor(tk.Tk):
         canvas_y = self.canvas.canvasy(event.y)
         x = int(canvas_x // self.cell_size)
         y = int(canvas_y // self.cell_size)
-        if 0 <= x < self.grid_width and 0 <= y < self.grid_height:
-            self.selected_x = x
-            self.selected_y = y
-            self.load_cell_to_editor()
+
+        if not (0 <= x < self.grid_width and 0 <= y < self.grid_height):
+            return
+
+        self.selected_x = x
+        self.selected_y = y
+        self.last_selected = (x, y)
+
+        # Remove previous overlay
+        if self.selection_overlay_id:
+            self.canvas.delete(self.selection_overlay_id)
+
+        # Draw gray overlay (semi-transparent)
+        x1 = x * self.cell_size
+        y1 = y * self.cell_size
+        x2 = x1 + self.cell_size
+        y2 = y1 + self.cell_size
+        self.selection_overlay_id = self.canvas.create_rectangle(
+            x1, y1, x2, y2,
+            outline="black",
+            fill="#aaaaaa",
+            stipple="gray25"
+        )
+
+        self.load_cell_to_editor()
+
 
     def update_cell_color(self, x, y, color=None):
         if color is None:
@@ -253,11 +276,8 @@ class MapEditor(tk.Tk):
                     y1 = y * self.cell_size
                     x2 = x1 + self.cell_size
                     y2 = y1 + self.cell_size
-                    if cell.is_solid:
-                        fill_color = "#000000"
-                    else:
-                        fill_color = f"#{(cell.color >> 8) & 0xFFFFFF:06x}"
-                    rect_id = self.canvas.create_rectangle(x1, y1, x2, y2, fill=fill_color, outline="black")
+                    color = "#000000" if cell.is_solid else f"#{(cell.color >> 8) & 0xFFFFFF:06x}"
+                    rect_id = self.canvas.create_rectangle(x1, y1, x2, y2, fill=color, outline="black")
                     self.cell_ids[x, y] = rect_id
                 self.map_data.append(row)
         except Exception as e:
