@@ -77,7 +77,8 @@ perf: fclean $(NAME)
 	@./$(NAME)
 	@gprof -bp $(NAME)
 
-sanitize: CFLAGS += -g -lasan -fsanitize=address
+sanitize: LIBS := -lasan $(LIBS)
+sanitize: CFLAGS += -g -fsanitize=address
 sanitize: CRPT_RULE = sanitize
 sanitize: fclean $(NAME)
 
