@@ -6,6 +6,7 @@
 ** crpt_draw_line
 */
 
+#include <SFML/Graphics/RenderWindow.h>
 #include <carpet/utils/graphics.h>
 #include <carpet/game.h>
 
@@ -29,23 +30,14 @@ static sfRenderStates get_default_state(void)
 void crpt_draw_line(graphics_line_t line)
 {
     window_t *win = crpt_game_get()->window;
-    sfVertexArray *array = sfVertexArray_create();
     sfRenderStates state = get_default_state();
-    sfVertex v1 = {
-        { line.start.x, line.start.y },
-        line.start_color,
-        { line.tex_start.x, line.tex_start.y },
-    };
-    sfVertex v2 = {
-        { line.end.x, line.end.y },
-        line.end_color,
-        { line.tex_end.x, line.tex_end.y },
+    sfVertex vertices[2] = {
+        { { line.start.x, line.start.y }, line.start_color,
+            { line.tex_start.x, line.tex_start.y } },
+        { { line.end.x, line.end.y }, line.end_color,
+            { line.tex_end.x, line.tex_end.y } },
     };
 
     state.texture = line.texture;
-    sfVertexArray_setPrimitiveType(array, sfLines);
-    sfVertexArray_append(array, v1);
-    sfVertexArray_append(array, v2);
-    sfRenderWindow_drawVertexArray(win, array, &state);
-    sfVertexArray_destroy(array);
+    sfRenderWindow_drawPrimitives(win, vertices, 2, sfLines, &state);
 }

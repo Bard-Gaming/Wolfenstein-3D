@@ -7,6 +7,7 @@
 */
 
 #include <SFML/Graphics/RenderStates.h>
+#include <SFML/Graphics/RenderWindow.h>
 #include <SFML/Graphics/VertexArray.h>
 #include <carpet/utils/graphics.h>
 #include <carpet/game.h>
@@ -49,13 +50,8 @@ static void draw_full_bar(const graphics_healthbar_t *bar, window_t *win)
         { { end_x, end_y }, bar->color, { tex_end, texmax.y } },
         { { bar->pos.x, end_y }, bar->color, { 0.f, texmax.y } },
     };
-    sfVertexArray *va = sfVertexArray_create();
 
-    sfVertexArray_setPrimitiveType(va, sfQuads);
-    for (int i = 0; i < 4; i++)
-        sfVertexArray_append(va, vertices[i]);
-    sfRenderWindow_drawVertexArray(win, va, &state);
-    sfVertexArray_destroy(va);
+    sfRenderWindow_drawPrimitives(win, vertices, 4, sfQuads, &state);
 }
 
 /*
@@ -76,13 +72,8 @@ static void draw_empty_bar(const graphics_healthbar_t *bar, window_t *win)
         { { end_x, end_y }, bar->color, { texmax.x, texmax.y } },
         { { start_x, end_y }, bar->color, { tex_start, texmax.y } },
     };
-    sfVertexArray *va = sfVertexArray_create();
 
-    sfVertexArray_setPrimitiveType(va, sfQuads);
-    for (int i = 0; i < 4; i++)
-        sfVertexArray_append(va, vertices[i]);
-    sfRenderWindow_drawVertexArray(win, va, &state);
-    sfVertexArray_destroy(va);
+    sfRenderWindow_drawPrimitives(win, vertices, 4, sfQuads, &state);
 }
 
 /*

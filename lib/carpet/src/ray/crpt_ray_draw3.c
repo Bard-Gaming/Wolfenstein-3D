@@ -20,12 +20,17 @@
 static color_t process_color(ray_t ray, const map_cell_t *cell)
 {
     color_t color = cell->color;
+    double factor = 1.0 -
+        fmin(ray.dist / CRPT_DISTANCE_MAX, 1.0) * CRPT_DISTANCE_FALLOFF_WALL;
 
     if (ray.side == RS_HORIZONTAL) {
         color.r *= CRPT_SHADOW_INTENSITY;
         color.g *= CRPT_SHADOW_INTENSITY;
         color.b *= CRPT_SHADOW_INTENSITY;
     }
+    color.r *= factor;
+    color.g *= factor;
+    color.b *= factor;
     return color;
 }
 

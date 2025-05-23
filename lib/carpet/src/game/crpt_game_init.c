@@ -11,6 +11,7 @@
 #include <carpet/errno.h>
 #include <carpet/scene.h>
 #include <carpet/event.h>
+#include <carpet/memory.h>
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
@@ -42,6 +43,7 @@ static void initialize_window(game_t *game)
         sfFullscreen, NULL
     );
     sfRenderWindow_setFramerateLimit(game->window, CRPT_DEFAULT_FPS);
+    sfRenderWindow_setPosition(game->window, (sfVector2i){ 0, 0 });
 }
 
 static void initialize_camera(camera_t *camera, window_t *window)
@@ -54,6 +56,7 @@ static void initialize_camera(camera_t *camera, window_t *window)
         .fov = M_PI_2,
         .width = window_dim.x,
         .height = window_dim.y,
+        .depth_buffer = cmalloc(window_dim.x * sizeof(double)),
     };
 }
 
@@ -70,8 +73,8 @@ void crpt_game_init(void)
     initialize_window(game);
     initialize_camera(&game->camera, game->window);
     crpt_assets_init();
-    game->scene = crpt_scene_default_get();
     crpt_event_init(game);
+    game->scene = crpt_scene_default_get();
     LOAD_SCENE(game->scene);
     game->is_initialized = true;
 }

@@ -21,18 +21,24 @@ struct carpet_camera {
     // Screen data:
     unsigned int width;
     unsigned int height;
+    double *depth_buffer;
 };
 
 
-// User functions:
+// FOV:
 void crpt_camera_set_fov(double new);
 double crpt_camera_get_fov(void);
 void crpt_camera_interpolate_fov(double end, double step);
 
+// Rotation:
 void crpt_camera_set_rotation(double new);
 double crpt_camera_get_rotation(void);
 void crpt_camera_rotate(double offset);
 
+// Window size:
+vec2u_t crpt_camera_get_size(void);
+
+// Position:
 vec2_t *crpt_camera_get_position(void);
 
 

@@ -17,8 +17,8 @@ static size_t get_min_index(crpt_array_t *array, size_t start, cmp_fnc_t cmp)
 {
     size_t min = start;
 
-    for (size_t i = start; i < array->count; i++) {
-        if (cmp(array->data[min], array->data[i]) > i)
+    for (size_t i = start + 1; i < array->count; i++) {
+        if (cmp(array->data[min], array->data[i]) > 0)
             min = i;
     }
     return min;
