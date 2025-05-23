@@ -12,7 +12,7 @@
 
 static void load_textures(void)
 {
-    crpt_load_texture("assets/textures/bricks.png", "bricks");
+    crpt_load_texture("assets/textures/blue_wall.png", "blue_wall");
     crpt_load_texture("assets/textures/healthbar_full.png", "hb_full");
     crpt_load_texture("assets/textures/healthbar_empty.png", "hb_empty");
 }
@@ -22,14 +22,14 @@ static void load_textures(void)
 */
 void load_level_scene(scene_t *scene)
 {
-    object_t border = { .type = OT_WALL, .color = sfWhite };
-    object_t room = { .type = OT_ROOM, .color = sfWhite };
+    map_cell_t border = { .type = MCT_WALL, .color = sfWhite };
+    map_cell_t room = { .type = MCT_EMPTY, .color = sfWhite };
 
     load_textures();
-    border.texture = crpt_fetch_texture("bricks");
+    border.texture = crpt_fetch_texture("blue_wall");
     scene->map = crpt_map_create(50, 50);
-    scene->map->floor = (color_t){ 100, 100, 100, 255 };
-    scene->map->ceiling = (color_t){ 70, 70, 70, 255 };
+    scene->map->floor = (color_t){ 112, 112, 112, 255 };
+    scene->map->ceiling = (color_t){ 56, 56, 56, 255 };
     crpt_map_create_border(scene->map, &border);
     crpt_map_randomize(scene->map, 20, &border);
     crpt_map_fill_empty(scene->map, &room);

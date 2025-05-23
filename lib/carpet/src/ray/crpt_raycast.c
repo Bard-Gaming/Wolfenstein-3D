@@ -23,13 +23,13 @@ static ray_t cast_ray_vert(vec2_t origin, double angle, const map_t *map)
     bool is_right = cos(angle) > 0.0;
     ray_t ray = { RS_VERTICAL, 0.0, 0.0, { 0, 0 } };
     vec2_t offset = is_right ?
-        (vec2_t){ map->cube_size, - map->cube_size * tangent } :
-        (vec2_t){ - map->cube_size, map->cube_size * tangent };
+        (vec2_t){ map->cell_size, - map->cell_size * tangent } :
+        (vec2_t){ - map->cell_size, map->cell_size * tangent };
 
-    ray.pos.x = ((int)(origin.x / map->cube_size) * map->cube_size) +
-        (is_right ? map->cube_size : -0.0001);
+    ray.pos.x = ((int)(origin.x / map->cell_size) * map->cell_size) +
+        (is_right ? map->cell_size : -0.0001);
     ray.pos.y = (origin.x - ray.pos.x) * tangent + origin.y;
-    for (unsigned int dof = 0; dof < 50; dof++) {
+    for (unsigned int dof = 0; dof < map->width; dof++) {
         if (crpt_map_is_solid(map, ray.pos))
             return ray;
         ray.pos = crpt_vec2_add(ray.pos, offset);
@@ -49,13 +49,13 @@ static ray_t cast_ray_horiz(vec2_t origin, double angle, const map_t *map)
     ray_t ray = { RS_HORIZONTAL, 0.0, 0.0, { 0, 0 } };
     bool is_top = sin(angle) > 0.0;
     vec2_t offset = is_top ?
-        (vec2_t){ map->cube_size * tangent, - map->cube_size } :
-        (vec2_t){ - map->cube_size * tangent, map->cube_size };
+        (vec2_t){ map->cell_size * tangent, - map->cell_size } :
+        (vec2_t){ - map->cell_size * tangent, map->cell_size };
 
-    ray.pos.y = ((int)(origin.y / map->cube_size) * map->cube_size) +
-        (is_top ? -0.0001 : map->cube_size);
+    ray.pos.y = ((int)(origin.y / map->cell_size) * map->cell_size) +
+        (is_top ? -0.0001 : map->cell_size);
     ray.pos.x = (origin.y - ray.pos.y) * tangent + origin.x;
-    for (unsigned int dof = 0; dof < 50; dof++) {
+    for (unsigned int dof = 0; dof < map->height; dof++) {
         if (crpt_map_is_solid(map, ray.pos))
             return ray;
         ray.pos = crpt_vec2_add(ray.pos, offset);

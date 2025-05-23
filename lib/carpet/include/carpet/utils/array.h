@@ -22,8 +22,10 @@ struct carpet_array {
 
 
 void crpt_array_append(crpt_array_t *array, void *data);
-void crpt_array_delete(crpt_array_t *array, NULLABLE free_fnc_t free);
+void crpt_array_delete(crpt_array_t *array, NULLABLE free_fnc_t delete);
+void crpt_array_empty(crpt_array_t *array, NULLABLE free_fnc_t delete);
 void crpt_array_reserve(crpt_array_t *array, size_t count);
+void crpt_array_sort(crpt_array_t *array, cmp_fnc_t cmp);
 
 
 #endif

@@ -20,6 +20,7 @@
 struct carpet_asset_manager {
     crpt_hashtable_t fonts;
     crpt_hashtable_t textures;
+    crpt_hashtable_t sprites;
 };
 
 
@@ -38,6 +39,11 @@ void crpt_load_texture(const char *path, const char *id);
 void crpt_unload_texture(const char *id);
 UNSAFE void crpt_load_texture_src(void *data, size_t len, const char *id);
 texture_t *crpt_fetch_texture(const char *id);
+
+// Sprite:
+void crpt_load_sprite(const texture_t *texture, const char *id);
+void crpt_unload_sprite(const char *id);
+sprite_t *crpt_fetch_sprite(const char *id);
 
 // Internal:
 asset_manager_t *crpt_asset_manager_get(void);

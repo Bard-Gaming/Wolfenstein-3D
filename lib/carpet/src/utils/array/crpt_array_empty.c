@@ -3,7 +3,7 @@
 ** Project - Carpet Lib
 ** File description:
 ** Implementation for
-** crpt_array_delete
+** crpt_array_empty
 */
 
 #include <carpet/utils/array.h>
@@ -21,14 +21,16 @@ static void delete_data(crpt_array_t *array, free_fnc_t delete)
 }
 
 /*
-** Frees all of the data associated
-** with the given array using the given
-** delete function.
+** Empties the array, resetting it
+** to a state with no elements. If you intend
+** to reuse the array, this function is better
+** than deleting the array, as this doesn't waste
+** the already allocated space.
 */
-void crpt_array_delete(crpt_array_t *array, free_fnc_t delete)
+void crpt_array_empty(crpt_array_t *array, free_fnc_t delete)
 {
     if (delete != NULL)
         delete_data(array, delete);
     free(array->data);
-    memset(array, 0, sizeof(crpt_array_t));
+    array->count = 0;
 }

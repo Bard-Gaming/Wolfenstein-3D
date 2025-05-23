@@ -49,10 +49,10 @@ vec2_t get_wall_normal(const map_t *map, vec2_t pos)
     vec2_t check;
     vec2_t normal = { 0.0, 0.0 };
     vec2_t neighbors[] = {
-        { map->cube_size, 0.0 },
-        { - map->cube_size, 0.0 },
-        { 0.0, map->cube_size },
-        { 0.0, - map->cube_size },
+        { map->cell_size, 0.0 },
+        { - map->cell_size, 0.0 },
+        { 0.0, map->cell_size },
+        { 0.0, - map->cell_size },
     };
 
     for (unsigned int i = 0; i < 4; i++) {

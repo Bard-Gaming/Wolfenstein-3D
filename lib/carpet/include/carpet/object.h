@@ -2,8 +2,8 @@
 ** EPITECH PROJECT, 2025
 ** Project - Carpet Lib
 ** File description:
-** Header file for Carpet Lib's
-** map objects.
+** Header file for the game's
+** objects.
 */
 
 #ifndef LIB_CARPET_OBJECT_H
@@ -12,31 +12,41 @@
     #include <carpet/utils/vector.h>
 
 
-enum carpet_object_type {
-    OT_WALL,  // Solid wall. Faces: Wall (same for all 4 sides)
-    OT_ROOM,  // No wall. Faces: Ceil, Floor
-};
-
-
+/*
+** This structure shouldn't be
+** modified directly. Please use
+** the helper functions in this
+** header file to manipulate
+** objects.
+**
+** Note: This struct is a base
+** object struct. As a user,
+** you are free to "derive" from
+** this struct and use your own.
+*/
 struct carpet_object {
-    // Map Info:
-    vec2_t position;
-    map_t *map;
-
-    // Display:
-    object_type_t type;
+    // Drawing:
     const texture_t *texture;
-    color_t color;
+
+    // Process:
+    /* the following is fixed update (for animations & such) */
+    NULLABLE object_update_fnc_t update;
+    /* Function used to free the memory allocated for the object */
+    NULLABLE free_fnc_t free;
+
+    // World data:
+    size_t index;     // object index in map (good for optimization)
+    vec2_t position;  // object's position in the map
+    double cam_dist;  // distance to camera
 };
 
 
-object_t *crpt_object_create(vec2_t pos, object_type_t type);
-void crpt_object_delete(object_t *object);
-object_t *crpt_object_dup(const object_t *reference, vec2_t pos);
+// Object creation:
+object_t *crpt_object_create(const texture_t *texture, vec2_t pos);
+void crpt_object_defaults(object_t *object);
 
-// Internal:
-object_t *crpt_object_create_in_map(map_t *map, vec2_t pos, object_type_t t);
-object_t *crpt_object_dup_in_map(const object_t *ref, map_t *map, vec2_t pos);
+void crpt_object_set_position(object_t *object, vec2_t new);
+void crpt_object_move(object_t *object, vec2_t offset);
 
 
 #endif

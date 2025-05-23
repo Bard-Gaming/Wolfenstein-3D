@@ -7,7 +7,6 @@
 */
 
 #include <carpet/map.h>
-#include <carpet/object.h>
 #include <carpet/game.h>
 #include <carpet/ray.h>
 

@@ -11,7 +11,7 @@
 
 
 /*
-** Retrieves the squared distance
+** Retrieves the distance
 ** between two 3D vectors.
 */
 double crpt_vec3_distance(vec3_t a, vec3_t b)
@@ -22,7 +22,7 @@ double crpt_vec3_distance(vec3_t a, vec3_t b)
 }
 
 /*
-** Retrieves the squared distance
+** Retrieves the distance
 ** between 2D vectors.
 */
 double crpt_vec2_distance(vec2_t a, vec2_t b)
