@@ -7,7 +7,7 @@ import argparse
 import sys
 
 # === Default Parameters ===
-DEFAULT_TEXTURE = "WALL"
+DEFAULT_TEXTURE = ""
 DEFAULT_COLOR_HEX = "CCCCCC" #light gray
 DEFAULT_SOLID = False
 
