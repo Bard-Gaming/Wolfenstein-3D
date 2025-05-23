@@ -163,6 +163,10 @@ class MapEditor(tk.Tk):
 
     def load_cell_to_editor(self):
         cell = self.map_data[self.selected_y][self.selected_x]
+
+        if not cell.is_solid:
+            return  # Don't update panel if cell is not solid
+
         self.texture_entry.delete(0, tk.END)
         self.texture_entry.insert(0, cell.texture)
         self.color_hex.delete(0, tk.END)
