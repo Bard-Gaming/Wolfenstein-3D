@@ -29,8 +29,11 @@ SRC_FILES =	src/main.c														\
 			src/enemy/soldier/update_soldier_texture.c						\
 			src/enemy/create_enemy.c										\
 			src/enemy/set_enemy_max_health.c								\
+			src/player/draw_player.c										\
 			src/player/get_player.c											\
 			src/player/init_player.c										\
+			src/player/load_player_assets.c									\
+			src/player/unload_player_assets.c								\
 			src/player/update_player.c										\
 			src/scene/level/draw_level_scene_ui.c							\
 			src/scene/level/load_level_scene.c								\

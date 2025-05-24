@@ -15,8 +15,8 @@ static void load_textures(void)
 {
     crpt_load_texture(SOLDIER_ASSET("idle_front"), "soldier_idle_front");
     crpt_load_texture("assets/textures/blue_wall.png", "blue_wall");
-    crpt_load_texture("assets/textures/healthbar_full.png", "hb_full");
-    crpt_load_texture("assets/textures/healthbar_empty.png", "hb_empty");
+    crpt_load_texture("assets/sprites/player/healthbar_full.png", "hb_full");
+    crpt_load_texture("assets/sprites/player/healthbar_empty.png", "hb_empty");
 }
 
 static void load_enemies(map_t *map)
@@ -35,6 +35,7 @@ void load_level_scene(scene_t *scene)
     map_cell_t border = { .type = MCT_WALL, .color = sfWhite };
 
     load_textures();
+    load_player_assets();
     crpt_camera_set_fov(M_PI_2 - 0.225);
     border.texture = crpt_fetch_texture("blue_wall");
     scene->map = crpt_map_create(50, 50);

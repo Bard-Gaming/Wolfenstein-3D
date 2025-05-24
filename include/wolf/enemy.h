@@ -10,7 +10,7 @@
     #define WOLF_ENEMY_H
     #include <carpet.h>
 
-    #define SOLDIER_ASSET(file) "assets/sprites/soldier/soldier_" file ".png"
+    #define SOLDIER_ASSET(file) "assets/sprites/soldier/" file ".png"
 
 
 typedef enum {

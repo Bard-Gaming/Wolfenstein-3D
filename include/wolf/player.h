@@ -29,7 +29,13 @@ typedef struct {
 
 player_t *get_player(void);
 void init_player(void);
+
+// Assets:
+void load_player_assets(void);
+void unload_player_assets(void);
+
 void update_player(const map_t *map, time_micro_t dt);
+void draw_player(void);
 
 
 #endif

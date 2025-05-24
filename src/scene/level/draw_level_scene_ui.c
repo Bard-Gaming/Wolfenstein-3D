@@ -27,4 +27,5 @@ void draw_level_scene_ui(scene_t *scene, window_t *window)
         .empty = crpt_fetch_texture("hb_empty"),
         .color = sfWhite,
     });
+    draw_player();
 }
