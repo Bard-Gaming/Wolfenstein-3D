@@ -27,10 +27,11 @@ static void load_textures(void)
 
 static void load_enemies(map_t *map)
 {
-    crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 200.0, 100.0 }));
-    crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 342.0, 513.0 }));
-    crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 720.0, 78.0 }));
-    crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 563.0, 391.0 }));
+    //crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 200.0, 100.0 }));
+    //crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 342.0, 513.0 }));
+    //crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 720.0, 78.0 }));
+    //crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 563.0, 391.0 }));
+    crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 4572.0, 4006.0 }));
 }
 
 static void place_player(void)

@@ -36,6 +36,10 @@ typedef struct {
 
     double health;
     double max_health;
+
+    // Animation
+    int frame;             // current frame index
+    int frame_time;        // how many ticks this frame has shown
 } enemy_t;
 
 

@@ -18,5 +18,7 @@ void set_soldier_state(enemy_t *soldier, enemy_state_t state)
 {
     soldier->state_time = 0;
     soldier->state = state;
-    update_soldier_texture(soldier);
+    soldier->frame = 0;
+    soldier->frame_time = 0;
+    //update_soldier_texture(soldier);
 }
