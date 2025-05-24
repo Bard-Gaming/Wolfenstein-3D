@@ -7,6 +7,7 @@ coding-style-reports.log
 
 # Map Files:
 *.mdsc
+!maps/*.mdsc
 
 # Compiled Files:
 *.out
