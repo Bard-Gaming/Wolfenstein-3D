@@ -17,6 +17,7 @@ void set_level_scene(void);
 void load_level_scene(scene_t *scene);
 void unload_level_scene(scene_t *scene);
 void update_level_scene(scene_t *scene, time_micro_t dt);
+void update_level_scene_fixed(scene_t *scene, time_micro_t dt);
 void draw_level_scene_ui(scene_t *scene, window_t *window);
 
 // Start Scene:

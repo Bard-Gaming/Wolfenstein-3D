@@ -38,11 +38,13 @@ SRC_FILES =	src/main.c														\
 			src/player/set_player_weapon.c									\
 			src/player/unload_player_assets.c								\
 			src/player/update_player.c										\
+			src/player/update_player_fixed.c								\
 			src/scene/level/draw_level_scene_ui.c							\
 			src/scene/level/load_level_scene.c								\
 			src/scene/level/set_level_scene.c								\
 			src/scene/level/unload_level_scene.c							\
 			src/scene/level/update_level_scene.c							\
+			src/scene/level/update_level_scene_fixed.c						\
 			src/scene/start/draw_start_scene_ui.c							\
 			src/scene/start/load_start_scene.c								\
 			src/scene/start/set_start_scene.c								\

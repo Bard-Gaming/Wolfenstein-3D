@@ -20,5 +20,7 @@ void set_player_weapon(weapon_type_t weapon)
     player->weapon = weapon;
     player->shoot_delay = 0.0;
     player->anim_frame = 0;
+    player->time_elapsed = 0;
+    player->is_anim = false;
     player->weapon_sprite = crpt_fetch_sprite(weapon_lookup[weapon].asset_id);
 }

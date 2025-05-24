@@ -18,6 +18,7 @@ void set_level_scene(void)
         .load = load_level_scene,
         .unload = unload_level_scene,
         .update = update_level_scene,
+        .fixed_update = update_level_scene_fixed,
         .draw_ui = draw_level_scene_ui,
     };
 

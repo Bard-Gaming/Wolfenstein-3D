@@ -39,7 +39,11 @@ typedef struct {
     weapon_type_t weapon;     // selected weapon
     double shoot_delay;       // in seconds
     sprite_t *weapon_sprite;  // cached for performance
-    unsigned int anim_frame;  // current animation frame
+
+    // Animations:
+    bool is_anim;               // tells whether or not to play an anim
+    unsigned int anim_frame;    // current animation frame (neg for no anim)
+    unsigned int time_elapsed;  // time elapsed in current frame
 
     // World Data:
     vec2_t *pos;
@@ -58,6 +62,7 @@ void unload_player_assets(void);
 
 // Runtime:
 void update_player(const map_t *map, time_micro_t dt);
+void update_player_fixed(void);
 void draw_player(void);
 
 // Actions:
