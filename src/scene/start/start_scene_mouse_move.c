@@ -9,7 +9,12 @@
 #include <wolf/scenes.h>
 
 
-static void update_hover(sprite_t *sprite, int x, int y)
+/*
+** Updates the color of the sprite
+** depending on the sprite's state
+** (i.e. hovered, active, etc...).
+*/
+static void update_sprite_color(sprite_t *sprite, int x, int y)
 {
     sfFloatRect bounds = sfSprite_getGlobalBounds(sprite);
 
@@ -30,6 +35,6 @@ void start_scene_mouse_move(UNUSED scene_t *scene, event_t *event)
     sprite_t *start_btn = crpt_fetch_sprite("start_button");
     sprite_t *settings_btn = crpt_fetch_sprite("settings_button");
 
-    update_hover(start_btn, mouse_x, mouse_y);
-    update_hover(settings_btn, mouse_x, mouse_y);
+    update_sprite_color(start_btn, mouse_x, mouse_y);
+    update_sprite_color(settings_btn, mouse_x, mouse_y);
 }
