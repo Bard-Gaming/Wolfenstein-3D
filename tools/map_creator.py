@@ -25,12 +25,12 @@ class MapCell:
         array = bytearray()
         array.extend(b'\x01')
         array.extend(self.texture.encode("ascii") + b"\x00")
-        array.extend(self.color.to_bytes(4))
+        array.extend(self.color.to_bytes(4, byteorder="big"))
         return bytes(array)
 
-    @staticmethod
-    def from_bytes(buffer: bytes, offset: int):
-        if buffer[offset] == 0:
+    @classmethod
+    def from_file(cls, file):
+        if data[offset] == 0:
             return MapCell(False, "", int(DEFAULT_COLOR_HEX, 16)), offset + 1
         offset += 1
         end = buffer.index(0x00, offset)
@@ -38,7 +38,49 @@ class MapCell:
         offset = end + 1
         color = int.from_bytes(buffer[offset:offset + 4])
         offset += 4
-        return MapCell(True, texture, color), offset
+        return cls(True, texture, color), offset
+
+
+class Map:
+    width: int
+    height: int
+    cells: list[list[MapCell]]
+
+    def __init__(self, width: int, height: int) -> None:
+        self.width = width
+        self.height = height
+        self.cells = [
+            [MapCell(False, "", int(DEFAULT_COLOR_HEX, 16)) for _ in range(width)]
+            for _ in range(height)
+        ]
+
+
+    def to_bytes(self) -> bytes:
+        array = bytearray()
+
+        array.extend(width.to_bytes(4))
+        array.extend(height.to_bytes(4))
+
+        for cell in self.cells:
+            array.extend(cell.to_bytes())
+
+        return bytes(array)
+
+
+    @classmethod
+    def from_bytes(cls, data: bytes) -> "Map":
+        data
+
+        data_map = cls()
+
+        return data_map
+
+
+    def __repr__(self) -> str:
+        return f"Map({self.width}, {self.height})"
+
+
+
 
 
 class MapEditor(tk.Tk):
@@ -234,8 +276,8 @@ class MapEditor(tk.Tk):
 
         try:
             with open(filename, "wb") as f:
-                f.write(self.grid_width.to_bytes(4))
-                f.write(self.grid_height.to_bytes(4))
+                f.write(self.grid_width.to_bytes(4, byteorder="little"))
+                f.write(self.grid_height.to_bytes(4, byteorder="little"))
                 for row in self.map_data:
                     for cell in row:
                         f.write(cell.to_bytes())

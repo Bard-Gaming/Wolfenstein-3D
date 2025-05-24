@@ -59,6 +59,7 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/map/crpt_map_draw3.c										\
 			src/map/crpt_map_fill_empty.c									\
 			src/map/crpt_map_get_cell.c										\
+			src/map/crpt_map_import.c										\
 			src/map/crpt_map_is_solid.c										\
 			src/map/crpt_map_randomize.c									\
 			src/map/crpt_map_remove_object.c								\
