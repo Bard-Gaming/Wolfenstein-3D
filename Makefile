@@ -35,6 +35,7 @@ SRC_FILES =	src/main.c														\
 			src/player/load_player_assets.c									\
 			src/player/player_use_weapon.c									\
 			src/player/player_weapons.c										\
+			src/player/set_player_weapon.c										\
 			src/player/unload_player_assets.c								\
 			src/player/update_player.c										\
 			src/scene/level/draw_level_scene_ui.c							\

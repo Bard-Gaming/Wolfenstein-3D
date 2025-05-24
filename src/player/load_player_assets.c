@@ -31,9 +31,20 @@ static void load_asset(const char *path, const char *id)
 }
 
 /*
+** Loads the plain textures used in
+** the UI of the player.
+*/
+static void load_textures(void)
+{
+    crpt_load_texture("assets/sprites/player/healthbar_full.png", "hb_full");
+    crpt_load_texture("assets/sprites/player/healthbar_empty.png", "hb_empty");
+}
+
+/*
 ** Loads the player's assets.
 */
 void load_player_assets(void)
 {
+    load_textures();
     load_asset("assets/sprites/player/pistol.png", "player_pistol");
 }

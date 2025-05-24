@@ -21,8 +21,6 @@ static void load_textures(void)
     crpt_load_texture("assets/textures/plank_wall.png", "plank_wall");
     crpt_load_texture("assets/textures/mossy_stone_wall.png",
         "mossy_stone_wall");
-    crpt_load_texture("assets/sprites/player/healthbar_full.png", "hb_full");
-    crpt_load_texture("assets/sprites/player/healthbar_empty.png", "hb_empty");
 }
 
 static void load_enemies(map_t *map)

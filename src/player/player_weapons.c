@@ -9,5 +9,5 @@
 
 
 const weapon_t weapon_lookup[WT_COUNT] = {
-    { .damage = 2.5, .cooldown = 1.0 },
+    { .damage = 2.5, .cooldown = 1.0, .asset_id = "player_pistol" },
 };

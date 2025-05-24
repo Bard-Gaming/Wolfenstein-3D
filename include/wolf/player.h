@@ -26,6 +26,7 @@ typedef enum {
 typedef struct {
     double damage;
     double cooldown;  // in seconds
+    const char *asset_id;
 } weapon_t;
 
 
@@ -35,8 +36,10 @@ typedef struct {
     unsigned int ammo;
 
     // Weapon data:
-    weapon_type_t weapon;
-    double shoot_delay;  // in seconds
+    weapon_type_t weapon;     // selected weapon
+    double shoot_delay;       // in seconds
+    sprite_t *weapon_sprite;  // cached for performance
+    unsigned int anim_frame;  // current animation frame
 
     // World Data:
     vec2_t *pos;
@@ -59,6 +62,7 @@ void draw_player(void);
 
 // Actions:
 void player_use_weapon(void);
+void set_player_weapon(weapon_type_t weapon);
 
 
 #endif
