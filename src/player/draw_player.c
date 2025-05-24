@@ -9,9 +9,13 @@
 #include <wolf/player.h>
 
 
+/*
+** Draws the player's healthbar,
+** having it fill depending on the
+** player's health.
+*/
 static void draw_healthbar(const player_t *player)
 {
-
     const vec2u_t window_dim = crpt_camera_get_size();
 
     crpt_draw_healthbar((graphics_healthbar_t){
