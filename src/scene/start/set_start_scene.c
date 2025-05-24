@@ -17,9 +17,9 @@ void set_start_scene(void)
     static scene_t start = {
         .load = load_start_scene,
         .unload = unload_start_scene,
-        .update = update_start_scene,
         .draw_ui = draw_start_scene_ui,
-        .event_handlers[sfEvtMouseButtonReleased] = start_menu_events,
+        .event_handlers[sfEvtMouseButtonReleased] = start_scene_onclick,
+        .event_handlers[sfEvtMouseMoved] = start_scene_mouse_move,
     };
 
     crpt_scene_set(&start);
