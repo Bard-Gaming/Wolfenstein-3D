@@ -6,6 +6,7 @@ from dataclasses import dataclass
 import argparse
 import sys
 import os
+import random
 
 # === Default Parameters ===
 DEFAULT_TEXTURE = ""
@@ -53,8 +54,8 @@ class MapEditor(tk.Tk):
         self.cell_ids = {}
         self.selected_x = None
         self.selected_y = None
-        self.last_selected = None
         self.selection_overlay_id = None
+        self.texture_display_color = {}
 
         self.setup_ui()
 
@@ -141,23 +142,23 @@ class MapEditor(tk.Tk):
 
         for y in range(height):
             for x in range(width):
-                cell = self.map_data[y][x]
                 x1 = x * self.cell_size
                 y1 = y * self.cell_size
                 x2 = x1 + self.cell_size
                 y2 = y1 + self.cell_size
-                color = f"#{(cell.color >> 8) & 0xFFFFFF:06x}"
-                rect_id = self.canvas.create_rectangle(x1, y1, x2, y2, fill=color, outline="black")
+                rect_id = self.canvas.create_rectangle(x1, y1, x2, y2, fill="white", outline="black")
                 self.cell_ids[x, y] = rect_id
 
-    def load_cell_to_editor(self):
-        cell = self.map_data[self.selected_y][self.selected_x]
-        if not cell.is_solid:
-            return
-        self.texture_entry.delete(0, tk.END)
-        self.texture_entry.insert(0, cell.texture)
-        self.color_hex.delete(0, tk.END)
-        self.color_hex.insert(0, f"{cell.color:08x}")
+    def update_cell_color(self, x, y):
+        cell = self.map_data[y][x]
+        if cell.is_solid:
+            if cell.texture not in self.texture_display_color:
+                self.texture_display_color[cell.texture] = random.randint(0, 0xFFFFFF)
+            color = self.texture_display_color[cell.texture]
+        else:
+            color = int(DEFAULT_COLOR_HEX, 16)
+        self.canvas.itemconfig(self.cell_ids[x, y], fill=f"#{(color >> 8) & 0xFFFFFF:06x}")
+
 
     def on_canvas_click(self, event):
         if not hasattr(self, "grid_width") or not hasattr(self, "grid_height"):
@@ -173,31 +174,28 @@ class MapEditor(tk.Tk):
 
         self.selected_x = x
         self.selected_y = y
-        self.last_selected = (x, y)
 
-        # Remove previous overlay
         if self.selection_overlay_id:
             self.canvas.delete(self.selection_overlay_id)
 
-        # Draw gray overlay (semi-transparent)
         x1 = x * self.cell_size
         y1 = y * self.cell_size
         x2 = x1 + self.cell_size
         y2 = y1 + self.cell_size
         self.selection_overlay_id = self.canvas.create_rectangle(
-            x1, y1, x2, y2,
-            outline="black",
-            fill="#aaaaaa",
-            stipple="gray25"
+            x1, y1, x2, y2, outline="black", fill="#aaaaaa", stipple="gray25"
         )
 
         self.load_cell_to_editor()
 
-
-    def update_cell_color(self, x, y, color=None):
-        if color is None:
-            color = self.map_data[y][x].color
-        self.canvas.itemconfig(self.cell_ids[x, y], fill=f"#{(color >> 8) & 0xFFFFFF:06x}")
+    def load_cell_to_editor(self):
+        cell = self.map_data[self.selected_y][self.selected_x]
+        if not cell.is_solid:
+            return
+        self.texture_entry.delete(0, tk.END)
+        self.texture_entry.insert(0, cell.texture)
+        self.color_hex.delete(0, tk.END)
+        self.color_hex.insert(0, f"{cell.color:08x}")
 
     def create_wall(self):
         if self.selected_x is None or self.selected_y is None:
@@ -210,14 +208,14 @@ class MapEditor(tk.Tk):
             messagebox.showerror("Invalid color", "Must be a valid hex RGBA value.")
             return
         self.map_data[self.selected_y][self.selected_x] = MapCell(True, texture, color)
-        self.update_cell_color(self.selected_x, self.selected_y, 0x000000)
+        self.update_cell_color(self.selected_x, self.selected_y)
 
     def destroy_wall(self):
         if self.selected_x is None or self.selected_y is None:
             messagebox.showwarning("No cell selected", "Click on a cell first.")
             return
         self.map_data[self.selected_y][self.selected_x] = MapCell(False, "", int(DEFAULT_COLOR_HEX, 16))
-        self.update_cell_color(self.selected_x, self.selected_y, int(DEFAULT_COLOR_HEX, 16))
+        self.update_cell_color(self.selected_x, self.selected_y)
 
     def pick_color(self):
         color = colorchooser.askcolor()[1]
@@ -254,18 +252,22 @@ class MapEditor(tk.Tk):
                 buffer = f.read()
             width = int.from_bytes(buffer[0:4])
             height = int.from_bytes(buffer[4:8])
+
+            self.grid_width = width
+            self.grid_height = height
             self.width_entry.delete(0, tk.END)
             self.width_entry.insert(0, str(width))
             self.height_entry.delete(0, tk.END)
             self.height_entry.insert(0, str(height))
-            self.grid_width = width
-            self.grid_height = height
+
             self.canvas.delete("all")
             self.map_data = []
             self.cell_ids = {}
+
             total_width = width * self.cell_size
             total_height = height * self.cell_size
             self.canvas.config(scrollregion=(0, 0, total_width, total_height))
+
             offset = 8
             for y in range(height):
                 row = []
@@ -276,10 +278,17 @@ class MapEditor(tk.Tk):
                     y1 = y * self.cell_size
                     x2 = x1 + self.cell_size
                     y2 = y1 + self.cell_size
-                    color = "#000000" if cell.is_solid else f"#{(cell.color >> 8) & 0xFFFFFF:06x}"
-                    rect_id = self.canvas.create_rectangle(x1, y1, x2, y2, fill=color, outline="black")
+                    rect_id = self.canvas.create_rectangle(x1, y1, x2, y2, fill="white", outline="black")
                     self.cell_ids[x, y] = rect_id
                 self.map_data.append(row)
+
+            for y in range(height):
+                for x in range(width):
+                    cell = self.map_data[y][x]
+                    if cell.texture and cell.is_solid:
+                        if cell.texture not in self.texture_display_color:
+                            self.texture_display_color[cell.texture] = random.randint(0, 0xFFFFFF)
+                    self.update_cell_color(x, y)
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load map file:\n{e}")
 
