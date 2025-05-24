@@ -3,6 +3,7 @@
 import tkinter as tk
 from tkinter import colorchooser, messagebox, filedialog
 from dataclasses import dataclass
+from typing import Literal
 import argparse
 import sys
 import os
@@ -19,33 +20,45 @@ class MapCell:
     texture: str
     color: int
 
-    def to_bytes(self) -> bytes:
+    def to_bytes(self, byteorder: Literal["little", "big"] = "little") -> bytes:
         if not self.is_solid:
             return b'\x00'
+
         array = bytearray()
-        array.extend(b'\x01')
-        array.extend(self.texture.encode("ascii") + b"\x00")
-        array.extend(self.color.to_bytes(4, byteorder="big"))
+
+        # Type:
+        array.extend(b'\x01')  # 1 for solid wall (we already know this cell is solid)
+
+        # Texture:
+        array.extend(self.texture.encode("ascii") + b'\x00')  # Add terminating null-byte
+
+        # Color:
+        array.extend(self.color.to_bytes(4, byteorder))
+
         return bytes(array)
 
     @classmethod
-    def from_file(cls, file):
-        if data[offset] == 0:
-            return MapCell(False, "", int(DEFAULT_COLOR_HEX, 16)), offset + 1
-        offset += 1
-        end = buffer.index(0x00, offset)
-        texture = buffer[offset:end].decode("ascii")
-        offset = end + 1
-        color = int.from_bytes(buffer[offset:offset + 4])
-        offset += 4
-        return cls(True, texture, color), offset
+    def from_file(cls, file, byteorder: Literal["little", "big"] = "little") -> "MapCell":
+        is_solid: bytes = file.read(1)
+        if is_solid[0] == 0:
+            return MapCell(False, "", int(DEFAULT_COLOR_HEX, 16))
+
+        # Texture:
+        texture_bytes = bytearray()
+        char = file.read(1)
+        while char[0] != 0:
+            texture_bytes.extend(char)
+            char = file.read(1)
+        texture = texture_bytes.decode("ascii")
+
+        # Color:
+        color_bytes = file.read(4)
+        color = int.from_bytes(color_bytes, byteorder)
+
+        return cls(True, texture, color)
 
 
 class Map:
-    width: int
-    height: int
-    cells: list[list[MapCell]]
-
     def __init__(self, width: int, height: int) -> None:
         self.width = width
         self.height = height
@@ -54,45 +67,71 @@ class Map:
             for _ in range(height)
         ]
 
-
-    def to_bytes(self) -> bytes:
+    def to_bytes(self, byteorder: Literal["little", "big"] = "little") -> bytes:
         array = bytearray()
 
-        array.extend(width.to_bytes(4))
-        array.extend(height.to_bytes(4))
+        # Dimensions:
+        array.extend(self.width.to_bytes(4, byteorder))
+        array.extend(self.height.to_bytes(4, byteorder))
 
-        for cell in self.cells:
-            array.extend(cell.to_bytes())
+        # Cell data:
+        for cell in self:
+            array.extend(cell.to_bytes(byteorder))
 
         return bytes(array)
 
-
     @classmethod
-    def from_bytes(cls, data: bytes) -> "Map":
-        data
+    def from_file(cls, file, byteorder: Literal["little", "big"] = "little") -> "Map":
+        # Dimensions:
+        width = int.from_bytes(file.read(4), byteorder)
+        height = int.from_bytes(file.read(4), byteorder)
 
-        data_map = cls()
+        map_data = cls(width, height)
 
-        return data_map
+        # Cells:
+        for y in range(height):
+            for x in range(width):
+                map_data.cells[y][x] = MapCell.from_file(file, byteorder)
 
+        return map_data
+
+    def __getitem__(self, index: tuple) -> MapCell:
+        if not isinstance(index, tuple) or len(index) != 2:
+            raise TypeError("Map: index needs to be a 2D tuple.")
+
+        return self.cells[index[1]][index[0]]
+
+    def __setitem__(self, index: tuple, other: "MapCell"):
+        if not isinstance(index, tuple) or len(index) != 2:
+            raise TypeError("Map: index needs to be a 2D tuple.")
+        if not isinstance(other, MapCell):
+            raise TypeError("Map: item type needs to be of type MapCell.")
+
+        self.cells[index[1]][index[0]] = other
+
+    def __iter__(self) -> iter:
+        for row in self.cells:
+            for cell in row:
+                yield cell
 
     def __repr__(self) -> str:
         return f"Map({self.width}, {self.height})"
 
 
-
-
-
 class MapEditor(tk.Tk):
-    def __init__(self, default_texture=DEFAULT_TEXTURE, default_color=int(DEFAULT_COLOR_HEX, 16), load_file=None):
+    def __init__(self, default_texture=DEFAULT_TEXTURE, default_color=int(DEFAULT_COLOR_HEX, 16)):
         super().__init__()
         self.title("Wolf3D Map Editor")
         self.geometry("1200x800")
 
+        self.map = None
+
+        # Config:
         self.default_texture = default_texture
         self.default_color = default_color
         self.cell_size = 20
-        self.map_data = []
+
+        # App State:
         self.cell_ids = {}
         self.selected_x = None
         self.selected_y = None
@@ -101,8 +140,16 @@ class MapEditor(tk.Tk):
 
         self.setup_ui()
 
-        if load_file:
-            self.load_map(load_file)
+    @property
+    def selected_cell(self) -> MapCell:
+        return self.map[self.selected_x, self.selected_y]
+
+    @selected_cell.setter
+    def selected_cell(self, value: MapCell) -> None:
+        if not isinstance(value, MapCell):
+            raise TypeError("MapEditor: tried setting selected cell to a value that isn't of type MapCell")
+
+        self.map[self.selected_x, self.selected_y] = value
 
     def setup_ui(self):
         self.grid_rowconfigure(1, weight=1)
@@ -166,14 +213,13 @@ class MapEditor(tk.Tk):
             messagebox.showerror("Invalid Input", "Width and Height must be integers.")
             return
 
+        # Create blank map:
+        self.map = Map(width, height)
+
         self.grid_width = width
         self.grid_height = height
 
         self.canvas.delete("all")
-        self.map_data = [
-            [MapCell(False, self.default_texture, self.default_color) for _ in range(width)]
-            for _ in range(height)
-        ]
         self.cell_ids = {}
         self.selected_x = None
         self.selected_y = None
@@ -192,15 +238,14 @@ class MapEditor(tk.Tk):
                 self.cell_ids[x, y] = rect_id
 
     def update_cell_color(self, x, y):
-        cell = self.map_data[y][x]
+        cell = self.map[x, y]
         if cell.is_solid:
             if cell.texture not in self.texture_display_color:
-                self.texture_display_color[cell.texture] = random.randint(0, 0xFFFFFF)
+                self.texture_display_color[cell.texture] = random.randint(0, 0xffffffff)
             color = self.texture_display_color[cell.texture]
         else:
             color = int(DEFAULT_COLOR_HEX, 16)
-        self.canvas.itemconfig(self.cell_ids[x, y], fill=f"#{(color >> 8) & 0xFFFFFF:06x}")
-
+        self.canvas.itemconfig(self.cell_ids[x, y], fill=f"#{(color >> 8) & 0xffffff:06x}")
 
     def on_canvas_click(self, event):
         if not hasattr(self, "grid_width") or not hasattr(self, "grid_height"):
@@ -231,13 +276,13 @@ class MapEditor(tk.Tk):
         self.load_cell_to_editor()
 
     def load_cell_to_editor(self):
-        cell = self.map_data[self.selected_y][self.selected_x]
-        if not cell.is_solid:
+        if not self.selected_cell.is_solid:
             return
+
         self.texture_entry.delete(0, tk.END)
-        self.texture_entry.insert(0, cell.texture)
+        self.texture_entry.insert(0, self.selected_cell.texture)
         self.color_hex.delete(0, tk.END)
-        self.color_hex.insert(0, f"{cell.color:08x}")
+        self.color_hex.insert(0, f"{self.selected_cell.color:08x}")
 
     def create_wall(self):
         if self.selected_x is None or self.selected_y is None:
@@ -249,24 +294,24 @@ class MapEditor(tk.Tk):
         except ValueError:
             messagebox.showerror("Invalid color", "Must be a valid hex RGBA value.")
             return
-        self.map_data[self.selected_y][self.selected_x] = MapCell(True, texture, color)
+        self.selected_cell = MapCell(True, texture, color)
         self.update_cell_color(self.selected_x, self.selected_y)
 
     def destroy_wall(self):
         if self.selected_x is None or self.selected_y is None:
             messagebox.showwarning("No cell selected", "Click on a cell first.")
             return
-        self.map_data[self.selected_y][self.selected_x] = MapCell(False, "", int(DEFAULT_COLOR_HEX, 16))
+        self.selected_cell = MapCell(False, "", int(DEFAULT_COLOR_HEX, 16))
         self.update_cell_color(self.selected_x, self.selected_y)
 
     def pick_color(self):
         color = colorchooser.askcolor()[1]
-        if color:
+        if color is not None:
             self.color_hex.delete(0, tk.END)
             self.color_hex.insert(0, color.lstrip("#") + "ff")
 
-    def export_map(self):
-        if not self.map_data:
+    def export_map(self) -> None:
+        if self.map is None:
             messagebox.showerror("Error", "No map to export.")
             return
 
@@ -275,81 +320,82 @@ class MapEditor(tk.Tk):
             return
 
         try:
-            with open(filename, "wb") as f:
-                f.write(self.grid_width.to_bytes(4, byteorder="little"))
-                f.write(self.grid_height.to_bytes(4, byteorder="little"))
-                for row in self.map_data:
-                    for cell in row:
-                        f.write(cell.to_bytes())
-            messagebox.showinfo("Export Complete", f"Map saved to {filename}")
+            with open(filename, "wb") as file:
+                file.write(self.map.to_bytes())
         except Exception as e:
             messagebox.showerror("Error", f"Failed to write map file:\n{e}")
+        else:
+            messagebox.showinfo("Export Complete", f"Map saved to {filename}")
 
-    def load_map(self, path):
+    def load_map(self, path: str) -> None:
         if not os.path.exists(path):
             messagebox.showerror("Error", f"File not found: {path}")
             return
         try:
-            with open(path, "rb") as f:
-                buffer = f.read()
-            width = int.from_bytes(buffer[0:4])
-            height = int.from_bytes(buffer[4:8])
-
-            self.grid_width = width
-            self.grid_height = height
-            self.width_entry.delete(0, tk.END)
-            self.width_entry.insert(0, str(width))
-            self.height_entry.delete(0, tk.END)
-            self.height_entry.insert(0, str(height))
-
-            self.canvas.delete("all")
-            self.map_data = []
-            self.cell_ids = {}
-
-            total_width = width * self.cell_size
-            total_height = height * self.cell_size
-            self.canvas.config(scrollregion=(0, 0, total_width, total_height))
-
-            offset = 8
-            for y in range(height):
-                row = []
-                for x in range(width):
-                    cell, offset = MapCell.from_bytes(buffer, offset)
-                    row.append(cell)
-                    x1 = x * self.cell_size
-                    y1 = y * self.cell_size
-                    x2 = x1 + self.cell_size
-                    y2 = y1 + self.cell_size
-                    rect_id = self.canvas.create_rectangle(x1, y1, x2, y2, fill="white", outline="black")
-                    self.cell_ids[x, y] = rect_id
-                self.map_data.append(row)
-
-            for y in range(height):
-                for x in range(width):
-                    cell = self.map_data[y][x]
-                    if cell.texture and cell.is_solid:
-                        if cell.texture not in self.texture_display_color:
-                            self.texture_display_color[cell.texture] = random.randint(0, 0xFFFFFF)
-                    self.update_cell_color(x, y)
+            with open(path, "rb") as file:
+                self.map = Map.from_file(file)
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load map file:\n{e}")
+            return
+
+        self.grid_width = self.map.width
+        self.grid_height = self.map.width
+        self.width_entry.delete(0, tk.END)
+        self.width_entry.insert(0, str(self.map.width))
+        self.height_entry.delete(0, tk.END)
+        self.height_entry.insert(0, str(self.map.height))
+
+        self.canvas.delete("all")
+        self.cell_ids = {}
+
+        total_width = self.map.width * self.cell_size
+        total_height = self.map.height * self.cell_size
+        self.canvas.config(scrollregion=(0, 0, total_width, total_height))
+
+        for y in range(self.map.height):
+            for x in range(self.map.width):
+                x1 = x * self.cell_size
+                y1 = y * self.cell_size
+                x2 = x1 + self.cell_size
+                y2 = y1 + self.cell_size
+                rect_id = self.canvas.create_rectangle(x1, y1, x2, y2, fill="white", outline="black")
+                self.cell_ids[x, y] = rect_id
+
+        for y in range(self.map.height):
+            for x in range(self.map.width):
+                cell = self.map[x, y]
+                if cell.texture and cell.is_solid:
+                    if cell.texture not in self.texture_display_color:
+                        self.texture_display_color[cell.texture] = random.randint(0, 0xffffff)
+                self.update_cell_color(x, y)
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Launch Wolf3D Map Editor")
-    parser.add_argument("-t", "--texture", type=str, default=DEFAULT_TEXTURE, help="Default texture ID")
-    parser.add_argument("-c", "--color", type=str, default=DEFAULT_COLOR_HEX, help="Default hex color (e.g. FF0000)")
-    parser.add_argument("-load", "--load_file", type=str, help="Path to .mdsc file to load and edit")
+    parser.add_argument("-t", "--texture", type=str, default=DEFAULT_TEXTURE, help="Sets the default texture ID")
+    parser.add_argument("-c", "--color", type=str, default=DEFAULT_COLOR_HEX, help="Sets the default RGBA value")
+    parser.add_argument("-l", "--load_file", type=str, help="Loads the map at the given path")
     return parser.parse_args()
 
 
-if __name__ == "__main__":
+def main():
     args = parse_args()
     try:
         color_int = int(args.color.lstrip("#"), 16)
-    except ValueError:
-        print("Invalid color hex provided. Use format like FF0000.")
-        sys.exit(1)
 
-    app = MapEditor(default_texture=args.texture, default_color=color_int, load_file=args.load_file)
+    except ValueError:
+        print("Invalid color RGBA provided. The given color has to be in hexadecimal.", file=sys.stderr)
+        exit(2)
+
+    app = MapEditor(default_texture=args.texture, default_color=color_int)
+
+    # Load given map (if present):
+    if args.load_file is not None:
+        app.load_map(args.load_file)
+
+    # Run the app:
     app.mainloop()
+
+
+if __name__ == "__main__":
+    main()
