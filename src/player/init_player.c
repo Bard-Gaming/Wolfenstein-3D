@@ -19,4 +19,6 @@ void init_player(void)
 
     player->health = PLAYER_MAX_HEALTH;
     player->pos = crpt_camera_get_position();
+    player->ammo = PLAYER_START_AMMO;
+    player->shoot_delay = 0.0;
 }

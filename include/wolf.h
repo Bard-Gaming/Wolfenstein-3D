@@ -16,6 +16,7 @@
     #include <wolf/enemy.h>
     #include <wolf/player.h>
     #include <wolf/scenes.h>
+    #include <wolf/settings.h>
 
 
 #endif
