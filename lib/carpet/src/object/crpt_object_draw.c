@@ -8,9 +8,26 @@
 
 #include <carpet/object.h>
 #include <carpet/camera.h>
+#include <carpet/scene.h>
+#include <carpet/game.h>
+#include <carpet/map.h>
 #include <carpet/utils/graphics.h>
 #include <carpet/utils/math.h>
 
+
+/*
+** Computes the floor offset.
+** This is simply the map's cell size
+** divided by two.
+*/
+static double get_floor_offset(void)
+{
+    game_t *game = crpt_game_get();
+
+    return (game->scene->map == NULL ?
+        CRPT_DEFAULT_CUBE_SIZE : game->scene->map->cell_size
+    ) / 2.0;
+}
 
 /*
 ** Refer to the following link for information on
@@ -26,17 +43,17 @@ static graphics_map_texture_t compute_texture_data(const object_t *obj,
     sfVector2u bounds = sfTexture_getSize(obj->texture);
     double dist_scale = cam->height / obj->cam_dist;
     double scale = obj->scale * dist_scale;
-    double sprite_angle = norm(atan2(
+    double sprite_angle = atan2(
         cam->position.y - obj->position.y,
         obj->position.x - cam->position.x
-    ));
-    double angle_diff = sprite_angle - cam->rotation;
+    );
+    double angle_det = math_norm(sprite_angle - cam->rotation) / cam->fov;
     double center_x = (cam->width - scale * bounds.x) * 0.5;
-    double start_y = (obj->scale - 2) * bounds.y;
+    double start_y = get_floor_offset() - obj->scale * bounds.y;
 
     return (graphics_map_texture_t){
-        .x = angle_diff * cam->width / cam->fov + center_x,
-        .y = cam->height * 0.5 - (start_y + obj->height) * dist_scale,
+        .x = angle_det * cam->width + center_x,
+        .y = cam->height * 0.5 + (start_y - obj->height) * dist_scale,
         .width = bounds.x * scale,
         .height = bounds.y * scale,
         .dist = obj->cam_dist,

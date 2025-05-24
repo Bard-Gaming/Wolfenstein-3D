@@ -31,6 +31,17 @@ static inline double norm(double angle)
 }
 
 /*
+** Normalizes an angle to the range
+** ]-PI; PI]. This is especially useful
+** for some mathematical formulas, hence
+** the name.
+*/
+static inline double math_norm(double angle)
+{
+    return angle - M_2PI * floor((angle + M_PI) / M_2PI);
+}
+
+/*
 ** Returns a 32bit random value
 ** between [0; 2^32[.
 */
