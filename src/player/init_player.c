@@ -21,4 +21,5 @@ void init_player(void)
     player->pos = crpt_camera_get_position();
     player->ammo = PLAYER_START_AMMO;
     player->shoot_delay = 0.0;
+    player->weapon = WT_PISTOL;
 }

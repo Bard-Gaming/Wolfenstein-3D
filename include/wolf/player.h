@@ -16,15 +16,34 @@
     #define PLAYER_SPRINT_FOV (M_PI_2 - 0.15)
 
 
+typedef enum {
+    WT_PISTOL,
+
+    WT_COUNT,  // keep last
+} weapon_type_t;
+
+
+typedef struct {
+    double damage;
+    double cooldown;  // in seconds
+} weapon_t;
+
+
 typedef struct {
     // Player stats:
     double health;
     unsigned int ammo;
-    double shoot_delay;
+
+    // Weapon data:
+    weapon_type_t weapon;
+    double shoot_delay;  // in seconds
 
     // World Data:
     vec2_t *pos;
 } player_t;
+
+
+extern const weapon_t weapon_lookup[WT_COUNT];
 
 
 player_t *get_player(void);
@@ -34,8 +53,12 @@ void init_player(void);
 void load_player_assets(void);
 void unload_player_assets(void);
 
+// Runtime:
 void update_player(const map_t *map, time_micro_t dt);
 void draw_player(void);
+
+// Actions:
+void player_use_weapon(void);
 
 
 #endif

@@ -33,6 +33,8 @@ SRC_FILES =	src/main.c														\
 			src/player/get_player.c											\
 			src/player/init_player.c										\
 			src/player/load_player_assets.c									\
+			src/player/player_use_weapon.c									\
+			src/player/player_weapons.c										\
 			src/player/unload_player_assets.c								\
 			src/player/update_player.c										\
 			src/scene/level/draw_level_scene_ui.c							\
@@ -48,6 +50,7 @@ SRC_FILES =	src/main.c														\
 			src/scene/start/unload_start_scene.c							\
 			src/settings/get_input_vec.c									\
 			src/settings/get_settings.c										\
+			src/settings/is_key_pressed.c									\
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 

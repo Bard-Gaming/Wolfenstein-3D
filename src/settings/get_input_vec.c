@@ -25,12 +25,16 @@ static double get_input_diff(sfKeyCode a, sfKeyCode b)
 ** The vector contains the forward momentum (x),
 ** as well as the rotation offset (y).
 */
-vec2_t get_input_vec(void)
+vec2_t get_input_vec(time_micro_t dt)
 {
-    sfKeyCode *controls = get_settings()->controls;
+    settings_t *settings = get_settings();
+    sfKeyCode *controls = settings->controls;
+    double r_speed = settings->sensitivity * ROTATION_SPEED_MAX;
 
     return (vec2_t){
-        .x = get_input_diff(controls[0], controls[1]),
-        .y = get_input_diff(controls[3], controls[2]) * 0.0125,
+        .x = get_input_diff(controls[CK_FRONT], controls[CK_BACK]) *
+            dt * DELTA_TIME_FACTOR * MOVE_SPEED,
+        .y = get_input_diff(controls[CK_RIGHT], controls[CK_LEFT]) *
+            r_speed * dt * DELTA_TIME_FACTOR,
     };
 }
