@@ -36,11 +36,12 @@ SRC_FILES =	src/main.c														\
 			src/scene/level/set_level_scene.c								\
 			src/scene/level/unload_level_scene.c							\
 			src/scene/level/update_level_scene.c							\
-			src/scene/start_menu/draw_start_scene_ui.c						\
-			src/scene/start_menu/load_start_scene.c							\
-			src/scene/start_menu/set_start_scene.c							\
-			src/scene/start_menu/unload_start_scene.c						\
-			src/scene/start_menu/update_start_scene.c						\
+			src/scene/start/draw_start_scene_ui.c							\
+			src/scene/start/load_start_scene.c								\
+			src/scene/start/set_start_scene.c								\
+			src/scene/start/start_scene_mouse_move.c						\
+			src/scene/start/start_scene_onclick.c							\
+			src/scene/start/unload_start_scene.c							\
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 
