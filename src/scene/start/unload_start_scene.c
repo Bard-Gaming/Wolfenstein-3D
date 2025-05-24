@@ -22,7 +22,6 @@ static void unload_widget(const char *id)
     crpt_unload_texture(id);
 }
 
-
 /*
 ** Unloads all sprites related to the start menu.
 */
