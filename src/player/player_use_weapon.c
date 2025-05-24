@@ -16,9 +16,7 @@
 */
 static void no_ammo(player_t *player)
 {
-    player->anim_frame = 4;
-    player->is_anim = true;
-    return;
+    player->anim_frame = 3;
 }
 
 /*
@@ -30,10 +28,10 @@ void player_use_weapon(void)
 
     if (player->shoot_delay > 0.0)
         return;
-    if (player->ammo == 0)
-        return no_ammo(player);
     player->is_anim = true;
     player->time_elapsed = 10;
     player->shoot_delay = weapon_lookup[player->weapon].cooldown;
+    if (player->ammo == 0)
+        return no_ammo(player);
     player->ammo--;
 }
