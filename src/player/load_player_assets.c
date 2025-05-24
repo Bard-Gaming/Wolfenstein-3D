@@ -17,16 +17,17 @@
 */
 static void load_asset(const char *path, const char *id)
 {
-    const float height = 1280.f;
     vec2u_t size = crpt_camera_get_size();
+    const float scale = size.x / 64.f;
     sprite_t *sprite;
 
     crpt_load_texture(path, id);
     crpt_load_sprite(crpt_fetch_texture(id), id);
     sprite = crpt_fetch_sprite(id);
+    sfSprite_setOrigin(sprite, (sfVector2f){ 0.f, 64.f });
     sfSprite_setTextureRect(sprite, (sfIntRect){ 0, 0, 64, 64 });
-    sfSprite_setScale(sprite, (sfVector2f){ size.x / 64.f, height / 64.f });
-    sfSprite_setPosition(sprite, (sfVector2f){ 0.f, size.y - height });
+    sfSprite_setScale(sprite, (sfVector2f){ scale, scale * 0.75 });
+    sfSprite_setPosition(sprite, (sfVector2f){ 0.f, size.y });
 }
 
 /*
