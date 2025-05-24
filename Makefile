@@ -47,7 +47,7 @@ OBJ_FILES = $(SRC_FILES:.c=.o)
 SUCCESS_MSG_FORMAT = "\033[92;1m   %s\033[0m\n"
 ERROR_MSG_FORMAT = "\033[31;1m   %s\033[0m\n"
 
-.PHONY: all debug sanitize clean fclean re
+.PHONY: all debug perf sanitize clean fclean re
 
 all: CFLAGS += -O3
 all: $(NAME)
