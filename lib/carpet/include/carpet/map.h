@@ -14,6 +14,7 @@
 
     #define CRPT_DEFAULT_CUBE_SIZE 64.f
     #define CRPT_DEFAULT_TILE_SIZE 12.f
+    #define CRPT_MAP_TEXTURE_MAX 1024
 
 
 enum carpet_map_cell_type {
@@ -50,6 +51,7 @@ struct carpet_map {
 
 // Map process / lifetime:
 map_t *crpt_map_create(unsigned int width, unsigned int height);
+map_t *crpt_map_import(const char *path);
 void crpt_map_delete(map_t *map);
 
 // Drawing:

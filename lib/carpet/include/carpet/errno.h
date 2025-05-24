@@ -12,6 +12,7 @@
     #include <carpet/types.h>
 
     #define CRPT_ERRNO crpt_errno_get()
+    #define CRPT_CRITICAL_ERROR 126
 
 
 enum carpet_errno {
@@ -25,6 +26,9 @@ enum carpet_errno {
     // Game errors:
     CE_GAME_NO_INIT,
     CE_GAME_DOUBLE_INIT,
+
+    // Map:
+    CE_MAP_INVALID_FILE,
 
     // Object errors:
     CE_OBJECT_NO_MAP,

@@ -21,6 +21,9 @@ static const char *crpt_strerror_buffer[CE_COUNT] = {
     [CE_GAME_NO_INIT] = "game hasn't been initialized.",
     [CE_GAME_DOUBLE_INIT] = "game has already been initialized.",
 
+    // Map:
+    [CE_MAP_INVALID_FILE] = "invalid map file.",
+
     // Object:
     [CE_OBJECT_NO_MAP] = "tried creating object on scene with no map.",
 

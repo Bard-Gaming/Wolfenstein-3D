@@ -10,8 +10,6 @@
     #define LIB_CARPET_MEMORY_H
     #include <carpet/types.h>
 
-    #define CRPT_CRITICAL_ERROR 126
-
 
 void *cmalloc(size_t size);
 void *ccalloc(size_t nmemb, size_t size);
