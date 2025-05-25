@@ -18,8 +18,12 @@
 ** Determines whether or not a given
 ** object is in the specified range.
 */
-static bool is_in_range(const object_t *obj, vec2_t min, vec2_t max)
+static bool is_in_range(const object_t *obj, vec2_t pos)
 {
+    double offset = CRPT_RAY_POS(obj->cam_dist * CRPT_RAY_THRESHOLD);
+    vec2_t min = { pos.x - offset, pos.y - offset };
+    vec2_t max = { pos.x + offset, pos.y + offset };
+
     return
         (min.x <= obj->position.x && obj->position.x <= max.x) &&
         (min.y <= obj->position.y && obj->position.y <= max.y);
@@ -30,18 +34,21 @@ static bool is_in_range(const object_t *obj, vec2_t min, vec2_t max)
 ** at the given position. If no object is at
 ** the specified position, NULL is returned
 ** instead.
+**
+** Technical Addendum:
+** The map objects array is sorted from farthest
+** to closest, meaning that it needs to be traversed
+** in reverse order to go from closest to farthest.
 */
 static object_t *object_at_position(const map_t *map, vec2_t pos, ssize_t type)
 {
-    vec2_t min = { pos.x - CRPT_RAY_THRESHOLD, pos.y - CRPT_RAY_THRESHOLD };
-    vec2_t max = { pos.x + CRPT_RAY_THRESHOLD, pos.y + CRPT_RAY_THRESHOLD };
     object_t *obj;
 
-    for (size_t i = 0; i < map->objects.count; i++) {
-        obj = map->objects.data[i];
+    for (size_t i = map->objects.count; i > 0; i--) {
+        obj = map->objects.data[i - 1];
         if (type >= 0 && obj->type != type)
             continue;
-        if (is_in_range(obj, min, max))
+        if (is_in_range(obj, pos))
             return obj;
     }
     return NULL;

@@ -16,7 +16,10 @@
     #define CRPT_DISTANCE_FALLOFF 0.40
     #define CRPT_DISTANCE_FALLOFF_WALL (CRPT_DISTANCE_FALLOFF + 0.1)
     #define CRPT_DISTANCE_MAX 1250.0
-    #define CRPT_RAY_THRESHOLD 32.0
+    #define CRPT_RAY_THRESHOLD 0.025
+    #define _RAY_POS_MIN 10.0
+    #define _RAY_POS_MAX 50.0
+    #define CRPT_RAY_POS(pos) fmin(fmax((pos), _RAY_POS_MIN), _RAY_POS_MAX)
 
 
 enum carpet_ray_side {
