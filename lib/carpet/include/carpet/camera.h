@@ -41,5 +41,8 @@ vec2u_t crpt_camera_get_size(void);
 // Position:
 vec2_t *crpt_camera_get_position(void);
 
+// Utils:
+bool crpt_camera_has_line_of_sight(vec2_t pos);
+
 
 #endif

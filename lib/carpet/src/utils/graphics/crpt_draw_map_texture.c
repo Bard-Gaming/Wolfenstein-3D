@@ -34,21 +34,19 @@ static void add_line(vertex_array_t *va,
     double screen_x = texture.x + x;
     float texture_x;
     float texture_y;
-    float tex_x;
 
     if (0.0 > screen_x || screen_x > cam->width)
         return;
     if (cam->depth_buffer[(unsigned int)screen_x] < texture.dist)
         return;
-    texture_x = x / texture.scale;
+    texture_x = (x + texture.width_offset) / texture.scale;
     texture_y = sfTexture_getSize(texture.texture).y;
-    tex_x = (x + texture.width_offset) / texture.scale;
     sfVertexArray_append(va, (sfVertex){
-        { texture.x + x, texture.y }, texture.color, { tex_x, 0.f }
+        { texture.x + x, texture.y }, texture.color, { texture_x, 0.f }
     });
     sfVertexArray_append(va, (sfVertex){
         { screen_x, texture.y + texture.height },
-        texture.color, { tex_x, texture_y }
+        texture.color, { texture_x, texture_y }
     });
 }
 

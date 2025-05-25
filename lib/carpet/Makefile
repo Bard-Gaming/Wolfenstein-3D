@@ -34,6 +34,7 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/camera/crpt_camera_get_position.c							\
 			src/camera/crpt_camera_get_rotation.c							\
 			src/camera/crpt_camera_get_size.c								\
+			src/camera/crpt_camera_has_line_of_sight.c						\
 			src/camera/crpt_camera_interpolate_fov.c						\
 			src/camera/crpt_camera_rotate.c									\
 			src/camera/crpt_camera_set_fov.c								\
