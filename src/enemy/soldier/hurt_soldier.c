@@ -19,4 +19,6 @@ void hurt_soldier(enemy_t *soldier, double damage)
 {
     soldier->health -= damage;
     soldier->hurt_time = SOLDIER_HURT_TIME;
+    if (soldier->state != ES_ATTACK)
+        set_soldier_state(soldier, ES_ATTACK);
 }

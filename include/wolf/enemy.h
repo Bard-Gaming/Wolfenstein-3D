@@ -52,6 +52,7 @@ typedef struct {
     enemy_state_t state;
     unsigned int state_time;  // cycles passed in current state
     unsigned int state_duration;
+    enemy_state_t next_state;
 
     double rotation;
 

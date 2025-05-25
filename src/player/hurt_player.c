@@ -12,12 +12,15 @@
 /*
 ** Hurts the player by the given amount
 ** of damage.
+** The player has a native 15% evasion rate.
 ** TODO: Handle death
 */
 void hurt_player(double damage)
 {
     player_t *player = get_player();
 
+    if (crpt_rand(100) < 15)
+        return;
     player->health = fmax(player->health - damage, 0.0);
     player->hurt_time = 1.0;
 }
