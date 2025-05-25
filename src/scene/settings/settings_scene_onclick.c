@@ -7,13 +7,9 @@
 */
 
 #include <wolf/scenes.h>
-
-
-#include <wolf/scenes.h>
 #include <wolf/settings.h>
 #include <stdio.h>
-#include <SFML/Window/Keyboard.h>
-#include <SFML/Graphics.h>
+
 
 /*
 ** Handles key input after clicking a control button.
@@ -83,8 +79,8 @@ static int rebind_control(settings_state_t *state, int index, const char *id)
 */
 static int handle_control_click(settings_state_t *state, int x, int y)
 {
-    const char *ids[] = {
-        "forward_key", "backward_key", "left_key", "right_key"
+    static const char *ids[] = {
+        "buffer_forward", "buffer_backward", "buffer_left", "buffer_right"
     };
 
     for (int i = 0; i < 4; ++i) {

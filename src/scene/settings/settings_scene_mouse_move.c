@@ -10,10 +10,10 @@
 
 
 static const char *widget_ids[] = {
-    "forward_key",
-    "backward_key",
-    "left_key",
-    "right_key",
+    "buffer_forward",
+    "buffer_backward",
+    "buffer_left",
+    "buffer_right",
     "back_button",
 
     // Toggle buttons (2 for sound, 2 for music)
