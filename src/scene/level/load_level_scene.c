@@ -13,7 +13,6 @@
 
 static void load_textures(void)
 {
-    crpt_load_texture(SOLDIER_ASSET("idle_front"), "soldier_idle_front");
     crpt_load_texture("assets/textures/rocks.png", "rocks");
     crpt_load_texture("assets/textures/blue_wall.png", "blue_wall");
     crpt_load_texture("assets/textures/stone_wall.png", "stone_wall");
@@ -23,7 +22,7 @@ static void load_textures(void)
         "mossy_stone_wall");
 }
 
-static void load_enemies(map_t *map)
+static void place_enemies(map_t *map)
 {
     crpt_map_add_object(map, (void *)create_soldier(4628.0, 3786.0));
     crpt_map_add_object(map, (void *)create_soldier(4863.5, 4188.5));
@@ -51,11 +50,12 @@ void load_level_scene(scene_t *scene)
 {
     load_textures();
     load_player_assets();
-    crpt_camera_set_fov(M_PI_2 - 0.225);
+    load_soldier_assets();
     scene->map = crpt_map_import("maps/level_1.mdsc");
     scene->map->floor = (color_t){ 112, 112, 112, 255 };
     scene->map->ceiling = (color_t){ 56, 56, 56, 255 };
-    load_enemies(scene->map);
+    place_enemies(scene->map);
+    crpt_camera_set_fov(M_PI_2 - 0.225);
     init_player();
     place_player();
 }

@@ -7,6 +7,7 @@
 */
 
 #include <wolf/player.h>
+#include <wolf/enemy.h>
 
 
 /*
@@ -17,6 +18,23 @@
 static void no_ammo(player_t *player)
 {
     player->anim_frame = 3;
+}
+
+/*
+** Actual weapon shooting logic.
+*/
+static void shoot_weapon(player_t *player)
+{
+    const map_t *map = crpt_game_get()->scene->map;
+    enemy_t *enemy = (void *)crpt_ray_hitscan_object(
+        map, crpt_camera_get_rotation(), OT_ENEMY
+    );
+
+    if (enemy == NULL)
+        return;
+    enemy->health -= weapon_lookup[player->weapon].damage;
+    if (enemy->health <= 0.0)
+        kill_enemy(enemy);
 }
 
 /*
@@ -34,4 +52,5 @@ void player_use_weapon(void)
     if (player->ammo == 0)
         return no_ammo(player);
     player->ammo--;
+    shoot_weapon(player);
 }

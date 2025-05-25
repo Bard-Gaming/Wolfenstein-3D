@@ -14,6 +14,20 @@
 
 
 typedef enum {
+    OT_DECORATION,
+    OT_ENEMY,
+    OT_DEAD_ENEMY,  // separate to avoid hitscans reaching dead enemies
+} object_type_t;
+
+
+typedef enum {
+    ET_UNSET,
+
+    ET_SOLDIER,
+} enemy_type_t;
+
+
+typedef enum {
     ES_IDLE,
     ES_MOVE,
     ES_ATTACK,
@@ -27,6 +41,7 @@ typedef enum {
 */
 typedef struct {
     object_t object;  // /!\ keep first /!|
+    enemy_type_t type;
 
     // State:
     enemy_state_t state;
@@ -42,9 +57,13 @@ typedef struct {
 // Base enemy functions:
 enemy_t *create_enemy(const texture_t *texture, vec2_t pos);
 void set_enemy_max_health(enemy_t *enemy, double health);
+void kill_enemy(enemy_t *enemy);
 
 // Soldier functions:
 enemy_t *create_soldier(double x, double y);
+void kill_soldier(enemy_t *soldier);
+void load_soldier_assets(void);
+void unload_soldier_assets(void);
 void update_soldier(enemy_t *soldier);
 void update_soldier_texture(enemy_t *soldier);
 void set_soldier_state(enemy_t *soldier, enemy_state_t state);

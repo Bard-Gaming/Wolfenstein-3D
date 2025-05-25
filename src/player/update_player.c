@@ -19,8 +19,8 @@ static vec2_t compute_pos_offset(double intensity)
     double rotation = crpt_camera_get_rotation();
 
     return (vec2_t){
-        .x = cosf(rotation) * intensity,
-        .y = - sinf(rotation) * intensity,
+        .x = cos(rotation) * intensity,
+        .y = - sin(rotation) * intensity,
     };
 }
 
