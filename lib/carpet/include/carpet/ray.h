@@ -16,6 +16,7 @@
     #define CRPT_DISTANCE_FALLOFF 0.40
     #define CRPT_DISTANCE_FALLOFF_WALL (CRPT_DISTANCE_FALLOFF + 0.1)
     #define CRPT_DISTANCE_MAX 1250.0
+    #define CRPT_RAY_THRESHOLD 32.0
 
 
 enum carpet_ray_side {
@@ -35,6 +36,9 @@ struct carpet_ray {
 ray_t crpt_raycast(vec2_t origin, double rotation, const map_t *map);
 void crpt_ray_draw3(ray_t ray, double x,
     const map_t *map, const camera_t *cam);
+
+// Hitscans:
+object_t *crpt_ray_hitscan_object(const map_t *map, double angle, ssize_t t);
 
 
 #endif

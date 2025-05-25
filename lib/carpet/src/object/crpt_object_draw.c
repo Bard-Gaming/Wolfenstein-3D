@@ -40,22 +40,23 @@ static double get_floor_offset(void)
 static graphics_map_texture_t compute_texture_data(const object_t *obj,
     const camera_t *cam)
 {
-    sfVector2u bounds = sfTexture_getSize(obj->texture);
+    double bound_x = obj->texture_rect.y - obj->texture_rect.x;
+    double bound_y = sfTexture_getSize(obj->texture).y;
     double dist_scale = cam->height / obj->cam_dist;
     double scale = obj->scale * dist_scale;
     double sprite_angle = atan2(
         cam->position.y - obj->position.y,
-        obj->position.x - cam->position.x
-    );
+        obj->position.x - cam->position.x);
     double angle_det = math_norm(sprite_angle - cam->rotation) / cam->fov;
-    double center_x = (cam->width - scale * bounds.x) * 0.5;
-    double start_y = get_floor_offset() - obj->scale * bounds.y;
+    double center_x = (cam->width - scale * bound_x) * 0.5;
+    double start_y = get_floor_offset() - obj->scale * bound_y;
 
     return (graphics_map_texture_t){
         .x = angle_det * cam->width + center_x,
         .y = cam->height * 0.5 + (start_y - obj->height) * dist_scale,
-        .width = bounds.x * scale,
-        .height = bounds.y * scale,
+        .width = obj->texture_rect.y * scale,
+        .width_offset = obj->texture_rect.x * scale,
+        .height = bound_y * scale,
         .dist = obj->cam_dist,
         .scale = scale,
     };
@@ -74,5 +75,6 @@ void crpt_object_draw(const object_t *object, const camera_t *cam)
         return;
     texture_data = compute_texture_data(object, cam);
     texture_data.texture = object->texture;
+    texture_data.color = object->color;
     crpt_draw_map_texture(texture_data);
 }

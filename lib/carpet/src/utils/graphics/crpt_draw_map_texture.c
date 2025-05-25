@@ -45,8 +45,8 @@ static void add_line(vertex_array_t *va,
         { texture.x + x, texture.y }, sfWhite, { texture_x, 0.f }
     });
     sfVertexArray_append(va, (sfVertex){
-        { texture.x + x, texture.y + texture.height },
-        sfWhite, { texture_x, texture_y }
+        { screen_x, texture.y + texture.height },
+        texture.color, { texture_x, texture_y }
     });
 }
 

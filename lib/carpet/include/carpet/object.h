@@ -29,12 +29,15 @@
 struct carpet_object {
     // Drawing:
     const texture_t *texture;
+    vec2_t texture_rect;
+    color_t color;
 
     // Process:
     /* the following is fixed update (for animations & such) */
     NULLABLE object_update_fnc_t update;
     /* Function used to free the memory allocated for the object */
     NULLABLE free_fnc_t free;
+    unsigned int type;  // user-defined type
 
     // World data:
     size_t index;     // object index in map (good for optimization)
@@ -50,6 +53,7 @@ object_t *crpt_object_create(const texture_t *texture, vec2_t pos);
 void crpt_object_defaults(object_t *object);
 
 // Object utils:
+void crpt_object_set_texture(object_t *obj, const texture_t *texture);
 void crpt_object_set_position(object_t *object, vec2_t new);
 void crpt_object_move(object_t *object, vec2_t offset);
 

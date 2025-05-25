@@ -21,7 +21,7 @@ object_t *crpt_object_create(const texture_t *texture, vec2_t pos)
     object_t *object = cmalloc(sizeof(object_t));
 
     crpt_object_defaults(object);
-    object->texture = texture;
+    crpt_object_set_texture(object, texture);
     crpt_object_set_position(object, pos);
     return object;
 }

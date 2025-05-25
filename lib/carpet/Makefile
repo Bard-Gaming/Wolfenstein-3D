@@ -71,6 +71,8 @@ SRC_FILES =	src/assets/fonts/crpt_fetch_font.c								\
 			src/object/crpt_object_draw.c									\
 			src/object/crpt_object_move.c									\
 			src/object/crpt_object_set_position.c							\
+			src/object/crpt_object_set_texture.c							\
+			src/ray/crpt_ray_hitscan_object.c								\
 			src/ray/crpt_ray_draw3.c										\
 			src/ray/crpt_raycast.c											\
 			src/scene/default/crpt_scene_default_get.c						\
