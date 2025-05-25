@@ -10,15 +10,15 @@
 
 
 /*
-** Loads a player asset.
+** Loads a player weapon.
 ** The 'height' constant reflects
 ** the height of the weapon when
 ** in the hand of the player (in px).
 */
-static void load_asset(const char *path, const char *id)
+static void load_weapon(const char *path, const char *id)
 {
     vec2u_t size = crpt_camera_get_size();
-    const float scale = size.x / 64.f;
+    const float scale = size.x / 128.f;
     sprite_t *sprite;
 
     crpt_load_texture(path, id);
@@ -27,7 +27,7 @@ static void load_asset(const char *path, const char *id)
     sfSprite_setOrigin(sprite, (sfVector2f){ 0.f, 64.f });
     sfSprite_setTextureRect(sprite, (sfIntRect){ 0, 0, 64, 64 });
     sfSprite_setScale(sprite, (sfVector2f){ scale, scale * 0.75 });
-    sfSprite_setPosition(sprite, (sfVector2f){ 0.f, size.y });
+    sfSprite_setPosition(sprite, (sfVector2f){ size.x * 0.25, size.y });
 }
 
 /*
@@ -46,5 +46,5 @@ static void load_textures(void)
 void load_player_assets(void)
 {
     load_textures();
-    load_asset("assets/sprites/player/pistol.png", "player_pistol");
+    load_weapon("assets/sprites/player/pistol.png", "player_pistol");
 }
