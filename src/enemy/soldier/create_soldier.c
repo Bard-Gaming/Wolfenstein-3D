@@ -13,11 +13,11 @@
 ** Creates a solider enemy at the
 ** given position.
 */
-enemy_t *create_soldier(vec2_t pos)
+enemy_t *create_soldier(double x, double y)
 {
     enemy_t *enemy = create_enemy(
         crpt_fetch_texture("soldier_idle_front"),
-        pos
+        (vec2_t){ x, y }
     );
 
     set_enemy_max_health(enemy, 20);

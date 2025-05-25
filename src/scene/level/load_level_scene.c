@@ -25,10 +25,14 @@ static void load_textures(void)
 
 static void load_enemies(map_t *map)
 {
-    crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 200.0, 100.0 }));
-    crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 342.0, 513.0 }));
-    crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 720.0, 78.0 }));
-    crpt_map_add_object(map, (void *)create_soldier((vec2_t){ 563.0, 391.0 }));
+    crpt_map_add_object(map, (void *)create_soldier(4628.0, 3786.0));
+    crpt_map_add_object(map, (void *)create_soldier(4863.5, 4188.5));
+    crpt_map_add_object(map, (void *)create_soldier(2397.0, 3370.0));
+    crpt_map_add_object(map, (void *)create_soldier(3686.0, 4831.0));
+    crpt_map_add_object(map, (void *)create_soldier(3694.0, 5403.0));
+    crpt_map_add_object(map, (void *)create_soldier(3544.0, 5337.0));
+    crpt_map_add_object(map, (void *)create_soldier(1767.0, 3400.0));
+    crpt_map_add_object(map, (void *)create_soldier(307.0, 3985.0));
 }
 
 static void place_player(void)
@@ -36,8 +40,8 @@ static void place_player(void)
     player_t *player = get_player();
 
     player->pos->x = 4512.0;
-    player->pos->y = 4256.0;
-    crpt_camera_set_rotation(M_PI_2);
+    player->pos->y = 3296.0;
+    crpt_camera_set_rotation(3 * M_PI_2);
 }
 
 /*
