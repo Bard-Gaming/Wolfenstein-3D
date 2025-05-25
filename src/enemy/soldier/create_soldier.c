@@ -22,5 +22,6 @@ enemy_t *create_soldier(double x, double y)
 
     set_enemy_max_health(enemy, 20);
     enemy->object.update = (object_update_fnc_t)update_soldier;
+    enemy->type = ET_SOLDIER;
     return enemy;
 }
