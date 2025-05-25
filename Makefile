@@ -37,6 +37,7 @@ SRC_FILES =	src/main.c														\
 			src/enemy/set_enemy_max_health.c								\
 			src/player/draw_player.c										\
 			src/player/get_player.c											\
+			src/player/hurt_player.c										\
 			src/player/init_player.c										\
 			src/player/load_player_assets.c									\
 			src/player/player_press_key.c									\

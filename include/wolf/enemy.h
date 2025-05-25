@@ -12,6 +12,7 @@
 
     #define SOLDIER_ASSET(file) "assets/sprites/soldier/" file ".png"
     #define SOLDIER_HURT_TIME 500  // in fixed update cycles
+    #define SOLDIER_FRAME_TIME 5   // in fixed update cycles
 
 
 typedef enum {
@@ -48,6 +49,7 @@ typedef struct {
     // State:
     enemy_state_t state;
     unsigned int state_time;  // cycles passed in current state
+    unsigned int state_duration;
 
     double rotation;
 
