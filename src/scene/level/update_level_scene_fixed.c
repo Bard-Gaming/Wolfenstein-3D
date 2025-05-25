@@ -15,7 +15,7 @@
 ** This is mainly for animation-related things,
 ** as they need time-independence.
 */
-void update_level_scene_fixed(scene_t *scene, UNUSED time_micro_t dt)
+void update_level_scene_fixed(UNUSED scene_t *scene, UNUSED time_micro_t dt)
 {
     update_player_fixed();
 }

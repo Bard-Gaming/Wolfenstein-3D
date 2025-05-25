@@ -26,7 +26,7 @@ static const char *get_state_str(const enemy_t *soldier)
     }
 }
 
-static const double compute_angle(const enemy_t *soldier)
+static double compute_angle(const enemy_t *soldier)
 {
     return norm(
         soldier->rotation - crpt_camera_get_rotation()

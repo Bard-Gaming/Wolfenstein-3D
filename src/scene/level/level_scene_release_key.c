@@ -14,7 +14,7 @@
 ** Event handler function that is called
 ** when a key is pressed.
 */
-void level_scene_release_key(scene_t *scene, event_t *event)
+void level_scene_release_key(UNUSED scene_t *scene, event_t *event)
 {
     if (event->key.code == sfKeyEscape)
         return set_start_scene();

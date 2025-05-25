@@ -11,17 +11,6 @@
 
 
 /*
-** Updates the soldier to face the
-** player.
-*/
-static void face_player(enemy_t *soldier)
-{
-    vec2_t dir = crpt_vec2_sub(*get_player()->pos, soldier->object.position);
-
-    soldier->rotation = atan2(dir.y, dir.x);
-}
-
-/*
 ** Determines whether or not the player is
 ** in the line of sight of the given soldier
 ** or not.

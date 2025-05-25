@@ -12,7 +12,7 @@
 /*
 ** Min/Max pairs of state durations.
 */
-const static vec2u_t state_durations[] = {
+static const vec2u_t state_durations[] = {
     [ES_IDLE] = { 50, 150 },
     [ES_MOVE] = { 50, 150 },
     [ES_ATTACK] = { 0, 0 },
