@@ -106,7 +106,7 @@ static void draw_key_label(const char *text, float x, float y)
 static void draw_key_labels(const settings_t *settings)
 {
     float label_x = 1100.f;
-    float label_y[] = { 415.f, 475.f, 535.f, 600.f };
+    float label_y[] = { 268.f, 368.f, 468.f, 568.f };
     const char *key;
 
     for (int i = 0; i < 4; i++) {

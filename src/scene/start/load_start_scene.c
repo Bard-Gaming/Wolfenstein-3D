@@ -19,10 +19,10 @@ static const char *widget_ids[] = {
 
 
 static const sfVector2f positions[] = {
-    { 0.f, 50.f },
+    { 0.f, 0.f },
     { 700.f, 280.f },
     { 880.f, 800.f },
-    { 855.f, 900.f },
+    { 860.f, 900.f },
 };
 
 

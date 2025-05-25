@@ -41,25 +41,25 @@ static const char *widget_ids[] = {
 };
 
 static const sfVector2f positions[] = {
-    { 0.f, 50.f },       // settings_bg
-    { 700.f, 400.f },    // forward
-    { 700.f, 460.f },    // backward
-    { 700.f, 520.f },    // left
-    { 700.f, 580.f },    // right
-    { 700.f, 720.f },    // sound toggle label
-    { 700.f, 800.f },    // music toggle label
-    { 850.f, 950.f },    // back button
+    { 0.f, 0.f },       // settings_bg
+    { 700.f, 250.f },   // forward
+    { 700.f, 350.f },   // backward
+    { 700.f, 450.f },   // left
+    { 700.f, 550.f },   // right
+    { 700.f, 700.f },   // sound toggle label
+    { 700.f, 800.f },   // music toggle label
+    { 850.f, 950.f },  // back button
 
-    { 1000.f, 400.f },   // buffer_forward
-    { 1000.f, 460.f },   // buffer_backward
-    { 1000.f, 520.f },   // buffer_left
-    { 1000.f, 580.f },   // buffer_right
+    { 1000.f, 250.f },   // buffer_forward
+    { 1000.f, 350.f },   // buffer_backward
+    { 1000.f, 450.f },   // buffer_left
+    { 1000.f, 550.f },   // buffer_right
 
     // sound toggles (ON/OFF)
-    { 1020.f, 720.f },   // sound_on_red
-    { 1020.f, 720.f },   // sound_on_green
-    { 1120.f, 720.f },   // sound_off_red
-    { 1120.f, 720.f },   // sound_off_green
+    { 1020.f, 700.f },   // sound_on_red
+    { 1020.f, 700.f },   // sound_on_green
+    { 1120.f, 700.f },   // sound_off_red
+    { 1120.f, 700.f },   // sound_off_green
 
     // music toggles (ON/OFF)
     { 1020.f, 800.f },   // music_on_red
