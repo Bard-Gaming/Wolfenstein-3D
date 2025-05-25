@@ -11,7 +11,7 @@
     #include <carpet.h>
 
     #define SOLDIER_ASSET(file) "assets/sprites/soldier/" file ".png"
-    #define SOLDIER_HURT_TIME 500  // in microsec
+    #define SOLDIER_HURT_TIME 500  // in fixed update cycles
 
 
 typedef enum {
