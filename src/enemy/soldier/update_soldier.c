@@ -6,7 +6,6 @@
 ** update_soldier
 */
 
-#include "carpet/utils/vector.h"
 #include <wolf/enemy.h>
 #include <wolf/player.h>
 
@@ -38,20 +37,39 @@ static int player_is_visible(const enemy_t *soldier)
     return crpt_vec2_dot(forward, dir_to_player) > 0.7;
 }
 
+static bool collides_with_wall(vec2_t start, vec2_t direction)
+{
+    const map_t *map = crpt_game_get()->scene->map;
+    vec2_t step = crpt_vec2_scale(direction, 0.1);
+    vec2_t current = crpt_vec2_add(start, step);
+
+    for (unsigned int i = 0; i < 20; i++) {
+        if (crpt_map_is_solid(map, current))
+            return true;
+        current = crpt_vec2_add(current, step);
+    }
+    return false;
+}
 
 /*
-** Makes the soldier move forward.
+** Makes the soldier move forward, if possible.
+** Returns true if the move has been possible
+** and false if not.
 */
-static void move_forward(enemy_t *soldier)
+static bool move_forward(enemy_t *soldier)
 {
     const double speed = 0.6;
-    vec2_t offset = crpt_vec2_normalized((vec2_t){
-        .x = cos(soldier->rotation),
-        .y = - sin(soldier->rotation),
+    vec2_t direction = crpt_vec2_normalized((vec2_t){
+        cos(soldier->rotation),
+        - sin(soldier->rotation),
     });
+    vec2_t offset;
 
-    offset = crpt_vec2_scale(offset, speed);
+    if (collides_with_wall(soldier->object.position, direction))
+        return false;
+    offset = crpt_vec2_scale(direction, speed);
     soldier->object.position = crpt_vec2_add(soldier->object.position, offset);
+    return true;
 }
 
 /*
@@ -76,7 +94,8 @@ static void handle_move_state(enemy_t *soldier)
         return set_soldier_state(soldier, ES_IDLE);
     if (soldier->state_time == 1)
         soldier->rotation = ((double)crpt_rand(1000) / 1000.0) * M_2PI;
-    move_forward(soldier);
+    if (!move_forward(soldier))
+        set_soldier_state(soldier, ES_IDLE);
 }
 
 /*
@@ -88,24 +107,46 @@ static void handle_attack_state(enemy_t *soldier)
     double distance =
         crpt_vec2_distance(*player->pos, soldier->object.position);
 
-    if (distance > 50.0)
+    if (distance > 500.0)
+    /*     face_player(soldier); */
+    /* if (!player_is_visible(soldier)) */
         return set_soldier_state(soldier, ES_MOVE);
-    face_player(soldier);
-    if (soldier->state_time % 100 == 0)
+    if (soldier->state_time % SOLDIER_SHOOT_CD == 0) {
+        soldier->frame_time = 0;
+        soldier->frame = 2;
         hurt_player(2.5);
+    }
 }
 
-void update_soldier(enemy_t *soldier)
+/*
+** Runs a single cycle of the enemy's AI.
+*/
+static void run_enemy_ai(enemy_t *soldier)
 {
-    soldier->state_time++;
+    if (soldier->state == ES_DEAD && soldier->frame == 4)
+        soldier->object.update = NULL;
+    if (soldier->hurt_time > 0)
+        soldier->hurt_time--;
     switch (soldier->state) {
     case ES_IDLE:
         return handle_idle_state(soldier);
     case ES_MOVE:
-        return handle_move_state(soldier);
+        handle_move_state(soldier);
+        break;
     case ES_ATTACK:
         return handle_attack_state(soldier);
     default:
         return;
     }
+}
+
+/*
+** Updates the given soldier's
+** data.
+*/
+void update_soldier(enemy_t *soldier)
+{
+    run_enemy_ai(soldier);
+    update_soldier_texture(soldier);
+    soldier->state_time++;
 }

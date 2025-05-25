@@ -19,4 +19,5 @@ void hurt_player(double damage)
     player_t *player = get_player();
 
     player->health = fmax(player->health - damage, 0.0);
+    player->hurt_time = 1.0;
 }

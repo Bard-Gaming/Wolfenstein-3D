@@ -19,15 +19,15 @@ const static vec2u_t state_durations[] = {
     [ES_DEAD] = { 0, 0 },
 };
 
+
 /*
 ** Returns a random state duration between
 ** the given state's min and max.
 */
 static unsigned int get_random_time(enemy_state_t state)
 {
-    if (state_durations[state].y != 0)
+    if (state_durations[state].y == 0)
         return 0;
-
     return
         crpt_rand(state_durations[state].y) +
         state_durations[state].x;

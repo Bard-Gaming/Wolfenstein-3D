@@ -46,6 +46,7 @@ typedef struct {
     bool is_anim;               // tells whether or not to play an anim
     unsigned int anim_frame;    // current animation frame (neg for no anim)
     unsigned int time_elapsed;  // time elapsed in current frame
+    double hurt_time;
 
     // World Data:
     vec2_t *pos;

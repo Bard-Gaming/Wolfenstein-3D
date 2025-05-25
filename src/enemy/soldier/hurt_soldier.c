@@ -18,6 +18,5 @@
 void hurt_soldier(enemy_t *soldier, double damage)
 {
     soldier->health -= damage;
-    soldier->object.color = sfRed;
     soldier->hurt_time = SOLDIER_HURT_TIME;
 }

@@ -11,8 +11,10 @@
     #include <carpet.h>
 
     #define SOLDIER_ASSET(file) "assets/sprites/soldier/" file ".png"
-    #define SOLDIER_HURT_TIME 500  // in fixed update cycles
-    #define SOLDIER_FRAME_TIME 5   // in fixed update cycles
+    #define SOLDIER_HURT_TIME 25   // in fixed update cycles
+    #define SOLDIER_FRAME_TIME 10  // in fixed update cycles
+    #define SOLDIER_TEXTURE_MAX 128
+    #define SOLDIER_SHOOT_CD 200
 
 
 typedef enum {

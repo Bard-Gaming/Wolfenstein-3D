@@ -95,4 +95,5 @@ void update_player(const map_t *map, time_micro_t dt)
     apply_sprint(&offset);
     *player->pos = crpt_vec2_add(*player->pos, offset);
     player->shoot_delay = fmax(player->shoot_delay - dt / 1000000.0, 0.0);
+    player->hurt_time = fmax(player->hurt_time - dt / 5000000.0, 0.0);
 }

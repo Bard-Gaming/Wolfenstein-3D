@@ -7,11 +7,10 @@
 */
 
 #include <wolf/enemy.h>
-#include <string.h>
 #include <stdio.h>
 
 
-const char *get_state_str(enemy_t *soldier)
+const char *get_state_str(const enemy_t *soldier)
 {
     switch (soldier->state) {
         case ES_IDLE:
@@ -20,14 +19,23 @@ const char *get_state_str(enemy_t *soldier)
             return "move";
         case ES_ATTACK:
             return "shoot";
+        case ES_DEAD:
+            return "die";
         default:
             return "idle";
     }
 }
 
-const char *get_direction_str(double rotation)
+const double compute_angle(const enemy_t *soldier)
 {
-    double deg = rotation * (180.0 / M_PI);
+    return norm(
+        soldier->rotation - crpt_camera_get_rotation()
+    );
+}
+
+const char *get_direction_str(const enemy_t *soldier)
+{
+    double deg = compute_angle(soldier) * (180.0 / M_PI);
 
     if (deg >= 337.5 || deg < 22.5)
         return "front";
@@ -46,10 +54,45 @@ const char *get_direction_str(double rotation)
     return "front_left";
 }
 
+const char *get_texture_id(const enemy_t *soldier)
+{
+    static char texture_id[SOLDIER_TEXTURE_MAX];
+    const char *state;
+    const char *dir;
+
+    switch (soldier->state) {
+    case ES_DEAD:
+        return "soldier_die";
+    case ES_ATTACK:
+        return "soldier_shoot";
+    default:
+        state = get_state_str(soldier);
+        dir = get_direction_str(soldier);
+        snprintf(texture_id, 128, "soldier_%s_%s", state, dir);
+        return texture_id;
+    }
+}
+
+static unsigned int get_total_frames(const enemy_t *soldier)
+{
+    switch (soldier->state) {
+    case ES_ATTACK:
+        return 4;
+    case ES_MOVE:
+        return 4;
+    case ES_DEAD:
+        return 5;
+    default:
+        return 1;
+    }
+}
+
 void update_animation_frame(enemy_t *soldier)
 {
-    unsigned int total_frames = (soldier->state == ES_ATTACK) ? 3 : 4;
+    unsigned int total_frames = get_total_frames(soldier);
 
+    if (soldier->state == ES_ATTACK && soldier->frame == 3)
+        return;
     soldier->frame_time++;
     if (soldier->frame_time >= SOLDIER_FRAME_TIME) {
         soldier->frame_time = 0;
@@ -71,14 +114,10 @@ void apply_texture(enemy_t *soldier, const char *texture_id)
 
 void update_soldier_texture(enemy_t *soldier)
 {
-    const char *state = get_state_str(soldier);
-    const char *dir = get_direction_str(soldier->rotation);
-    char texture_id[128];
+    const char *texture_id = get_texture_id(soldier);
 
-    if (soldier->state != ES_ATTACK)
-        snprintf(texture_id, 128, "%s_%s", state, dir);
-    else
-        strcpy(texture_id, "shoot");
     update_animation_frame(soldier);
     apply_texture(soldier, texture_id);
+    soldier->object.color = soldier->hurt_time == 0 ?
+        sfWhite : sfRed;
 }
