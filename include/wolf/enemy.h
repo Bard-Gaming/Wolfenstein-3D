@@ -51,9 +51,14 @@ typedef struct {
 
     double rotation;
 
+    // Health:
     double health;
     double max_health;
     unsigned int hurt_time;
+
+    // Animation
+    int frame;             // current frame index
+    int frame_time;        // how many ticks this frame has shown
 } enemy_t;
 
 
