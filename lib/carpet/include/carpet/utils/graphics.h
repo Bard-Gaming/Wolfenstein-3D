@@ -45,6 +45,7 @@ struct carpet_graphics_healthbar {
 
 struct carpet_graphics_map_texture {
     const texture_t *texture;
+    color_t color;
 
     // Screen position:
     double x;
@@ -55,6 +56,7 @@ struct carpet_graphics_map_texture {
     double scale;  // scale it should be drawn in
 
     // Texture scale:
+    unsigned int width_offset;
     unsigned int width;
     unsigned int height;
 };

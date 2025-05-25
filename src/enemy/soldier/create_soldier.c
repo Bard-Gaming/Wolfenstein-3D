@@ -13,14 +13,16 @@
 ** Creates a solider enemy at the
 ** given position.
 */
-enemy_t *create_soldier(vec2_t pos)
+enemy_t *create_soldier(double x, double y)
 {
-    enemy_t *enemy = create_enemy(
+    enemy_t *soldier = create_enemy(
         crpt_fetch_texture("soldier_idle_front"),
-        pos
+        (vec2_t){ x, y }
     );
 
-    set_enemy_max_health(enemy, 20);
-    enemy->object.update = (object_update_fnc_t)update_soldier;
-    return enemy;
+    set_enemy_max_health(soldier, 20);
+    soldier->object.update = (object_update_fnc_t)update_soldier;
+    soldier->type = ET_SOLDIER;
+    set_soldier_state(soldier, ES_IDLE);
+    return soldier;
 }

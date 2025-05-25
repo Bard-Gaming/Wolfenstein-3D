@@ -56,7 +56,6 @@ static void load_cell(map_t *map, FILE *stream, unsigned int x, unsigned int y)
     char texture_id[CRPT_MAP_TEXTURE_MAX];
     unsigned char is_wall;
     color_t color;
-    char current;
 
     read_file(&is_wall, sizeof(char), 1, stream);
     if (!is_wall)

@@ -6,132 +6,130 @@
 ** update_soldier
 */
 
-#include <carpet/utils/vector.h>
-#include <wolf/player.h>
 #include <wolf/enemy.h>
-#include <stdlib.h>
-#include <math.h>
-#include <stdio.h>
-
-#define SECONDS(x) ((x) * 100)
-#define RAND_SECONDS(min, max) (rand() % (SECONDS(max) - SECONDS(min) + 1) + SECONDS(min))
+#include <wolf/player.h>
 
 
-static void face_player(enemy_t *soldier)
+/*
+** Determines whether or not the player is
+** in the line of sight of the given soldier
+** or not.
+*/
+static int player_is_visible(const enemy_t *soldier)
 {
     player_t *player = get_player();
-    vec2_t dir = crpt_vec2_sub(*player->pos, soldier->object.position);
-    soldier->rotation = atan2(dir.y, dir.x);
-    double deg = soldier->rotation * 180 / M_PI;
+    vec2_t forward = { cos(soldier->rotation), - sin(soldier->rotation) };
+    vec2_t dir_to_player = crpt_vec2_normalized(
+        crpt_vec2_sub(*player->pos, soldier->object.position)
+    );
 
-    if (deg < 0)
-        deg += 360;
-    printf("[DEBUG] Soldier rotation set to face player: %.2f°\n", deg);
+    return crpt_vec2_dot(forward, dir_to_player) > 0.7;
 }
 
-static int is_player_in_front(enemy_t *soldier)
+static bool collides_with_wall(vec2_t start, vec2_t direction)
 {
-    player_t *player = get_player();
-    vec2_t dir_to_player = crpt_vec2_sub(*player->pos, soldier->object.position);
-    vec2_t forward = { cos(soldier->rotation), sin(soldier->rotation) };
-    vec2_t normal = crpt_vec2_normalized(dir_to_player);
-    double dot = crpt_vec2_dot(forward, normal);
-    double angle_to_player = atan2(normal.y, normal.x) * 180 / M_PI;
-    double soldier_angle = soldier->rotation * 180 / M_PI;
+    const map_t *map = crpt_game_get()->scene->map;
+    vec2_t step = crpt_vec2_scale(direction, 0.1);
+    vec2_t current = crpt_vec2_add(start, step);
 
-    printf("hereeeeeeeeeeeeeeeeeee %lf\n", soldier->rotation);
-    if (angle_to_player < 0)
-        angle_to_player += 360;
-    if (soldier_angle < 0)
-        soldier_angle += 360;
-    printf("[DEBUG] Facing: %.2f°, Player Dir: %.2f°, Dot: %.2f\n",
-           soldier_angle, angle_to_player, dot);
-    return dot > 0.7;
-}
-
-static void move_forward(enemy_t *soldier)
-{
-    double speed = 0.1;
-    double dx = cos(soldier->rotation) * speed;
-    double dy = sin(soldier->rotation) * speed;
-
-    soldier->object.position.x += dx;
-    soldier->object.position.y += dy;
-
-    printf("[DEBUG] Soldier moves (%.2f, %.2f) → new pos: (%.2f, %.2f)\n",
-        dx, dy,
-        soldier->object.position.x,
-        soldier->object.position.y);
-}
-
-static bool should_switch_to_attack(enemy_t *soldier)
-{
-    if (soldier->state != ES_ATTACK && is_player_in_front(soldier)) {
-        printf("[DEBUG] Switching to ATTACK (player in sight)\n");
-        set_soldier_state(soldier, ES_ATTACK);
-        return true;
+    for (unsigned int i = 0; i < 20; i++) {
+        if (crpt_map_is_solid(map, current))
+            return true;
+        current = crpt_vec2_add(current, step);
     }
     return false;
 }
 
-void handle_idle_state(enemy_t *soldier)
+/*
+** Makes the soldier move forward, if possible.
+** Returns true if the move has been possible
+** and false if not.
+*/
+static bool move_forward(enemy_t *soldier)
 {
-    if (soldier->state_time == 1) {
-        printf("[DEBUG] State = IDLE\n");
-        face_player(soldier);
-    }
+    const double speed = 0.6;
+    vec2_t direction = crpt_vec2_normalized((vec2_t){
+        cos(soldier->rotation),
+        - sin(soldier->rotation),
+    });
+    vec2_t offset;
 
-    if (soldier->state_time > RAND_SECONDS(2, 4)) {
-        printf("[DEBUG] Switching to MOVE\n");
-        set_soldier_state(soldier, ES_MOVE);
-    }
+    if (collides_with_wall(soldier->object.position, direction))
+        return false;
+    offset = crpt_vec2_scale(direction, speed);
+    soldier->object.position = crpt_vec2_add(soldier->object.position, offset);
+    return true;
 }
 
-void handle_move_state(enemy_t *soldier)
+/*
+** Handles the idle state for the soldier
+*/
+static void handle_idle_state(enemy_t *soldier)
 {
-    if (soldier->state_time == 1) {
-        printf("[DEBUG] State = MOVE\n");
-        face_player(soldier);
-    }
-
-    move_forward(soldier);
-
-    if (soldier->state_time > RAND_SECONDS(1, 2)) {
-        printf("[DEBUG] Switching to IDLE\n");
-        set_soldier_state(soldier, ES_IDLE);
-    }
+    if (player_is_visible(soldier))
+        return set_soldier_state(soldier, ES_ATTACK);
+    if (soldier->state_time > soldier->state_duration)
+        return set_soldier_state(soldier, ES_MOVE);
 }
 
-void handle_attack_state(enemy_t *soldier)
+/*
+** Handles the move state for the soldier.
+*/
+static void handle_move_state(enemy_t *soldier)
 {
+    if (player_is_visible(soldier))
+        return set_soldier_state(soldier, ES_ATTACK);
+    if (soldier->state_time > soldier->state_duration)
+        return set_soldier_state(soldier, ES_IDLE);
     if (soldier->state_time == 1)
-        printf("[DEBUG] State = ATTACK\n");
-
-    if (!is_player_in_front(soldier)) {
-        printf("[DEBUG] Lost player — back to IDLE\n");
+        soldier->rotation = ((double)crpt_rand(1000) / 1000.0) * M_2PI;
+    if (!move_forward(soldier))
         set_soldier_state(soldier, ES_IDLE);
-    }
-    else if (soldier->state_time % SECONDS(1) == 0) {
-        printf("[DEBUG] ATTACKING player!\n");
-        // TODO: damage or shoot
+}
+
+/*
+** Handles the enemy's attack state.
+*/
+static void handle_attack_state(enemy_t *soldier)
+{
+    if (!crpt_camera_has_line_of_sight(soldier->object.position))
+        return set_soldier_state(soldier, ES_MOVE);
+    if (soldier->state_time % SOLDIER_SHOOT_CD == 0) {
+        soldier->frame_time = 0;
+        soldier->frame = 2;
+        hurt_player(2.5);
     }
 }
 
+/*
+** Runs a single cycle of the enemy's AI.
+*/
+static void run_enemy_ai(enemy_t *soldier)
+{
+    if (soldier->state == ES_DEAD && soldier->frame == 4)
+        soldier->object.update = NULL;
+    if (soldier->hurt_time > 0)
+        soldier->hurt_time--;
+    switch (soldier->state) {
+    case ES_IDLE:
+        return handle_idle_state(soldier);
+    case ES_MOVE:
+        handle_move_state(soldier);
+        break;
+    case ES_ATTACK:
+        return handle_attack_state(soldier);
+    default:
+        return;
+    }
+}
+
+/*
+** Updates the given soldier's
+** data.
+*/
 void update_soldier(enemy_t *soldier)
 {
+    run_enemy_ai(soldier);
+    update_soldier_texture(soldier);
     soldier->state_time++;
-
-    if (should_switch_to_attack(soldier))
-        return;
-    switch (soldier->state) {
-        case ES_IDLE:
-            handle_idle_state(soldier);
-            break;
-        case ES_MOVE:
-            handle_move_state(soldier);
-            break;
-        case ES_ATTACK:
-            handle_attack_state(soldier);
-            break;
-    }
 }

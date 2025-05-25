@@ -10,7 +10,7 @@
 
 
 /*
-** Loads a player asset.
+** Unloads a player asset.
 */
 static void unload_asset(const char *id)
 {
@@ -19,9 +19,26 @@ static void unload_asset(const char *id)
 }
 
 /*
-** Loads the player's assets.
+** Unloads the plain
+*/
+static void unload_textures(void)
+{
+    crpt_unload_texture("hb_full");
+    crpt_unload_texture("hb_empty");
+}
+
+/*
+** Unloads the player's assets
+** and plain textures.
 */
 void unload_player_assets(void)
 {
+    player_t *player = get_player();
+
+    sfText_destroy(player->ammo_display);
+    unload_textures();
+    unload_asset("player_ammo");
     unload_asset("player_pistol");
+    unload_asset("player_submachine");
+    unload_asset("player_minigun");
 }

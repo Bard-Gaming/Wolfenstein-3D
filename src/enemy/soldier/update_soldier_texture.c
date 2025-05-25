@@ -7,15 +7,10 @@
 */
 
 #include <wolf/enemy.h>
-#include <math.h>
 #include <stdio.h>
 
-#define SECONDS(x) ((x) * 100)
-#define FRAME_WIDTH      64
-#define FRAME_HEIGHT     64
-#define FRAME_DURATION   SECONDS(0.2)
 
-const char *get_state_str(enemy_t *soldier)
+static const char *get_state_str(const enemy_t *soldier)
 {
     switch (soldier->state) {
         case ES_IDLE:
@@ -24,16 +19,24 @@ const char *get_state_str(enemy_t *soldier)
             return "move";
         case ES_ATTACK:
             return "shoot";
+        case ES_DEAD:
+            return "die";
         default:
             return "idle";
     }
 }
 
-const char *get_direction_str(double rotation)
+static double compute_angle(const enemy_t *soldier)
 {
-    double deg = rotation * (180.0 / M_PI);
+    return norm(
+        soldier->rotation - crpt_camera_get_rotation()
+    );
+}
 
-    if (deg < 0) deg += 360;
+static const char *get_direction_str(const enemy_t *soldier)
+{
+    double deg = compute_angle(soldier) * (180.0 / M_PI);
+
     if (deg >= 337.5 || deg < 22.5)
         return "front";
     if (deg < 67.5)
@@ -51,53 +54,70 @@ const char *get_direction_str(double rotation)
     return "front_left";
 }
 
-int get_total_frames(enemy_t *soldier)
+static const char *get_texture_id(const enemy_t *soldier)
 {
-    return (soldier->state == ES_ATTACK) ? 3 : 4;
+    static char texture_id[SOLDIER_TEXTURE_MAX];
+    const char *state;
+    const char *dir;
+
+    switch (soldier->state) {
+    case ES_DEAD:
+        return "soldier_die";
+    case ES_ATTACK:
+        return "soldier_shoot";
+    default:
+        state = get_state_str(soldier);
+        dir = get_direction_str(soldier);
+        snprintf(texture_id, 128, "soldier_%s_%s", state, dir);
+        return texture_id;
+    }
 }
 
-sfIntRect get_frame_rect(int frame_index)
+static unsigned int get_total_frames(const enemy_t *soldier)
 {
-    return (sfIntRect) {
-        .left = frame_index * FRAME_WIDTH,
-        .top = 0,
-        .width = FRAME_WIDTH,
-        .height = FRAME_HEIGHT
-    };
+    switch (soldier->state) {
+    case ES_ATTACK:
+        return 4;
+    case ES_MOVE:
+        return 4;
+    case ES_DEAD:
+        return 5;
+    default:
+        return 1;
+    }
 }
 
-void advance_animation_frame(enemy_t *soldier, int total_frames)
+static void update_animation_frame(enemy_t *soldier)
 {
+    unsigned int total_frames = get_total_frames(soldier);
+
+    if (soldier->state == ES_ATTACK && soldier->frame == 3)
+        return;
     soldier->frame_time++;
-    if (soldier->frame_time >= FRAME_DURATION) {
+    if (soldier->frame_time >= SOLDIER_FRAME_TIME) {
         soldier->frame_time = 0;
         soldier->frame = (soldier->frame + 1) % total_frames;
     }
 }
 
-void apply_sprite_texture(enemy_t *soldier, const char *texture_id, sfIntRect rect)
+static void apply_texture(enemy_t *soldier, const char *texture_id)
 {
     texture_t *texture = crpt_fetch_texture(texture_id);
+    vec2_t rect = {
+        soldier->frame * 64.0,
+        (soldier->frame + 1) * 64.0,
+    };
 
     soldier->object.texture = texture;
-    //sfSprite_setTextureRect(soldier->object, rect);
-    printf("[DEBUG] Texture: %s | Frame: %d | Rect.left: %d\n",
-           texture_id, soldier->frame, rect.left);
+    soldier->object.texture_rect = rect;
 }
 
 void update_soldier_texture(enemy_t *soldier)
 {
-    const char *state = get_state_str(soldier);
-    const char *dir = (soldier->state == ES_ATTACK) ? NULL : get_direction_str(soldier->rotation);
-    char texture_id[128];
-    int total_frames = get_total_frames(soldier);
-    sfIntRect rect;
+    const char *texture_id = get_texture_id(soldier);
 
-    if (dir)
-        snprintf(texture_id, sizeof(texture_id), SOLDIER_ASSET("%s_%s"), state, dir);
-    else
-        snprintf(texture_id, sizeof(texture_id), SOLDIER_ASSET("shoot"));
-    advance_animation_frame(soldier, total_frames);
-    rect = get_frame_rect(soldier->frame);
-    apply_sprite_texture(soldier, texture_id, rect);
+    update_animation_frame(soldier);
+    apply_texture(soldier, texture_id);
+    soldier->object.color = soldier->hurt_time == 0 ?
+        sfWhite : sfRed;
 }
