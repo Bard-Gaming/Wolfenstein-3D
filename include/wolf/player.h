@@ -61,6 +61,7 @@ void load_player_assets(void);
 void unload_player_assets(void);
 
 // Runtime:
+void player_press_key(event_t *event);
 void update_player(const map_t *map, time_micro_t dt);
 void update_player_fixed(void);
 void draw_player(void);

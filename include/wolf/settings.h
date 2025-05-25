@@ -22,7 +22,11 @@ typedef enum {
     CK_LEFT,
     CK_RIGHT,
     CK_SPRINT,
+
     CK_SHOOT,
+
+    CK_WEAPON_NEXT,
+    CK_WEAPON_PREV,
 
     CK_COUNT,  // keep last
 } control_key_t;

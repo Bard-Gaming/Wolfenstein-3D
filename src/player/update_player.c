@@ -94,7 +94,5 @@ void update_player(const map_t *map, time_micro_t dt)
         offset = compute_collision_vector(offset, *player->pos, map);
     apply_sprint(&offset);
     *player->pos = crpt_vec2_add(*player->pos, offset);
-    if (is_key_pressed(CK_SHOOT))
-        player_use_weapon();
     player->shoot_delay = fmax(player->shoot_delay - dt / 1000000.0, 0.0);
 }
