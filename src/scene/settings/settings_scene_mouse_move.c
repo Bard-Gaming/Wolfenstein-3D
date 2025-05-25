@@ -14,9 +14,17 @@ static const char *widget_ids[] = {
     "backward_key",
     "left_key",
     "right_key",
-    "sound_toggle",
-    "music_toggle",
-    "back_button"
+    "back_button",
+
+    // Toggle buttons (2 for sound, 2 for music)
+    "sound_on_red",
+    "sound_on_green",
+    "sound_off_red",
+    "sound_off_green",
+    "music_on_red",
+    "music_on_green",
+    "music_off_red",
+    "music_off_green"
 };
 
 /*

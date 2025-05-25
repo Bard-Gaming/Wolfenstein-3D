@@ -17,7 +17,25 @@ static const char *widget_ids[] = {
     "right_key",
     "sound_toggle",
     "music_toggle",
-    "back_button"
+    "back_button",
+
+    // Key buffer displays
+    "buffer_forward",
+    "buffer_backward",
+    "buffer_left",
+    "buffer_right",
+
+    // Sound toggle states (ON/OFF)
+    "sound_on_red",
+    "sound_on_green",
+    "sound_off_red",
+    "sound_off_green",
+
+    // Music toggle states (ON/OFF)
+    "music_on_red",
+    "music_on_green",
+    "music_off_red",
+    "music_off_green"
 };
 
 static void unload_widget(const char *id)

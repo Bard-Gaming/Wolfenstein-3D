@@ -35,5 +35,6 @@ void draw_settings_scene_ui(scene_t *scene, window_t *window);
 void settings_scene_onclick(scene_t *scene, event_t *event);
 void settings_scene_mouse_move(scene_t *scene, event_t *event);
 void settings_scene_key_pressed(scene_t *scene, event_t *event);
+const char *key_to_string(sfKeyCode code);
 
 #endif

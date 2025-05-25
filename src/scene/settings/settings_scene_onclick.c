@@ -9,14 +9,11 @@
 #include <wolf/scenes.h>
 
 
-/*
-** Mouse click event handler for the
-** game's settings menu.
-*/
-
 #include <wolf/scenes.h>
 #include <wolf/settings.h>
 #include <stdio.h>
+#include <SFML/Window/Keyboard.h>
+#include <SFML/Graphics.h>
 
 /*
 ** Handles key input after clicking a control button.
@@ -58,6 +55,9 @@ static int handle_back_button(int x, int y)
     return 0;
 }
 
+/*
+** Wait for key press after clicking a control.
+*/
 static int rebind_control(settings_state_t *state, int index, const char *id)
 {
     sfEvent event;
@@ -70,7 +70,7 @@ static int rebind_control(settings_state_t *state, int index, const char *id)
             settings = get_settings();
             settings->controls[index] = event.key.code;
             printf("[DEBUG] Rebound control[%d] to keycode %d\n",
-                    index, event.key.code);
+                index, event.key.code);
             state->waiting_for_key = -1;
             break;
         }
@@ -78,6 +78,9 @@ static int rebind_control(settings_state_t *state, int index, const char *id)
     return 1;
 }
 
+/*
+** Handle clicking any control button (ZQSD).
+*/
 static int handle_control_click(settings_state_t *state, int x, int y)
 {
     const char *ids[] = {
@@ -91,36 +94,48 @@ static int handle_control_click(settings_state_t *state, int x, int y)
     return 0;
 }
 
-/*
-** Toggle sound setting on click.
-*/
 static int toggle_sound(settings_t *settings, int x, int y)
 {
-    if (is_sprite_clicked("sound_toggle", x, y)) {
-        settings->sound_enabled = !settings->sound_enabled;
-        printf("[DEBUG] Sound toggled: %s\n",
-                settings->sound_enabled ? "ON" : "OFF");
-        return 1;
+    if (!settings->sound_enabled) {
+        if (is_sprite_clicked("sound_on_red", x, y) ||
+            is_sprite_clicked("sound_on_green", x, y)) {
+            settings->sound_enabled = 1;
+            printf("[DEBUG] Sound toggled: ON\n");
+            return 1;
+        }
+    } else {
+        if (is_sprite_clicked("sound_off_red", x, y) ||
+            is_sprite_clicked("sound_off_green", x, y)) {
+            settings->sound_enabled = 0;
+            printf("[DEBUG] Sound toggled: OFF\n");
+            return 1;
+        }
     }
     return 0;
 }
 
-/*
-** Toggle music setting on click.
-*/
 static int toggle_music(settings_t *settings, int x, int y)
 {
-    if (is_sprite_clicked("music_toggle", x, y)) {
-        settings->music_enabled = !settings->music_enabled;
-        printf("[DEBUG] Music toggled: %s\n",
-                settings->music_enabled ? "ON" : "OFF");
-        return 1;
+    if (!settings->music_enabled) {
+        if (is_sprite_clicked("music_on_red", x, y) ||
+            is_sprite_clicked("music_on_green", x, y)) {
+            settings->music_enabled = 1;
+            printf("[DEBUG] Music toggled: ON\n");
+            return 1;
+        }
+    } else {
+        if (is_sprite_clicked("music_off_red", x, y) ||
+            is_sprite_clicked("music_off_green", x, y)) {
+            settings->music_enabled = 0;
+            printf("[DEBUG] Music toggled: OFF\n");
+            return 1;
+        }
     }
     return 0;
 }
 
 /*
-** Main click handler for the settings scene.
+** Main mouse click handler for the settings scene.
 */
 void settings_scene_onclick(scene_t *scene, event_t *event)
 {
