@@ -37,6 +37,7 @@ SRC_FILES =	src/main.c														\
 			src/player/get_player.c											\
 			src/player/init_player.c										\
 			src/player/load_player_assets.c									\
+			src/player/player_press_key.c									\
 			src/player/player_use_weapon.c									\
 			src/player/player_weapons.c										\
 			src/player/set_player_weapon.c									\
@@ -44,6 +45,7 @@ SRC_FILES =	src/main.c														\
 			src/player/update_player.c										\
 			src/player/update_player_fixed.c								\
 			src/scene/level/draw_level_scene_ui.c							\
+			src/scene/level/level_scene_release_key.c						\
 			src/scene/level/load_level_scene.c								\
 			src/scene/level/set_level_scene.c								\
 			src/scene/level/unload_level_scene.c							\

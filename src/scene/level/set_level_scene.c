@@ -20,6 +20,7 @@ void set_level_scene(void)
         .update = update_level_scene,
         .fixed_update = update_level_scene_fixed,
         .draw_ui = draw_level_scene_ui,
+        .event_handlers[sfEvtKeyReleased] = level_scene_release_key,
     };
 
     crpt_scene_set(&level);
