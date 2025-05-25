@@ -24,6 +24,7 @@ INCLUDE_DIRS = -I./include -I./$(CRPT_DIR)/include
 
 SRC_FILES =	src/main.c														\
 			src/enemy/soldier/create_soldier.c								\
+			src/enemy/soldier/hurt_soldier.c								\
 			src/enemy/soldier/kill_soldier.c								\
 			src/enemy/soldier/load_soldier_assets.c							\
 			src/enemy/soldier/set_soldier_state.c							\
@@ -31,6 +32,7 @@ SRC_FILES =	src/main.c														\
 			src/enemy/soldier/update_soldier.c								\
 			src/enemy/soldier/update_soldier_texture.c						\
 			src/enemy/create_enemy.c										\
+			src/enemy/hurt_enemy.c											\
 			src/enemy/kill_enemy.c											\
 			src/enemy/set_enemy_max_health.c								\
 			src/player/draw_player.c										\

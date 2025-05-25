@@ -32,9 +32,7 @@ static void shoot_weapon(player_t *player)
 
     if (enemy == NULL)
         return;
-    enemy->health -= weapon_lookup[player->weapon].damage;
-    if (enemy->health <= 0.0)
-        kill_enemy(enemy);
+    hurt_enemy(enemy, weapon_lookup[player->weapon].damage);
 }
 
 /*

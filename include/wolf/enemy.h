@@ -11,6 +11,7 @@
     #include <carpet.h>
 
     #define SOLDIER_ASSET(file) "assets/sprites/soldier/" file ".png"
+    #define SOLDIER_HURT_TIME 500  // in microsec
 
 
 typedef enum {
@@ -31,6 +32,7 @@ typedef enum {
     ES_IDLE,
     ES_MOVE,
     ES_ATTACK,
+    ES_DEAD,
 } enemy_state_t;
 
 
@@ -51,16 +53,19 @@ typedef struct {
 
     double health;
     double max_health;
+    unsigned int hurt_time;
 } enemy_t;
 
 
 // Base enemy functions:
 enemy_t *create_enemy(const texture_t *texture, vec2_t pos);
 void set_enemy_max_health(enemy_t *enemy, double health);
+void hurt_enemy(enemy_t *enemy, double damage);
 void kill_enemy(enemy_t *enemy);
 
 // Soldier functions:
 enemy_t *create_soldier(double x, double y);
+void hurt_soldier(enemy_t *soldier, double damage);
 void kill_soldier(enemy_t *soldier);
 void load_soldier_assets(void);
 void unload_soldier_assets(void);

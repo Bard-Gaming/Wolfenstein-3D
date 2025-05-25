@@ -24,5 +24,6 @@ enemy_t *create_enemy(const texture_t *texture, vec2_t pos)
     enemy->state = ES_IDLE;
     enemy->type = ET_UNSET;
     enemy->rotation = 0.0;
+    enemy->hurt_time = 0;
     return enemy;
 }

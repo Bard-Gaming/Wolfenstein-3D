@@ -18,6 +18,8 @@
 
 typedef enum {
     WT_PISTOL,
+    WT_MACHINE_GUN,
+    WT_REVOLVER,
 
     WT_COUNT,  // keep last
 } weapon_type_t;
