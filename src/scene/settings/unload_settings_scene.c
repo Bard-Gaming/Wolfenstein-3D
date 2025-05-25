@@ -29,7 +29,8 @@ static void unload_widget(const char *id)
 void unload_settings_scene(scene_t *scene)
 {
     (void)scene;
-    for (unsigned int i = 0; i < sizeof(widget_ids) / sizeof(widget_ids[0]); i++) {
+    for (unsigned int i = 0; i <
+            sizeof(widget_ids) / sizeof(widget_ids[0]); i++) {
         unload_widget(widget_ids[i]);
     }
     free(scene->data);
