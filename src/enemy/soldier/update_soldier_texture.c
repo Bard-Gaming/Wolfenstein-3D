@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 
-const char *get_state_str(const enemy_t *soldier)
+static const char *get_state_str(const enemy_t *soldier)
 {
     switch (soldier->state) {
         case ES_IDLE:
@@ -26,14 +26,14 @@ const char *get_state_str(const enemy_t *soldier)
     }
 }
 
-const double compute_angle(const enemy_t *soldier)
+static const double compute_angle(const enemy_t *soldier)
 {
     return norm(
         soldier->rotation - crpt_camera_get_rotation()
     );
 }
 
-const char *get_direction_str(const enemy_t *soldier)
+static const char *get_direction_str(const enemy_t *soldier)
 {
     double deg = compute_angle(soldier) * (180.0 / M_PI);
 
@@ -54,7 +54,7 @@ const char *get_direction_str(const enemy_t *soldier)
     return "front_left";
 }
 
-const char *get_texture_id(const enemy_t *soldier)
+static const char *get_texture_id(const enemy_t *soldier)
 {
     static char texture_id[SOLDIER_TEXTURE_MAX];
     const char *state;
@@ -87,7 +87,7 @@ static unsigned int get_total_frames(const enemy_t *soldier)
     }
 }
 
-void update_animation_frame(enemy_t *soldier)
+static void update_animation_frame(enemy_t *soldier)
 {
     unsigned int total_frames = get_total_frames(soldier);
 
@@ -100,7 +100,7 @@ void update_animation_frame(enemy_t *soldier)
     }
 }
 
-void apply_texture(enemy_t *soldier, const char *texture_id)
+static void apply_texture(enemy_t *soldier, const char *texture_id)
 {
     texture_t *texture = crpt_fetch_texture(texture_id);
     vec2_t rect = {

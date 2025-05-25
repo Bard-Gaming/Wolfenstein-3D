@@ -31,7 +31,6 @@ static void unload_idle_textures(void)
 */
 static void unload_move_textures(void)
 {
-
     crpt_unload_texture("soldier_move_back");
     crpt_unload_texture("soldier_move_back_left");
     crpt_unload_texture("soldier_move_back_right");

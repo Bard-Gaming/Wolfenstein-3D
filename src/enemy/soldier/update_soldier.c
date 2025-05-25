@@ -108,8 +108,6 @@ static void handle_attack_state(enemy_t *soldier)
         crpt_vec2_distance(*player->pos, soldier->object.position);
 
     if (distance > 500.0)
-    /*     face_player(soldier); */
-    /* if (!player_is_visible(soldier)) */
         return set_soldier_state(soldier, ES_MOVE);
     if (soldier->state_time % SOLDIER_SHOOT_CD == 0) {
         soldier->frame_time = 0;
