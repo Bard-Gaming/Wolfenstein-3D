@@ -52,7 +52,8 @@ static void draw_ammo_display(const player_t *player)
     snprintf(ammo_repr, 12, "%u", player->ammo);
     sfText_setString(player->ammo_display, ammo_repr);
     crpt_draw_sprite(crpt_fetch_sprite("player_ammo"));
-    sfRenderWindow_drawText(crpt_game_get()->window, player->ammo_display, NULL);
+    sfRenderWindow_drawText(crpt_game_get()->window,
+        player->ammo_display, NULL);
 }
 
 /*

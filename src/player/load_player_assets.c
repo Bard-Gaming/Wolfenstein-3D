@@ -60,7 +60,8 @@ static void load_ammo_counter(void)
     player->ammo_display = sfText_create();
     sfText_setString(player->ammo_display, "0");
     sfText_setFont(player->ammo_display, crpt_fetch_font("arial"));
-    sfText_setPosition(player->ammo_display, (sfVector2f){ 70.f, size.y - 150.f });
+    sfText_setPosition(player->ammo_display,
+        (sfVector2f){ 70.f, size.y - 150.f });
 }
 
 /*
