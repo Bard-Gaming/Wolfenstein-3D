@@ -31,4 +31,13 @@ void draw_level_scene_ui(scene_t *scene, window_t *window);
 void level_scene_release_key(scene_t *scene, event_t *event);
 
 
+// Death Scene:
+void set_death_scene(void);
+void load_death_scene(scene_t *scene);
+void unload_death_scene(scene_t *scene);
+void draw_death_scene_ui(scene_t *scene, window_t *window);
+void death_scene_onclick(scene_t *scene, event_t *event);
+void death_scene_mouse_move(scene_t *scene, event_t *event);
+
+
 #endif

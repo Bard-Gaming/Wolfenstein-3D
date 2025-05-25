@@ -47,6 +47,12 @@ SRC_FILES =	src/main.c														\
 			src/player/unload_player_assets.c								\
 			src/player/update_player.c										\
 			src/player/update_player_fixed.c								\
+			src/scene/death/draw_death_scene_ui.c							\
+			src/scene/death/load_death_scene.c								\
+			src/scene/death/set_death_scene.c								\
+			src/scene/death/death_scene_mouse_move.c						\
+			src/scene/death/death_scene_onclick.c							\
+			src/scene/death/unload_death_scene.c							\
 			src/scene/level/draw_level_scene_ui.c							\
 			src/scene/level/level_scene_release_key.c						\
 			src/scene/level/load_level_scene.c								\
