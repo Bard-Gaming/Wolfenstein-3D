@@ -10,7 +10,7 @@
     #define WOLF_PLAYER_H
     #include <carpet.h>
 
-    #define PLAYER_MAX_HEALTH 100.0
+    #define PLAYER_MAX_HEALTH 40.0
     #define PLAYER_START_AMMO 130
     #define PLAYER_FOV (M_PI_2 - 0.225)
     #define PLAYER_SPRINT_FOV (M_PI_2 - 0.15)

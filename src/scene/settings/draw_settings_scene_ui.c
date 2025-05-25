@@ -117,14 +117,12 @@ static void draw_key_labels(const settings_t *settings)
     }
 }
 
-void draw_settings_scene_ui(scene_t *scene, window_t *window)
+void draw_settings_scene_ui(UNUSED scene_t *scene, UNUSED window_t *window)
 {
     settings_t *settings = get_settings();
 
-    (void)scene;
-    (void)window;
     draw_base_widgets();
-    draw_sound_toggle(settings->sound_enabled);
-    draw_music_toggle(settings->music_enabled);
+    draw_sound_toggle(settings->sound);
+    draw_music_toggle(settings->music);
     draw_key_labels(settings);
 }

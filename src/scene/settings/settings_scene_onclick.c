@@ -6,6 +6,7 @@
 ** settings_scene_onclick
 */
 
+#include <stdbool.h>
 #include <wolf/scenes.h>
 #include <wolf/settings.h>
 #include <stdio.h>
@@ -25,14 +26,13 @@ void settings_scene_key_pressed(scene_t *scene, event_t *event)
         return;
     settings = get_settings();
     settings->controls[index] = key;
-    printf("[DEBUG] Rebound control[%d] to keycode %d\n", index, key);
     state->waiting_for_key = -1;
 }
 
 /*
 ** Helper: Check if a sprite with the given ID is clicked.
 */
-static int is_sprite_clicked(const char *id, int x, int y)
+static bool is_sprite_clicked(const char *id, int x, int y)
 {
     sfFloatRect bounds = sfSprite_getGlobalBounds(crpt_fetch_sprite(id));
 
@@ -42,7 +42,7 @@ static int is_sprite_clicked(const char *id, int x, int y)
 /*
 ** Handle clicking the back button.
 */
-static int handle_back_button(int x, int y)
+static bool handle_back_button(int x, int y)
 {
     if (is_sprite_clicked("back_button", x, y)) {
         set_start_scene();
@@ -60,13 +60,10 @@ static int rebind_control(settings_state_t *state, int index, const char *id)
     settings_t *settings;
 
     state->waiting_for_key = index;
-    printf("[DEBUG] Clicked %s — waiting for key input...\n", id);
     while (sfRenderWindow_waitEvent(crpt_game_get()->window, &event)) {
         if (event.type == sfEvtKeyPressed) {
             settings = get_settings();
             settings->controls[index] = event.key.code;
-            printf("[DEBUG] Rebound control[%d] to keycode %d\n",
-                index, event.key.code);
             state->waiting_for_key = -1;
             break;
         }
@@ -90,44 +87,34 @@ static int handle_control_click(settings_state_t *state, int x, int y)
     return 0;
 }
 
-static int toggle_sound(settings_t *settings, int x, int y)
+static bool toggle_sound(settings_t *settings, int x, int y)
 {
-    if (!settings->sound_enabled) {
-        if (is_sprite_clicked("sound_on_red", x, y) ||
-            is_sprite_clicked("sound_on_green", x, y)) {
-            settings->sound_enabled = 1;
-            printf("[DEBUG] Sound toggled: ON\n");
-            return 1;
-        }
-    } else {
-        if (is_sprite_clicked("sound_off_red", x, y) ||
-            is_sprite_clicked("sound_off_green", x, y)) {
-            settings->sound_enabled = 0;
-            printf("[DEBUG] Sound toggled: OFF\n");
-            return 1;
-        }
+    if (is_sprite_clicked("sound_on_red", x, y) ||
+        is_sprite_clicked("sound_on_green", x, y)) {
+        settings->sound = true;
+        return false;
     }
-    return 0;
+    if (is_sprite_clicked("sound_off_red", x, y) ||
+        is_sprite_clicked("sound_off_green", x, y)) {
+        settings->sound = false;
+        return true;
+    }
+    return false;
 }
 
-static int toggle_music(settings_t *settings, int x, int y)
+static bool toggle_music(settings_t *settings, int x, int y)
 {
-    if (!settings->music_enabled) {
-        if (is_sprite_clicked("music_on_red", x, y) ||
-            is_sprite_clicked("music_on_green", x, y)) {
-            settings->music_enabled = 1;
-            printf("[DEBUG] Music toggled: ON\n");
-            return 1;
-        }
-    } else {
-        if (is_sprite_clicked("music_off_red", x, y) ||
-            is_sprite_clicked("music_off_green", x, y)) {
-            settings->music_enabled = 0;
-            printf("[DEBUG] Music toggled: OFF\n");
-            return 1;
-        }
+    if (is_sprite_clicked("music_on_red", x, y) ||
+        is_sprite_clicked("music_on_green", x, y)) {
+        settings->music = true;
+        return true;
     }
-    return 0;
+    if (is_sprite_clicked("music_off_red", x, y) ||
+        is_sprite_clicked("music_off_green", x, y)) {
+        settings->music = false;
+        return true;
+    }
+    return false;
 }
 
 /*
