@@ -27,5 +27,13 @@ void draw_start_scene_ui(scene_t *scene, window_t *window);
 void start_scene_onclick(scene_t *scene, event_t *event);
 void start_scene_mouse_move(scene_t *scene, event_t *event);
 
+// settings scene:
+void set_settings_scene(void);
+void load_settings_scene(scene_t *scene);
+void unload_settings_scene(scene_t *scene);
+void draw_settings_scene_ui(scene_t *scene, window_t *window);
+void settings_scene_onclick(scene_t *scene, event_t *event);
+void settings_scene_mouse_move(scene_t *scene, event_t *event);
+void settings_scene_key_pressed(scene_t *scene, event_t *event);
 
 #endif

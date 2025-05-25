@@ -46,6 +46,12 @@ SRC_FILES =	src/main.c														\
 			src/scene/start/start_scene_mouse_move.c						\
 			src/scene/start/start_scene_onclick.c							\
 			src/scene/start/unload_start_scene.c							\
+			src/scene/settings/draw_settings_scene_ui.c						\
+			src/scene/settings/load_settings_scene.c						\
+			src/scene/settings/set_settings_scene.c							\
+			src/scene/settings/settings_scene_mouse_move.c					\
+			src/scene/settings/settings_scene_onclick.c						\
+			src/scene/settings/unload_settings_scene.c						\
 			src/settings/get_input_vec.c									\
 			src/settings/get_settings.c										\
 

@@ -22,6 +22,7 @@
 struct carpet_scene {
     // User data:
     NULLABLE map_t *map;
+    void *data;
 
     // Load:
     NULLABLE scene_fnc_t load;

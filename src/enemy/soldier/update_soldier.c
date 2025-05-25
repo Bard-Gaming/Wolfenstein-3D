@@ -64,7 +64,7 @@ static void move_forward(enemy_t *soldier)
         soldier->object.position.y);
 }
 
-void update_bool should_switch_to_attack(enemy_t *soldier)
+static bool should_switch_to_attack(enemy_t *soldier)
 {
     if (soldier->state != ES_ATTACK && is_player_in_front(soldier)) {
         printf("[DEBUG] Switching to ATTACK (player in sight)\n");
