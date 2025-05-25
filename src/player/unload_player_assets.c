@@ -35,4 +35,6 @@ void unload_player_assets(void)
 {
     unload_textures();
     unload_asset("player_pistol");
+    unload_asset("player_submachine");
+    unload_asset("player_minigun");
 }

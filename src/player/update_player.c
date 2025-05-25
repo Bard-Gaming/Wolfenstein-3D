@@ -79,6 +79,13 @@ static void apply_sprint(vec2_t *offset)
     }
 }
 
+static bool should_shoot(player_t *player)
+{
+    return
+        is_key_pressed(CK_SHOOT) &&
+        (!player->holding_fire || weapon_lookup[player->weapon].autofire);
+}
+
 /*
 ** Updates the level's scene.
 ** Nothing much to add there, is there?..
@@ -89,6 +96,8 @@ void update_player(const map_t *map, time_micro_t dt)
     vec2_t input_vec = get_input_vec(dt);
     vec2_t offset = compute_pos_offset(input_vec.x);
 
+    if (!is_key_pressed(CK_SHOOT))
+        player->holding_fire = false;
     crpt_camera_rotate(input_vec.y);
     if (will_collide(map, *player->pos, offset))
         offset = compute_collision_vector(offset, *player->pos, map);
@@ -96,4 +105,8 @@ void update_player(const map_t *map, time_micro_t dt)
     *player->pos = crpt_vec2_add(*player->pos, offset);
     player->shoot_delay = fmax(player->shoot_delay - dt / 1000000.0, 0.0);
     player->hurt_time = fmax(player->hurt_time - dt / 5000000.0, 0.0);
+    if (should_shoot(player))
+        player_use_weapon();
+    if (is_key_pressed(CK_SHOOT))
+        player->holding_fire = true;
 }

@@ -16,7 +16,9 @@
 */
 static void weapon_switch(int offset)
 {
-    weapon_type_t weapon = (get_player()->weapon + offset) % WT_COUNT;
+    weapon_type_t weapon =
+        (get_player()->weapon + offset + WT_COUNT) %
+        WT_COUNT;
 
     set_player_weapon(weapon);
 }
@@ -30,8 +32,6 @@ void player_press_key(event_t *event)
 {
     settings_t *settings = get_settings();
 
-    if (event->key.code == settings->controls[CK_SHOOT])
-        return player_use_weapon();
     if (event->key.code == settings->controls[CK_WEAPON_NEXT])
         return weapon_switch(1);
     if (event->key.code == settings->controls[CK_WEAPON_PREV])

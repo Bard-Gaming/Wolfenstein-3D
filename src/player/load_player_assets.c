@@ -47,4 +47,6 @@ void load_player_assets(void)
 {
     load_textures();
     load_weapon("assets/sprites/player/pistol.png", "player_pistol");
+    load_weapon("assets/sprites/player/submachine.png", "player_submachine");
+    load_weapon("assets/sprites/player/minigun.png", "player_minigun");
 }

@@ -18,7 +18,8 @@
 
 typedef enum {
     WT_PISTOL,
-    WT_MACHINE_GUN,
+    WT_SUBMACHINE_GUN,
+    WT_MINIGUN,
     WT_REVOLVER,
 
     WT_COUNT,  // keep last
@@ -28,6 +29,7 @@ typedef enum {
 typedef struct {
     double damage;
     double cooldown;  // in seconds
+    bool autofire;
     const char *asset_id;
 } weapon_t;
 
@@ -41,6 +43,7 @@ typedef struct {
     weapon_type_t weapon;     // selected weapon
     double shoot_delay;       // in seconds
     sprite_t *weapon_sprite;  // cached for performance
+    bool holding_fire;
 
     // Animations:
     bool is_anim;               // tells whether or not to play an anim
