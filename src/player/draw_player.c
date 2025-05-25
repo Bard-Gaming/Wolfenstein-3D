@@ -7,6 +7,7 @@
 */
 
 #include <wolf/player.h>
+#include <stdio.h>
 
 
 /*
@@ -41,6 +42,20 @@ static void draw_red_screen(const player_t *player)
 }
 
 /*
+** Note: The maximum amount of characters an unsigned
+** integer can hold is 11, plus a null byte at the end.
+*/
+static void draw_ammo_display(const player_t *player)
+{
+    char ammo_repr[12];
+
+    snprintf(ammo_repr, 12, "%u", player->ammo);
+    sfText_setString(player->ammo_display, ammo_repr);
+    crpt_draw_sprite(crpt_fetch_sprite("player_ammo"));
+    sfRenderWindow_drawText(crpt_game_get()->window, player->ammo_display, NULL);
+}
+
+/*
 ** Draws the player's arms and other
 ** related elements.
 */
@@ -49,6 +64,7 @@ void draw_player(void)
     player_t *player = get_player();
 
     draw_healthbar(player);
+    draw_ammo_display(player);
     crpt_draw_sprite(player->weapon_sprite);
     if (player->hurt_time > 0.0)
         draw_red_screen(player);

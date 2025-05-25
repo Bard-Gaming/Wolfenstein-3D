@@ -33,7 +33,11 @@ static void unload_textures(void)
 */
 void unload_player_assets(void)
 {
+    player_t *player = get_player();
+
+    sfText_destroy(player->ammo_display);
     unload_textures();
+    unload_asset("player_ammo");
     unload_asset("player_pistol");
     unload_asset("player_submachine");
     unload_asset("player_minigun");
