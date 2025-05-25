@@ -34,6 +34,7 @@ static void add_line(vertex_array_t *va,
     double screen_x = texture.x + x;
     float texture_x;
     float texture_y;
+    float tex_x;
 
     if (0.0 > screen_x || screen_x > cam->width)
         return;
@@ -41,12 +42,13 @@ static void add_line(vertex_array_t *va,
         return;
     texture_x = x / texture.scale;
     texture_y = sfTexture_getSize(texture.texture).y;
+    tex_x = (x + texture.width_offset) / texture.scale;
     sfVertexArray_append(va, (sfVertex){
-        { texture.x + x, texture.y }, sfWhite, { texture_x, 0.f }
+        { texture.x + x, texture.y }, texture.color, { tex_x, 0.f }
     });
     sfVertexArray_append(va, (sfVertex){
         { screen_x, texture.y + texture.height },
-        texture.color, { texture_x, texture_y }
+        texture.color, { tex_x, texture_y }
     });
 }
 
@@ -65,8 +67,8 @@ void crpt_draw_map_texture(graphics_map_texture_t texture)
     camera_t *cam = &game->camera;
 
     sfVertexArray_setPrimitiveType(va, sfLines);
-    for (unsigned int x = 0; x < texture.width; x++)
-        add_line(va, texture, x, cam);
+    for (unsigned int x = texture.width_offset; x < texture.width; x++)
+        add_line(va, texture, x - texture.width_offset, cam);
     sfRenderWindow_drawVertexArray(win, va, &state);
     sfVertexArray_destroy(va);
 }
