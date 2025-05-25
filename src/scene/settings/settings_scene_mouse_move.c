@@ -46,7 +46,7 @@ static void update_sprite_color(sprite_t *sprite, int x, int y)
 ** Mouse move event handler for the
 ** game's settings menu.
 */
-void settings_scene_mouse_move(scene_t *scene, event_t *event)
+void settings_scene_mouse_move(UNUSED scene_t *scene, event_t *event)
 {
     int x = event->mouseMove.x;
     int y = event->mouseMove.y;

@@ -54,7 +54,7 @@ static bool handle_back_button(int x, int y)
 /*
 ** Wait for key press after clicking a control.
 */
-static int rebind_control(settings_state_t *state, int index, const char *id)
+static int rebind_control(settings_state_t *state, int index)
 {
     sfEvent event;
     settings_t *settings;
@@ -82,7 +82,7 @@ static int handle_control_click(settings_state_t *state, int x, int y)
 
     for (int i = 0; i < 4; ++i) {
         if (is_sprite_clicked(ids[i], x, y))
-            return rebind_control(state, i, ids[i]);
+            return rebind_control(state, i);
     }
     return 0;
 }
